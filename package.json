@@ -1,0 +1,50 @@
+{
+  "name": "jsclaw",
+  "version": "0.0.1",
+  "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "src/",
+    "container/",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": "./src/index.js",
+    "./config": "./src/config.js",
+    "./container-runner": "./src/container-runner.js",
+    "./ipc": "./src/ipc.js",
+    "./ipc-utils": "./src/ipc-utils.js",
+    "./group-queue": "./src/group-queue.js",
+    "./mount-security": "./src/mount-security.js",
+    "./types": "./src/types.js",
+    "./container/agent-runner": "./container/agent-runner.js",
+    "./container/mcp-server": "./container/mcp-server.js"
+  },
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "node --check src/*.js container/agent-runner.js container/mcp-server.js",
+    "docker:build": "docker build -t jsclaw-agent:latest -f container/Dockerfile container/"
+  },
+  "keywords": [
+    "claude",
+    "ai",
+    "agent",
+    "container",
+    "docker",
+    "mcp",
+    "orchestration"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsclaw/jsclaw"
+  },
+  "homepage": "https://github.com/jsclaw/jsclaw",
+  "bugs": {
+    "url": "https://github.com/jsclaw/jsclaw/issues"
+  }
+}
