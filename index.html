@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jsclaw - Container Orchestration for Claude AI Agents</title>
+  <meta name="description" content="Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero dependencies.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-alt: #f8f9fb;
+      --bg-code: #f1f3f7;
+      --text: #1a1a2e;
+      --text-secondary: #555770;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --border: #e2e5ea;
+      --radius: 10px;
+      --max-w: 1080px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    code, pre, .mono {
+      font-family: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* --- NAV --- */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 24px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    nav .logo {
+      font-weight: 700; font-size: 1.15rem; color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+    }
+    nav .logo span { color: var(--accent); }
+    nav .links { display: flex; gap: 24px; font-size: 0.9rem; }
+    nav .links a { color: var(--text-secondary); font-weight: 500; }
+    nav .links a:hover { color: var(--accent); text-decoration: none; }
+    .badge-row { display: flex; gap: 6px; }
+    .badge-row img { height: 20px; }
+
+    /* --- HERO --- */
+    .hero {
+      padding: 80px 24px 64px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 .highlight { color: var(--accent); }
+    .hero .tagline {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 32px;
+    }
+
+    .install-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--text);
+      color: #e2e8f0;
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .install-box:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .install-box .dollar { color: var(--green); user-select: none; }
+    .install-box .cmd { user-select: all; }
+    .install-box .copy-btn {
+      background: none; border: none; color: #94a3b8;
+      cursor: pointer; padding: 2px; font-size: 0.85rem;
+      transition: color 0.15s;
+    }
+    .install-box .copy-btn:hover { color: #fff; }
+    .install-box .tooltip {
+      position: absolute; top: -32px; right: 8px;
+      background: var(--green); color: white;
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 0.75rem; opacity: 0;
+      transition: opacity 0.2s; pointer-events: none;
+    }
+    .install-box .tooltip.show { opacity: 1; }
+
+    .hero-links {
+      margin-top: 20px;
+      display: flex; gap: 16px; justify-content: center;
+      font-size: 0.9rem;
+    }
+    .hero-links a {
+      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* --- SECTION --- */
+    section { padding: 72px 24px; }
+    section.alt { background: var(--bg-alt); }
+    .section-inner { max-width: var(--max-w); margin: 0 auto; }
+    .section-title {
+      font-size: 1.75rem; font-weight: 700;
+      margin-bottom: 8px; letter-spacing: -0.02em;
+    }
+    .section-subtitle {
+      color: var(--text-secondary); margin-bottom: 40px;
+      font-size: 1.05rem;
+    }
+
+    /* --- FEATURES --- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
+    }
+    .feature-icon {
+      width: 40px; height: 40px;
+      background: var(--accent-light);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; margin-bottom: 14px;
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 650; margin-bottom: 6px; }
+    .feature-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.55; }
+
+    /* --- CODE --- */
+    .code-block {
+      background: var(--text);
+      color: #e2e8f0;
+      border-radius: var(--radius);
+      padding: 28px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .code-block .kw { color: #c084fc; }
+    .code-block .str { color: #86efac; }
+    .code-block .fn { color: #93c5fd; }
+    .code-block .cm { color: #64748b; }
+    .code-block .num { color: #fbbf24; }
+    .code-block .prop { color: #f0abfc; }
+
+    .code-tabs {
+      display: flex; gap: 0; margin-bottom: -1px; position: relative; z-index: 1;
+    }
+    .code-tab {
+      padding: 8px 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: var(--radius) var(--radius) 0 0;
+      cursor: pointer;
+    }
+    .code-tab.active {
+      color: var(--text);
+      background: var(--text);
+      color: #e2e8f0;
+      border-color: var(--text);
+    }
+
+    /* --- ARCH --- */
+    .arch-diagram {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .arch-diagram pre {
+      display: inline-block; text-align: left;
+      color: var(--text-secondary);
+    }
+    .arch-diagram .hl { color: var(--accent); font-weight: 600; }
+
+    /* --- API TABLE --- */
+    .api-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .api-table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: var(--bg-code);
+      border-bottom: 2px solid var(--border);
+      font-weight: 650;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+    .api-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .api-table code {
+      background: var(--bg-code);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    footer .links { display: flex; gap: 24px; justify-content: center; margin-bottom: 12px; }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 640px) {
+      .hero { padding: 56px 20px 48px; }
+      section { padding: 48px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      nav .links { gap: 14px; font-size: 0.82rem; }
+      .install-box { font-size: 0.9rem; padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="inner">
+      <div class="logo"><span>&gt;_</span> jsclaw</div>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#api">API</a>
+        <a href="https://github.com/jsclaw/jsclaw">GitHub</a>
+        <a href="https://www.npmjs.com/package/jsclaw">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge-row" style="justify-content:center; margin-bottom: 20px;">
+      <img src="https://img.shields.io/npm/v/jsclaw?color=2563eb&label=npm" alt="npm version">
+      <img src="https://img.shields.io/badge/license-MIT-059669" alt="MIT license">
+      <img src="https://img.shields.io/badge/node-%3E%3D20-555770" alt="node >= 20">
+      <img src="https://img.shields.io/badge/deps-0-059669" alt="zero dependencies">
+    </div>
+    <h1>Container orchestration<br>for <span class="highlight">Claude AI</span> agents</h1>
+    <p class="tagline">
+      Run Claude agents in isolated Docker containers with streaming output,
+      filesystem IPC, and built-in MCP tools. Pure JavaScript. Zero dependencies.
+    </p>
+    <div class="install-box" onclick="copyInstall(this)">
+      <span class="dollar">$</span>
+      <span class="cmd">npm install jsclaw</span>
+      <button class="copy-btn" aria-label="Copy">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <span class="tooltip">Copied!</span>
+    </div>
+    <div class="hero-links">
+      <a href="https://github.com/jsclaw/jsclaw">View on GitHub &rarr;</a>
+      <a href="https://github.com/qwibitai/nanoclaw">Based on nanoclaw</a>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="alt" id="features">
+    <div class="section-inner">
+      <h2 class="section-title">What's inside</h2>
+      <p class="section-subtitle">The core primitives you need to orchestrate Claude agents in containers.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F4E6;</div>
+          <h3>Container Runner</h3>
+          <p>Spawn Docker, Podman, or Apple containers. Stream agent output in real-time via sentinel-delimited JSON over stdout.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F4C1;</div>
+          <h3>Filesystem IPC</h3>
+          <p>Atomic JSON file-based communication between host and container. No sockets, no ports&mdash;just files. Simple and reliable.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x2699;</div>
+          <h3>Group Queue</h3>
+          <p>Per-group concurrency with configurable global limits. Exponential backoff retry. One container per group, up to N in parallel.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F527;</div>
+          <h3>MCP Tools</h3>
+          <p>Built-in MCP server exposes <code>send_message</code>, <code>schedule_task</code>, and task lifecycle tools to the agent inside the container.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F512;</div>
+          <h3>Mount Security</h3>
+          <p>Allowlist-based volume mount validation. Blocks sensitive paths (.ssh, .env, credentials) by default. Symlink-aware.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x26A1;</div>
+          <h3>Zero Dependencies</h3>
+          <p>The host side uses only Node.js built-ins. No native modules, no build step. Pure JavaScript ESM that just works.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK START -->
+  <section id="quickstart">
+    <div class="section-inner">
+      <h2 class="section-title">Quick start</h2>
+      <p class="section-subtitle">Three steps to running your first containerized Claude agent.</p>
+
+      <div style="margin-bottom: 24px;">
+        <div class="code-tabs">
+          <div class="code-tab active">run-agent.js</div>
+        </div>
+        <div class="code-block"><pre><span class="kw">import</span> { <span class="fn">runContainerAgent</span>, <span class="fn">createConfig</span> } <span class="kw">from</span> <span class="str">'jsclaw'</span>;
+
+<span class="kw">const</span> config = <span class="fn">createConfig</span>({
+  <span class="prop">containerImage</span>: <span class="str">'jsclaw-agent:latest'</span>,
+  <span class="prop">dataDir</span>:         <span class="str">'./data'</span>,
+  <span class="prop">groupsDir</span>:      <span class="str">'./groups'</span>,
+});
+
+<span class="kw">const</span> group = { <span class="prop">name</span>: <span class="str">'my-agent'</span>, <span class="prop">folder</span>: <span class="str">'my-agent'</span> };
+
+<span class="kw">const</span> input = {
+  <span class="prop">prompt</span>:      <span class="str">'Analyze the codebase and suggest improvements.'</span>,
+  <span class="prop">groupFolder</span>: <span class="str">'my-agent'</span>,
+  <span class="prop">chatJid</span>:     <span class="str">'user-1'</span>,
+  <span class="prop">isMain</span>:      <span class="num">true</span>,
+};
+
+<span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">runContainerAgent</span>(
+  group,
+  input,
+  (proc, name) =&gt; console.<span class="fn">log</span>(<span class="str">`Container</span> <span class="str">${name} started`</span>),
+  <span class="kw">async</span> (output) =&gt; console.<span class="fn">log</span>(<span class="str">'Agent:'</span>, output.result),
+  config,
+);
+
+console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.status);</pre></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="alt">
+    <div class="section-inner">
+      <h2 class="section-title">Architecture</h2>
+      <p class="section-subtitle">Host process communicates with isolated containers via stdin/stdout and filesystem IPC.</p>
+      <div class="arch-diagram">
+<pre>
+  <span class="hl">Host Process (your app)</span>                <span class="hl">Docker Container</span>
+ ┌─────────────────────────┐           ┌─────────────────────────┐
+ │                         │           │                         │
+ │  container-runner.js    │──stdin──▶ │  agent-runner.js        │
+ │  <span style="color:#059669">Spawns containers,</span>     │◀─stdout── │  <span style="color:#059669">Drives Claude SDK</span>       │
+ │  <span style="color:#059669">streams output</span>         │           │                         │
+ │                         │           │  mcp-server.js          │
+ │  ipc.js                 │◀──files── │  <span style="color:#059669">send_message,</span>          │
+ │  <span style="color:#059669">Polls IPC directories</span>  │──files──▶ │  <span style="color:#059669">schedule_task, ...</span>      │
+ │                         │           │                         │
+ │  group-queue.js         │           │  /workspace/group/      │
+ │  <span style="color:#059669">Concurrency control</span>    │           │  <span style="color:#059669">Isolated filesystem</span>    │
+ │                         │           │                         │
+ └─────────────────────────┘           └─────────────────────────┘
+         │                                       │
+    <span style="color:#2563eb">data/ipc/{group}/</span>                     <span style="color:#2563eb">/workspace/ipc/</span>
+    messages/ tasks/ input/              messages/ tasks/ input/
+</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- API -->
+  <section id="api">
+    <div class="section-inner">
+      <h2 class="section-title">API Reference</h2>
+      <p class="section-subtitle">Granular ESM exports &mdash; import only what you need.</p>
+      <div style="overflow-x: auto;">
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Export</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>createConfig(overrides?)</code></td>
+              <td>Create configuration with defaults, env vars, and overrides</td>
+            </tr>
+            <tr>
+              <td><code>runContainerAgent(group, input, ...)</code></td>
+              <td>Spawn a container, run a Claude agent, stream results</td>
+            </tr>
+            <tr>
+              <td><code>GroupQueue</code></td>
+              <td>Per-group concurrency queue with global container limit</td>
+            </tr>
+            <tr>
+              <td><code>startIpcWatcher(deps, config?)</code></td>
+              <td>Poll IPC directories for messages and task operations</td>
+            </tr>
+            <tr>
+              <td><code>writeIpcFile(dir, data)</code></td>
+              <td>Atomic JSON file write (temp + rename)</td>
+            </tr>
+            <tr>
+              <td><code>drainIpcDir(dir, filter?)</code></td>
+              <td>Read all JSON files from a directory, parse, and delete</td>
+            </tr>
+            <tr>
+              <td><code>validateAdditionalMounts(...)</code></td>
+              <td>Validate volume mounts against a security allowlist</td>
+            </tr>
+            <tr>
+              <td><code>buildVolumeMounts(group, config)</code></td>
+              <td>Build Docker volume mount arguments for a group</td>
+            </tr>
+            <tr>
+              <td><code>parseContainerOutput(buffer)</code></td>
+              <td>Parse sentinel-delimited JSON from container stdout</td>
+            </tr>
+            <tr>
+              <td><code>createLogger(options?)</code></td>
+              <td>Minimal JSON logger (no dependencies)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- MCP TOOLS -->
+  <section class="alt">
+    <div class="section-inner">
+      <h2 class="section-title">MCP Tools</h2>
+      <p class="section-subtitle">Tools available to the Claude agent inside the container via the built-in MCP server.</p>
+      <div style="overflow-x: auto;">
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>send_message</code></td>
+              <td>Send a message to the user or group immediately</td>
+            </tr>
+            <tr>
+              <td><code>schedule_task</code></td>
+              <td>Schedule a cron, interval, or one-shot task</td>
+            </tr>
+            <tr>
+              <td><code>list_tasks</code></td>
+              <td>List all scheduled tasks for the current group</td>
+            </tr>
+            <tr>
+              <td><code>pause_task</code></td>
+              <td>Pause a scheduled task by ID</td>
+            </tr>
+            <tr>
+              <td><code>resume_task</code></td>
+              <td>Resume a paused task by ID</td>
+            </tr>
+            <tr>
+              <td><code>cancel_task</code></td>
+              <td>Cancel and delete a scheduled task</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIG -->
+  <section>
+    <div class="section-inner">
+      <h2 class="section-title">Configuration</h2>
+      <p class="section-subtitle">Configure via <code>createConfig()</code> overrides or environment variables.</p>
+      <div style="overflow-x: auto;">
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Env Variable</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>JSCLAW_CONTAINER_IMAGE</code></td>
+              <td>jsclaw-agent:latest</td>
+              <td>Docker image for agent containers</td>
+            </tr>
+            <tr>
+              <td><code>JSCLAW_CONTAINER_RUNTIME</code></td>
+              <td>docker</td>
+              <td>docker, podman, or container</td>
+            </tr>
+            <tr>
+              <td><code>JSCLAW_CONTAINER_TIMEOUT</code></td>
+              <td>1800000</td>
+              <td>Idle timeout in milliseconds</td>
+            </tr>
+            <tr>
+              <td><code>JSCLAW_MAX_CONCURRENT</code></td>
+              <td>5</td>
+              <td>Maximum concurrent containers</td>
+            </tr>
+            <tr>
+              <td><code>JSCLAW_DATA_DIR</code></td>
+              <td>./data</td>
+              <td>IPC data directory</td>
+            </tr>
+            <tr>
+              <td><code>JSCLAW_GROUPS_DIR</code></td>
+              <td>./groups</td>
+              <td>Group workspace directory</td>
+            </tr>
+            <tr>
+              <td><code>ANTHROPIC_API_KEY</code></td>
+              <td>&mdash;</td>
+              <td>Required for Claude API access</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="links">
+      <a href="https://github.com/jsclaw/jsclaw">GitHub</a>
+      <a href="https://www.npmjs.com/package/jsclaw">npm</a>
+      <a href="https://github.com/qwibitai/nanoclaw">nanoclaw</a>
+      <a href="https://github.com/jsclaw/jsclaw/blob/main/LICENSE">MIT License</a>
+    </div>
+    <p>jsclaw v0.0.1 &middot; A JavaScript port of <a href="https://github.com/qwibitai/nanoclaw">nanoclaw</a></p>
+  </footer>
+
+  <script>
+    function copyInstall(el) {
+      navigator.clipboard.writeText('npm install jsclaw');
+      const tip = el.querySelector('.tooltip');
+      tip.classList.add('show');
+      setTimeout(() => tip.classList.remove('show'), 1500);
+    }
+  </script>
+</body>
+</html>
