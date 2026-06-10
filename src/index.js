@@ -4,7 +4,7 @@
  */
 
 // Config
-export { createConfig, defaultConfig } from './config.js';
+export { createConfig, defaultConfig, loadConfigFile } from './config.js';
 
 // Container runner
 export {
@@ -34,7 +34,22 @@ export { startHeartbeat, inQuietHours, HEARTBEAT_OK } from './heartbeat.js';
 export { ChannelManager } from './channel.js';
 
 // Webhooks
-export { startWebhookIngress, renderTemplate } from './webhooks.js';
+export { startWebhookIngress, renderTemplate, createWebhookEmitter } from './webhooks.js';
+
+// Skills
+export {
+  parseFrontmatter,
+  parseSkill,
+  loadSkills,
+  installSkill,
+  removeSkill,
+  skillMatches,
+  matchSkills,
+  buildSkillContext,
+} from './skills.js';
+
+// Multi-agent bindings
+export { resolveBinding, resolveAgentConfig } from './bindings.js';
 
 // Memory
 export {
