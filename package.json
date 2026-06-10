@@ -1,6 +1,6 @@
 {
   "name": "jsclaw",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
   "type": "module",
   "license": "MIT",
@@ -41,6 +41,7 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "node --test test/*.test.js",
+    "test:e2e": "node --test test/e2e.test.js",
     "lint": "node --check src/*.js bin/jsclaw.js container/agent-runner.js container/mcp-server.js",
     "docker:build": "docker build -t jsclaw-agent:latest -f container/Dockerfile container/"
   },

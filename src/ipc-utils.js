@@ -7,8 +7,12 @@ import { writeFileSync, readFileSync, renameSync, readdirSync, unlinkSync, mkdir
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
+// Monotonic sequence keeps same-millisecond writes in order when drained.
+let writeSeq = 0;
+
 /**
  * Atomically write a JSON IPC file (write .tmp, then rename).
+ * Filenames sort in write order, even within the same millisecond.
  * @param {string} dir - Target directory
  * @param {Object} data - Data to serialize as JSON
  * @param {string} [prefix] - Optional filename prefix
@@ -16,7 +20,8 @@ import { randomUUID } from 'node:crypto';
  */
 export function writeIpcFile(dir, data, prefix = '') {
   mkdirSync(dir, { recursive: true });
-  const filename = `${prefix}${Date.now()}-${randomUUID().slice(0, 8)}.json`;
+  const seq = String(writeSeq++ % 1e6).padStart(6, '0');
+  const filename = `${prefix}${Date.now()}-${seq}-${randomUUID().slice(0, 8)}.json`;
   const tmpPath = join(dir, `.${filename}.tmp`);
   const finalPath = join(dir, filename);
   writeFileSync(tmpPath, JSON.stringify(data));

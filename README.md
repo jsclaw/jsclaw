@@ -22,7 +22,7 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Webhooks** — HTTP ingress with `{{body.field}}` templates and secret auth, plus outgoing event webhooks (openclaw-compatible shapes)
 - **Config File** — Optional `jsclaw.json` with `${ENV_VAR}` expansion; overrides > env > file > defaults
 - **CLI** — `npx jsclaw status|doctor|tasks|memory|skill|config|run|heartbeat`
-- **Tested** — Full `node:test` suite, zero dev-dependencies
+- **Tested** — Full `node:test` suite plus Docker E2E tests against a mock agent image, zero dev-dependencies
 - **Mount Security** — Validate volume mounts against allowlists
 
 You bring your own I/O (chat, API, CLI) and storage. jsclaw handles the container orchestration.
