@@ -14,6 +14,8 @@ const DEFAULTS = {
   maxOutputSize: 10 * 1024 * 1024,  // 10 MB
   maxConcurrentContainers: 5,
   ipcPollInterval: 1000,
+  schedulerPollInterval: 60 * 1000,   // 1 minute
+  heartbeatInterval: 30 * 60 * 1000,  // 30 minutes
   dataDir: join(process.cwd(), 'data'),
   groupsDir: join(process.cwd(), 'groups'),
   mountAllowlistPath: undefined,
@@ -37,6 +39,8 @@ export function createConfig(overrides = {}) {
     ...(env.JSCLAW_MAX_OUTPUT_SIZE && { maxOutputSize: Number(env.JSCLAW_MAX_OUTPUT_SIZE) }),
     ...(env.JSCLAW_MAX_CONCURRENT && { maxConcurrentContainers: Number(env.JSCLAW_MAX_CONCURRENT) }),
     ...(env.JSCLAW_IPC_POLL_INTERVAL && { ipcPollInterval: Number(env.JSCLAW_IPC_POLL_INTERVAL) }),
+    ...(env.JSCLAW_SCHEDULER_POLL_INTERVAL && { schedulerPollInterval: Number(env.JSCLAW_SCHEDULER_POLL_INTERVAL) }),
+    ...(env.JSCLAW_HEARTBEAT_INTERVAL && { heartbeatInterval: Number(env.JSCLAW_HEARTBEAT_INTERVAL) }),
     ...(env.JSCLAW_DATA_DIR && { dataDir: env.JSCLAW_DATA_DIR }),
     ...(env.JSCLAW_GROUPS_DIR && { groupsDir: env.JSCLAW_GROUPS_DIR }),
     ...(env.JSCLAW_MOUNT_ALLOWLIST && { mountAllowlistPath: env.JSCLAW_MOUNT_ALLOWLIST }),

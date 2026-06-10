@@ -1,6 +1,6 @@
 {
   "name": "jsclaw",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
   "type": "module",
   "license": "MIT",
@@ -20,6 +20,10 @@
     "./ipc": "./src/ipc.js",
     "./ipc-utils": "./src/ipc-utils.js",
     "./group-queue": "./src/group-queue.js",
+    "./cron": "./src/cron.js",
+    "./task-store": "./src/task-store.js",
+    "./task-scheduler": "./src/task-scheduler.js",
+    "./heartbeat": "./src/heartbeat.js",
     "./mount-security": "./src/mount-security.js",
     "./types": "./src/types.js",
     "./container/agent-runner": "./container/agent-runner.js",
