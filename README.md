@@ -8,6 +8,7 @@ A JavaScript port of [nanoclaw](https://github.com/qwibitai/nanoclaw) — the co
 
 jsclaw provides primitives for running Claude AI agents in isolated Docker containers:
 
+- **Gateway** — WebSocket control plane (openclaw wire shape) with token auth + built-in webchat; `npx jsclaw gateway` runs the whole host
 - **Container Runner** — Spawn Docker containers, stream agent output via sentinel-delimited JSON
 - **IPC System** — Filesystem-based JSON communication between host and container
 - **Group Queue** — Per-group concurrency with configurable container limits
@@ -34,6 +35,26 @@ npm install jsclaw
 ```
 
 ## Quick Start
+
+### 0. The fast path: a full agent host in one command
+
+```bash
+docker build -t jsclaw-agent:latest -f node_modules/jsclaw/container/Dockerfile node_modules/jsclaw/container/
+export ANTHROPIC_API_KEY=sk-ant-...
+npx jsclaw gateway
+```
+
+Open the printed `http://127.0.0.1:18789/chat?token=...` URL and talk to your containerized agent. The gateway wires everything: orphan reaping at boot, task scheduler, heartbeat, IPC watcher, and a WebSocket API speaking openclaw's frame shape:
+
+```javascript
+// any WebSocket client
+ws.send(JSON.stringify({ type: 'req', id: 1, method: 'chat.send',
+  params: { groupFolder: 'main', message: 'Summarize my notes' } }));
+// → { type: 'event', event: 'agent.output', payload: { ... } }  (streaming)
+// → { type: 'res', id: 1, ok: true, payload: { result, newSessionId } }
+```
+
+Methods: `status`, `chat.send`, `tasks.list|pause|resume|cancel`, `heartbeat.trigger`, `memory.list|search`. Embed it yourself with `startGateway(deps, config, { port, token })`.
 
 ### 1. Build the container image
 

@@ -21,11 +21,15 @@ import { execSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { randomBytes } from 'node:crypto';
 import { createConfig, loadConfigFile } from '../src/config.js';
-import { TaskStore, computeNextRun } from '../src/task-store.js';
+import { TaskStore, computeNextRun, createTaskIpcHandler } from '../src/task-store.js';
+import { startTaskScheduler } from '../src/task-scheduler.js';
+import { startIpcWatcher } from '../src/ipc.js';
 import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
 import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
-import { HEARTBEAT_OK } from '../src/heartbeat.js';
+import { startHeartbeat, HEARTBEAT_OK } from '../src/heartbeat.js';
+import { startGateway } from '../src/gateway.js';
 import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
 const VERSION = JSON.parse(
@@ -47,6 +51,8 @@ Usage:
   jsclaw run <group> <prompt...>         Run an agent once with a prompt
   jsclaw heartbeat <group> [--dry-run]   Trigger a heartbeat cycle now
   jsclaw reap                            Remove orphaned jsclaw containers
+  jsclaw gateway [--port <n>]            Run the full agent host: gateway,
+                                         webchat, scheduler, heartbeat, IPC
   jsclaw skill list                      List installed skills
   jsclaw skill install <path>            Install a SKILL.md file
   jsclaw skill remove <name>             Remove an installed skill
@@ -368,12 +374,89 @@ function cmdConfig(config, sub, args, opts) {
   }
 }
 
+async function cmdGateway(config, opts) {
+  const verboseLogger = createConfig().logger; // real logger for a long-running host
+  config = createConfig({ logger: verboseLogger });
+  const port = opts.port ? Number(opts.port) : 18789;
+  const token = process.env.JSCLAW_GATEWAY_TOKEN || randomBytes(16).toString('hex');
+
+  // 1. Clean up after any previous crashed host
+  const reaped = await reapOrphanContainers(config);
+  if (reaped.length) console.log(`reaped ${reaped.length} orphaned container(s)`);
+
+  // 2. Core wiring: store, agent runner, queue-less direct runs
+  const store = new TaskStore(config);
+  const groups = () => listGroups(config);
+
+  const runAgent = (groupFolder, prompt, onOutput) =>
+    runContainerAgent(
+      { name: groupFolder, folder: groupFolder },
+      { prompt, groupFolder, chatJid: `gateway:${groupFolder}`, isMain: true },
+      null,
+      onOutput ? async (output) => onOutput(output) : null,
+      config,
+    );
+
+  // 3. Gateway first so subsystems can broadcast to clients
+  const gateway = await startGateway({
+    runAgent,
+    store,
+    getGroups: groups,
+    triggerHeartbeat: () => heartbeat.triggerNow(),
+  }, config, { port, token });
+
+  // 4. Agent-initiated messages and task ops
+  startIpcWatcher({
+    sendMessage: async (jid, text, sender) => {
+      gateway.broadcast('message', { jid, text, sender });
+    },
+    onTask: createTaskIpcHandler(store, { logger: config.logger }),
+    getRegisteredGroups: () => ({}),
+  }, config);
+
+  // 5. Scheduler executes what agents schedule
+  startTaskScheduler({
+    store,
+    runTask: async (task) => {
+      const result = await runAgent(task.groupFolder, task.prompt, null);
+      gateway.broadcast('task.completed', { taskId: task.id, status: result.status });
+    },
+  }, config);
+
+  // 6. Heartbeat wakes groups with a HEARTBEAT.md
+  const heartbeat = startHeartbeat({
+    getGroups: () => groups().map((folder) => ({ name: folder, folder })),
+    runAgent: (group, prompt) => runAgent(group.folder, prompt, null),
+    onAlert: async (group, result) => {
+      gateway.broadcast('heartbeat.alert', { groupFolder: group.folder, result });
+    },
+  }, config);
+
+  console.log(`\njsclaw gateway v${VERSION}`);
+  console.log(`  chat:    http://127.0.0.1:${gateway.port}/chat?token=${token}`);
+  console.log(`  ws:      ws://127.0.0.1:${gateway.port}/?token=${token}`);
+  console.log(`  groups:  ${groups().join(', ') || '(none yet — first chat creates one)'}`);
+  console.log(`  token:   ${token}${process.env.JSCLAW_GATEWAY_TOKEN ? ' (from JSCLAW_GATEWAY_TOKEN)' : ' (generated; set JSCLAW_GATEWAY_TOKEN to pin)'}`);
+  console.log('\nCtrl-C to stop.');
+
+  await new Promise((resolve) => {
+    for (const signal of ['SIGINT', 'SIGTERM']) {
+      process.on(signal, resolve);
+    }
+  });
+  console.log('\nshutting down…');
+  heartbeat.stop();
+  await gateway.stop();
+  process.exit(0);
+}
+
 // --- Main ---
 
 async function main() {
   const { values: opts, positionals } = parseArgs({
     options: {
       group: { type: 'string' },
+      port: { type: 'string' },
       'dry-run': { type: 'boolean', default: false },
       json: { type: 'boolean', default: false },
       version: { type: 'boolean', short: 'v', default: false },
@@ -401,6 +484,8 @@ async function main() {
       return cmdRun(config, rest[0], rest.slice(1).join(' '));
     case 'heartbeat':
       return cmdHeartbeat(config, rest[0], opts['dry-run']);
+    case 'gateway':
+      return cmdGateway(config, opts);
     case 'reap': {
       const reaped = await reapOrphanContainers(config);
       if (opts.json) return console.log(JSON.stringify(reaped));

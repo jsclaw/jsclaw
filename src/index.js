@@ -34,6 +34,9 @@ export { startHeartbeat, inQuietHours, HEARTBEAT_OK } from './heartbeat.js';
 // Channels
 export { ChannelManager } from './channel.js';
 
+// Gateway
+export { startGateway } from './gateway.js';
+
 // Webhooks
 export { startWebhookIngress, renderTemplate, createWebhookEmitter } from './webhooks.js';
 
