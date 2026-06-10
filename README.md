@@ -14,6 +14,8 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **MCP Tools** — Send messages and schedule tasks from inside the agent
 - **Task Scheduler** — Cron, interval, and one-shot tasks with zero-dep cron parsing
 - **Heartbeat** — Periodic agent wake-up for autonomous operation (`HEARTBEAT.md`)
+- **Identity Files** — `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` loaded into the system prompt, openclaw-style
+- **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
 - **Mount Security** — Validate volume mounts against allowlists
 
 You bring your own I/O (chat, API, CLI) and storage. jsclaw handles the container orchestration.
@@ -145,6 +147,41 @@ Drop a `HEARTBEAT.md` in a group folder to give that agent standing tasks:
 ```
 
 The agent replies `HEARTBEAT_OK` when nothing needs attention (suppressed); anything else is delivered through `onAlert`.
+
+### 5. Identity files (personality)
+
+Drop any of `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` into a group folder and the agent loads them into its system prompt in that order — same convention as openclaw:
+
+```markdown
+<!-- groups/main/SOUL.md -->
+# SOUL.md
+You are the colleague who actually gets things done.
+
+## Boundaries
+- Don't pad replies. Skip "Great question!" — just help.
+```
+
+### 6. Channels (pluggable I/O)
+
+```javascript
+import { ChannelManager, TaskStore, createTaskIpcHandler, startIpcWatcher, createConfig } from 'jsclaw';
+
+const store = new TaskStore(createConfig());
+const channels = new ChannelManager();
+channels.register(myTelegramChannel);   // implements the Channel interface
+channels.register(myDiscordChannel);
+
+await channels.connectAll();
+
+// Outbound routing by JID — drops straight into the IPC watcher
+startIpcWatcher({
+  sendMessage: channels.sendMessage,
+  onTask: createTaskIpcHandler(store),
+  getRegisteredGroups: () => ({}),
+}, createConfig());
+```
+
+A `Channel` implements: `name`, `connect()`, `disconnect()`, `sendMessage(jid, text, sender?)`, `ownsJid(jid)`, `isConnected()`, and optionally `setTyping()`. See [examples/telegram.js](examples/telegram.js) for a complete implementation.
 
 ## Architecture
 

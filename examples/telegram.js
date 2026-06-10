@@ -23,7 +23,11 @@ import {
   runContainerAgent,
   GroupQueue,
   startIpcWatcher,
+  startTaskScheduler,
   createConfig,
+  ChannelManager,
+  TaskStore,
+  createTaskIpcHandler,
 } from 'jsclaw';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -35,6 +39,42 @@ if (!TOKEN) {
 const config = createConfig();
 const bot = new Bot(TOKEN);
 const queue = new GroupQueue(config);
+const store = new TaskStore(config);
+
+// --- Channel: adapt Telegram to the jsclaw Channel interface ---
+
+let connected = false;
+
+/** @type {import('jsclaw/channel').Channel} */
+const telegramChannel = {
+  name: 'telegram',
+  async connect() {
+    bot.start({
+      onStart: (info) => {
+        connected = true;
+        console.log(`Bot running as @${info.username}`);
+      },
+    });
+  },
+  async disconnect() {
+    connected = false;
+    await bot.stop();
+  },
+  isConnected: () => connected,
+  // This example treats every numeric JID as a Telegram chat id
+  ownsJid: (jid) => /^-?\d+$/.test(jid),
+  async sendMessage(jid, text) {
+    for (const chunk of splitMessage(text, 4000)) {
+      await bot.api.sendMessage(Number(jid), chunk);
+    }
+  },
+  async setTyping(jid) {
+    await bot.api.sendChatAction(Number(jid), 'typing');
+  },
+};
+
+const channels = new ChannelManager({ logger: config.logger });
+channels.register(telegramChannel);
 
 // Track sessions per chat for conversation continuity
 const sessions = new Map();
@@ -94,21 +134,27 @@ function splitMessage(text, maxLen) {
   return chunks;
 }
 
-// --- IPC watcher: handle messages sent by agents via MCP tools ---
+// --- IPC watcher: agent MCP tools (send_message, schedule_task, ...) ---
+// ChannelManager routes outbound messages; the task handler persists
+// scheduled tasks into the TaskStore.
 
 startIpcWatcher({
-  sendMessage: async (jid, text) => {
-    try {
-      await bot.api.sendMessage(Number(jid), text);
-    } catch (err) {
-      console.error(`Failed to send to ${jid}:`, err.message);
-    }
-  },
-  onTask: async (type, data, sourceGroup, isMain) => {
-    console.log(`Task IPC: ${type}`, data);
-    // Implement your own task storage here
-  },
+  sendMessage: channels.sendMessage,
+  onTask: createTaskIpcHandler(store, { logger: config.logger }),
   getRegisteredGroups: () => ({}),
+}, config);
+
+// --- Scheduler: execute tasks the agent scheduled for itself ---
+
+startTaskScheduler({
+  store,
+  runTask: async (task) => {
+    await processMessage(
+      Number(task.chatJid),
+      task.prompt,
+      (msg) => channels.sendMessage(task.chatJid, msg),
+    );
+  },
 }, config);
 
 // --- Bot handlers ---
@@ -150,15 +196,13 @@ bot.command('start', async (ctx) => {
 // --- Startup ---
 
 console.log('Starting Telegram bot...');
-bot.start({
-  onStart: (info) => console.log(`Bot running as @${info.username}`),
-});
+await channels.connectAll();
 
 // Graceful shutdown
 for (const signal of ['SIGINT', 'SIGTERM']) {
   process.on(signal, async () => {
     console.log(`\n${signal} received, shutting down...`);
-    bot.stop();
+    await channels.disconnectAll();
     await queue.shutdown();
     process.exit(0);
   });

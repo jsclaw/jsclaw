@@ -1,6 +1,6 @@
 {
   "name": "jsclaw",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
   "type": "module",
   "license": "MIT",
@@ -24,6 +24,7 @@
     "./task-store": "./src/task-store.js",
     "./task-scheduler": "./src/task-scheduler.js",
     "./heartbeat": "./src/heartbeat.js",
+    "./channel": "./src/channel.js",
     "./mount-security": "./src/mount-security.js",
     "./types": "./src/types.js",
     "./container/agent-runner": "./container/agent-runner.js",
