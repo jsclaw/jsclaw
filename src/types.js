@@ -30,6 +30,8 @@
  * @property {number} maxOutputSize - Max stdout buffer size in bytes (default: 10485760)
  * @property {number} maxConcurrentContainers - Concurrency limit (default: 5)
  * @property {number} ipcPollInterval - IPC polling interval in ms (default: 1000)
+ * @property {number} schedulerPollInterval - Task scheduler poll interval in ms (default: 60000)
+ * @property {number} heartbeatInterval - Heartbeat interval in ms (default: 1800000)
  * @property {string} dataDir - Base directory for IPC/data files
  * @property {string} groupsDir - Base directory for group workspace folders
  * @property {string} [mountAllowlistPath] - Path to mount allowlist JSON

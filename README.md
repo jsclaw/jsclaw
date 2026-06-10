@@ -12,6 +12,8 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **IPC System** — Filesystem-based JSON communication between host and container
 - **Group Queue** — Per-group concurrency with configurable container limits
 - **MCP Tools** — Send messages and schedule tasks from inside the agent
+- **Task Scheduler** — Cron, interval, and one-shot tasks with zero-dep cron parsing
+- **Heartbeat** — Periodic agent wake-up for autonomous operation (`HEARTBEAT.md`)
 - **Mount Security** — Validate volume mounts against allowlists
 
 You bring your own I/O (chat, API, CLI) and storage. jsclaw handles the container orchestration.
@@ -89,6 +91,61 @@ queue.enqueueMessageCheck('group-1');
 // await queue.shutdown();
 ```
 
+### 4. Scheduled tasks + heartbeat (autonomous operation)
+
+```javascript
+import {
+  TaskStore, createTaskIpcHandler, startTaskScheduler,
+  startHeartbeat, runContainerAgent, startIpcWatcher, createConfig,
+} from 'jsclaw';
+
+const config = createConfig();
+const store = new TaskStore(config);
+
+// Agents can now schedule their own tasks via the schedule_task MCP tool
+startIpcWatcher({
+  sendMessage: async (jid, text) => { /* your channel */ },
+  onTask: createTaskIpcHandler(store),
+  getRegisteredGroups: () => ({}),
+}, config);
+
+// Execute due tasks (cron / interval / once)
+startTaskScheduler({
+  store,
+  runTask: async (task) => {
+    await runContainerAgent(
+      { name: task.groupFolder, folder: task.groupFolder },
+      { prompt: task.prompt, groupFolder: task.groupFolder,
+        chatJid: task.chatJid, isMain: true, isScheduledTask: true },
+      null, null, config,
+    );
+  },
+}, config);
+
+// Wake agents periodically to check their HEARTBEAT.md
+startHeartbeat({
+  getGroups: () => [{ name: 'main', folder: 'main' }],
+  runAgent: (group, prompt) => runContainerAgent(
+    group,
+    { prompt, groupFolder: group.folder, chatJid: 'heartbeat', isMain: true },
+    null, null, config,
+  ),
+  onAlert: async (group, result) => { /* deliver via your channel */ },
+}, config, { quietHours: { start: '22:00', end: '07:00' } });
+```
+
+Drop a `HEARTBEAT.md` in a group folder to give that agent standing tasks:
+
+```markdown
+## Every heartbeat
+- Check for failed deployments, alert me if any
+
+## Daily (morning)
+- Summarize my calendar for the day
+```
+
+The agent replies `HEARTBEAT_OK` when nothing needs attention (suppressed); anything else is delivered through `onAlert`.
+
 ## Architecture
 
 ```
@@ -156,6 +213,8 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_CONTAINER_TIMEOUT` | `1800000` | Idle timeout (ms) |
 | `JSCLAW_MAX_CONCURRENT` | `5` | Max concurrent containers |
 | `JSCLAW_DATA_DIR` | `./data` | IPC data directory |
+| `JSCLAW_SCHEDULER_POLL_INTERVAL` | `60000` | Task scheduler poll interval (ms) |
+| `JSCLAW_HEARTBEAT_INTERVAL` | `1800000` | Heartbeat interval (ms, 30 min) |
 | `JSCLAW_GROUPS_DIR` | `./groups` | Group workspace directory |
 | `JSCLAW_LOG_LEVEL` | `info` | Log level |
 | `ANTHROPIC_API_KEY` | — | Required for Claude API |

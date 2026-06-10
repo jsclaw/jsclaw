@@ -22,6 +22,14 @@ export { writeIpcFile, readIpcFile, drainIpcDir, writeCloseSentinel } from './ip
 // Queue
 export { GroupQueue } from './group-queue.js';
 
+// Scheduling
+export { parseCron, isValidCron, nextCron } from './cron.js';
+export { TaskStore, computeNextRun, createTaskIpcHandler } from './task-store.js';
+export { startTaskScheduler } from './task-scheduler.js';
+
+// Heartbeat
+export { startHeartbeat, inQuietHours, HEARTBEAT_OK } from './heartbeat.js';
+
 // Security
 export {
   validateMount,
