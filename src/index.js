@@ -33,6 +33,21 @@ export { startHeartbeat, inQuietHours, HEARTBEAT_OK } from './heartbeat.js';
 // Channels
 export { ChannelManager } from './channel.js';
 
+// Webhooks
+export { startWebhookIngress, renderTemplate } from './webhooks.js';
+
+// Memory
+export {
+  MEMORY_CATEGORIES,
+  memoryDir,
+  initMemory,
+  listMemoryFiles,
+  loadMemoryContext,
+  appendMemory,
+  searchMemory,
+  clearMemory,
+} from './memory.js';
+
 // Security
 export {
   validateMount,

@@ -16,6 +16,9 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Heartbeat** — Periodic agent wake-up for autonomous operation (`HEARTBEAT.md`)
 - **Identity Files** — `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` loaded into the system prompt, openclaw-style
 - **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
+- **Memory** — Per-group markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
+- **Webhooks** — HTTP ingress with `{{body.field}}` templates and secret auth (openclaw-compatible shape)
+- **CLI** — `npx jsclaw status|doctor|tasks|memory|run|heartbeat`
 - **Mount Security** — Validate volume mounts against allowlists
 
 You bring your own I/O (chat, API, CLI) and storage. jsclaw handles the container orchestration.
@@ -183,6 +186,57 @@ startIpcWatcher({
 
 A `Channel` implements: `name`, `connect()`, `disconnect()`, `sendMessage(jid, text, sender?)`, `ownsJid(jid)`, `isConnected()`, and optionally `setTyping()`. See [examples/telegram.js](examples/telegram.js) for a complete implementation.
 
+### 7. Memory (persistent context)
+
+Each group gets a `memory/` directory of plain Markdown — openclaw's categories (`preferences.md`, `contacts.md`, `projects.md`, `learnings.md`) plus any custom files. It rides the existing group mount, so the agent reads and writes its own memory with ordinary fs tools, and the agent runner loads it into the system prompt (budget: `JSCLAW_MEMORY_MAX_CHARS`, default 8000).
+
+```javascript
+import { initMemory, appendMemory, searchMemory, loadMemoryContext } from 'jsclaw';
+
+initMemory('main', config);                                      // seed categories
+appendMemory('main', 'preferences', 'prefers terse answers', config);
+searchMemory('main', 'terse', config);                           // [{ file, line, text }]
+loadMemoryContext('main', config, { maxChars: 8000 });           // system-prompt section
+```
+
+### 8. Webhooks (HTTP ingress)
+
+openclaw-compatible shape: `POST /webhook/<path>`, `X-Webhook-Secret` header, `{{body.field}}` templates.
+
+```javascript
+import { startWebhookIngress } from 'jsclaw';
+
+const { stop } = await startWebhookIngress({
+  port: 18789,
+  secret: process.env.WEBHOOK_SECRET,
+  endpoints: [
+    { path: '/deploy-alert', message: 'Deployment: {{body.service}} is {{body.status}}', groupFolder: 'main' },
+  ],
+  onMessage: async (message, endpoint) => {
+    // run an agent, enqueue it, forward to a channel...
+  },
+}, config);
+```
+
+```bash
+curl -X POST http://localhost:18789/webhook/deploy-alert \
+  -H "X-Webhook-Secret: $WEBHOOK_SECRET" \
+  -d '{"service": "api-v2", "status": "success"}'
+```
+
+### 9. CLI
+
+```bash
+npx jsclaw status                      # config, groups, task counts
+npx jsclaw doctor                      # environment health checks
+npx jsclaw tasks list                  # scheduled tasks (file-based, no daemon needed)
+npx jsclaw tasks pause|resume|cancel <id>
+npx jsclaw memory list main            # memory files for a group
+npx jsclaw memory search main "query"
+npx jsclaw run main "summarize my notes"   # one-shot agent run
+npx jsclaw heartbeat main --dry-run    # preview a heartbeat cycle
+```
+
 ## Architecture
 
 ```
@@ -252,6 +306,7 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_DATA_DIR` | `./data` | IPC data directory |
 | `JSCLAW_SCHEDULER_POLL_INTERVAL` | `60000` | Task scheduler poll interval (ms) |
 | `JSCLAW_HEARTBEAT_INTERVAL` | `1800000` | Heartbeat interval (ms, 30 min) |
+| `JSCLAW_MEMORY_MAX_CHARS` | `8000` | Memory budget loaded into system prompt (chars) |
 | `JSCLAW_GROUPS_DIR` | `./groups` | Group workspace directory |
 | `JSCLAW_LOG_LEVEL` | `info` | Log level |
 | `ANTHROPIC_API_KEY` | — | Required for Claude API |
