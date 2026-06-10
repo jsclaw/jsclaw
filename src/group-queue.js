@@ -9,8 +9,8 @@ import { join } from 'node:path';
 import { writeIpcFile, writeCloseSentinel } from './ipc-utils.js';
 import { createConfig } from './config.js';
 
-const MAX_RETRIES = 5;
-const BASE_RETRY_DELAY = 5000;
+const DEFAULT_MAX_RETRIES = 5;
+const DEFAULT_RETRY_BASE_DELAY = 5000;
 
 /**
  * @typedef {Object} QueueItem
@@ -25,6 +25,8 @@ export class GroupQueue {
   constructor(config) {
     this._config = config || createConfig();
     this._log = this._config.logger;
+    this._maxRetries = this._config.queueMaxRetries ?? DEFAULT_MAX_RETRIES;
+    this._retryBaseDelay = this._config.queueRetryBaseDelayMs ?? DEFAULT_RETRY_BASE_DELAY;
 
     /** @type {Map<string, import('./types.js').GroupState>} */
     this._groups = new Map();
@@ -138,63 +140,63 @@ export class GroupQueue {
    * Try to process the next item in any group's queue.
    * @private
    */
-  async _drain() {
-    if (this._activeCount >= this._config.maxConcurrentContainers) return;
-
-    // Find a group with queued work that isn't currently processing
+  _drain() {
+    // Fill every free slot; one pass may start several groups.
     for (const [, group] of this._groups) {
+      if (this._activeCount >= this._config.maxConcurrentContainers) return;
       if (group.processing || group.queue.length === 0) continue;
-      if (this._activeCount >= this._config.maxConcurrentContainers) break;
 
       group.processing = true;
       this._activeCount++;
 
       const item = group.queue.shift();
       this._processItem(group, item);
-      break; // Process one at a time, _drain is called recursively
     }
   }
 
   /**
-   * Process a single queue item with retry logic.
+   * Process a single queue item, retrying with exponential backoff.
+   * The slot is held for the item's entire lifetime — including retries,
+   * preserving per-group serialization — and released exactly once.
    * @param {import('./types.js').GroupState} group
    * @param {QueueItem} item
-   * @param {number} [attempt]
    * @private
    */
-  async _processItem(group, item, attempt = 0) {
+  async _processItem(group, item) {
     try {
-      let result;
-      if (item.fn) {
-        result = await item.fn();
-      } else if (this._processMessagesFn) {
-        result = await this._processMessagesFn(group.jid);
-      } else {
-        throw new Error('No processing function configured');
+      for (let attempt = 0; ; attempt++) {
+        try {
+          let result;
+          if (item.fn) {
+            result = await item.fn();
+          } else if (this._processMessagesFn) {
+            result = await this._processMessagesFn(group.jid);
+          } else {
+            throw new Error('No processing function configured');
+          }
+          item.resolve(result);
+          return;
+        } catch (err) {
+          if (attempt >= this._maxRetries) {
+            this._log.error(`Failed after ${this._maxRetries} retries for group ${group.jid}`, {
+              error: err.message,
+            });
+            item.reject(err);
+            return;
+          }
+          const delay = this._retryBaseDelay * Math.pow(2, attempt);
+          this._log.warn(`Retrying group ${group.jid} in ${delay}ms (attempt ${attempt + 1})`, {
+            error: err.message,
+          });
+          await new Promise((r) => setTimeout(r, delay));
+        }
       }
-
-      item.resolve(result);
-    } catch (err) {
-      if (attempt < MAX_RETRIES) {
-        const delay = BASE_RETRY_DELAY * Math.pow(2, attempt);
-        this._log.warn(`Retrying group ${group.jid} in ${delay}ms (attempt ${attempt + 1})`, {
-          error: err.message,
-        });
-        setTimeout(() => this._processItem(group, item, attempt + 1), delay);
-        return; // Don't release the slot yet
-      }
-      this._log.error(`Failed after ${MAX_RETRIES} retries for group ${group.jid}`, {
-        error: err.message,
-      });
-      item.reject(err);
     } finally {
-      if (attempt >= MAX_RETRIES || !item.fn) {
-        group.processing = false;
-        group.process = null;
-        group.containerName = null;
-        this._activeCount--;
-        this._drain(); // Check if more work can run
-      }
+      group.processing = false;
+      group.process = null;
+      group.containerName = null;
+      this._activeCount--;
+      this._drain();
     }
   }
 

@@ -37,6 +37,8 @@
  * @property {string} skillsDir - Directory of SKILL.md files (default: ./skills)
  * @property {string} [configPath] - Explicit config file path (default: ./jsclaw.json or JSCLAW_CONFIG_PATH)
  * @property {string} [mountAllowlistPath] - Path to mount allowlist JSON
+ * @property {number} [queueMaxRetries] - GroupQueue retry attempts (default: 5)
+ * @property {number} [queueRetryBaseDelayMs] - GroupQueue base retry delay in ms (default: 5000)
  * @property {Logger} [logger] - Logger instance (default: console-based)
  */
 
