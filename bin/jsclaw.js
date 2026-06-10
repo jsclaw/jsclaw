@@ -16,16 +16,17 @@
  */
 
 import { parseArgs } from 'node:util';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { createConfig } from '../src/config.js';
+import { createConfig, loadConfigFile } from '../src/config.js';
 import { TaskStore, computeNextRun } from '../src/task-store.js';
 import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
 import { runContainerAgent } from '../src/container-runner.js';
 import { HEARTBEAT_OK } from '../src/heartbeat.js';
+import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
 const VERSION = JSON.parse(
   readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'package.json'), 'utf-8')
@@ -45,6 +46,13 @@ Usage:
   jsclaw memory clear <group>            Delete a group's memory
   jsclaw run <group> <prompt...>         Run an agent once with a prompt
   jsclaw heartbeat <group> [--dry-run]   Trigger a heartbeat cycle now
+  jsclaw skill list                      List installed skills
+  jsclaw skill install <path>            Install a SKILL.md file
+  jsclaw skill remove <name>             Remove an installed skill
+  jsclaw skill test <path> <message...>  Check whether a message triggers a skill
+  jsclaw config list                     Show effective configuration
+  jsclaw config get <key>                Read a config value
+  jsclaw config set <key> <value>        Write a value to jsclaw.json
 
 Options:
   --group <folder>   Filter tasks by group
@@ -271,6 +279,94 @@ ${tasks}`;
   if (result.status === 'error') fail(result.error || 'heartbeat failed');
 }
 
+function cmdSkill(config, sub, args, opts) {
+  switch (sub) {
+    case 'list': {
+      const skills = loadSkills(config);
+      if (opts.json) return console.log(JSON.stringify(skills.map(({ body, ...s }) => s), null, 2));
+      if (skills.length === 0) return console.log('no skills installed');
+      for (const s of skills) {
+        console.log(`${s.name}${s.version ? ` v${s.version}` : ''}  trigger:${s.trigger}`);
+        console.log(`          ${s.description}`);
+      }
+      break;
+    }
+    case 'install': {
+      const path = args[0];
+      if (!path) fail('skill install requires a path', 2);
+      const skill = installSkill(path, config);
+      console.log(`installed ${skill.name} -> ${skill.path}`);
+      break;
+    }
+    case 'remove': {
+      const name = args[0];
+      if (!name) fail('skill remove requires a name', 2);
+      if (!removeSkill(name, config)) fail(`skill not found: ${name}`);
+      console.log(`removed ${name}`);
+      break;
+    }
+    case 'test': {
+      const [path, ...messageParts] = args;
+      const message = messageParts.join(' ');
+      if (!path || !message) fail('skill test requires a path and a message', 2);
+      const skill = parseSkill(readFileSync(path, 'utf-8'), path);
+      const matched = matchSkills([skill], { text: message });
+      if (matched.length > 0) {
+        console.log(`MATCH  ${skill.name} (trigger: ${skill.trigger})`);
+      } else {
+        console.log(`no match  ${skill.name} (trigger: ${skill.trigger})`);
+        process.exitCode = 1;
+      }
+      break;
+    }
+    default:
+      fail(`unknown skill subcommand: ${sub || '(none)'}`, 2);
+  }
+}
+
+// Config keys that may be read/written via the CLI (everything except logger).
+const CONFIG_KEYS = [
+  'containerImage', 'containerRuntime', 'containerTimeout', 'maxOutputSize',
+  'maxConcurrentContainers', 'ipcPollInterval', 'schedulerPollInterval',
+  'heartbeatInterval', 'dataDir', 'groupsDir', 'skillsDir', 'mountAllowlistPath',
+];
+
+function cmdConfig(config, sub, args, opts) {
+  switch (sub) {
+    case 'list': {
+      const visible = {};
+      for (const key of CONFIG_KEYS) visible[key] = config[key];
+      if (opts.json) return console.log(JSON.stringify(visible, null, 2));
+      for (const [k, v] of Object.entries(visible)) console.log(`${k} = ${v === undefined ? '(unset)' : v}`);
+      break;
+    }
+    case 'get': {
+      const key = args[0];
+      if (!key) fail('config get requires a key', 2);
+      if (!CONFIG_KEYS.includes(key)) fail(`unknown config key: ${key}`, 2);
+      const value = config[key];
+      console.log(value === undefined ? '(unset)' : String(value));
+      break;
+    }
+    case 'set': {
+      const [key, ...valueParts] = args;
+      const value = valueParts.join(' ');
+      if (!key || value === '') fail('config set requires a key and a value', 2);
+      if (!CONFIG_KEYS.includes(key)) fail(`unknown config key: ${key}`, 2);
+
+      const path = process.env.JSCLAW_CONFIG_PATH || join(process.cwd(), 'jsclaw.json');
+      const { file } = loadConfigFile();
+      const numeric = /^(containerTimeout|maxOutputSize|maxConcurrentContainers|ipcPollInterval|schedulerPollInterval|heartbeatInterval)$/.test(key);
+      file[key] = numeric ? Number(value) : value;
+      writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
+      console.log(`${key} = ${file[key]} (written to ${path})`);
+      break;
+    }
+    default:
+      fail(`unknown config subcommand: ${sub || '(none)'}`, 2);
+  }
+}
+
 // --- Main ---
 
 async function main() {
@@ -304,6 +400,10 @@ async function main() {
       return cmdRun(config, rest[0], rest.slice(1).join(' '));
     case 'heartbeat':
       return cmdHeartbeat(config, rest[0], opts['dry-run']);
+    case 'skill':
+      return cmdSkill(config, rest[0], rest.slice(1), opts);
+    case 'config':
+      return cmdConfig(config, rest[0], rest.slice(1), opts);
     default:
       fail(`unknown command: ${command}\n\n${USAGE}`, 2);
   }

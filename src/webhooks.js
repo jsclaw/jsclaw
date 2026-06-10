@@ -157,3 +157,71 @@ export function startWebhookIngress(options, config) {
     });
   });
 }
+
+// --- Egress ---
+
+/**
+ * @typedef {Object} OutgoingWebhook
+ * @property {string} event - Event name to deliver, or '*' for all
+ * @property {string} url - Destination URL
+ * @property {Record<string, string>} [headers] - Extra headers; ${ENV_VAR} is expanded
+ * @property {{ channel?: string, groupFolder?: string }} [filter] - Only deliver when payload fields match
+ */
+
+/**
+ * Expand ${ENV_VAR} references in a header value.
+ * @param {string} value
+ * @returns {string}
+ */
+function expandEnv(value) {
+  return value.replace(/\$\{(\w+)\}/g, (_, name) => process.env[name] ?? '');
+}
+
+/**
+ * Create an outgoing-webhook emitter — openclaw's shape:
+ * events like 'agent.task.completed', 'agent.error',
+ * 'channel.message.received' delivered as JSON POSTs.
+ *
+ * @param {OutgoingWebhook[]} outgoing
+ * @param {import('./types.js').JsclawConfig} [config]
+ * @returns {(event: string, payload?: Object) => Promise<number>}
+ *   emit(event, payload) — resolves to the number of successful deliveries
+ */
+export function createWebhookEmitter(outgoing, config) {
+  config = config || createConfig();
+  const log = config.logger;
+  const hooks = outgoing || [];
+
+  return async function emit(event, payload = {}) {
+    const matching = hooks.filter((h) => {
+      if (h.event !== '*' && h.event !== event) return false;
+      const filter = h.filter || {};
+      return Object.entries(filter).every(([k, v]) => payload[k] === v);
+    });
+
+    let delivered = 0;
+    await Promise.all(
+      matching.map(async (hook) => {
+        const headers = { 'Content-Type': 'application/json' };
+        for (const [k, v] of Object.entries(hook.headers || {})) {
+          headers[k] = expandEnv(v);
+        }
+        try {
+          const res = await fetch(hook.url, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ event, payload, timestamp: new Date().toISOString() }),
+          });
+          if (res.ok) {
+            delivered++;
+          } else {
+            log.warn(`Webhook egress non-OK response`, { event, url: hook.url, status: res.status });
+          }
+        } catch (err) {
+          log.warn(`Webhook egress failed`, { event, url: hook.url, error: err.message });
+        }
+      })
+    );
+    return delivered;
+  };
+}

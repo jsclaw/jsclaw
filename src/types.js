@@ -34,6 +34,8 @@
  * @property {number} heartbeatInterval - Heartbeat interval in ms (default: 1800000)
  * @property {string} dataDir - Base directory for IPC/data files
  * @property {string} groupsDir - Base directory for group workspace folders
+ * @property {string} skillsDir - Directory of SKILL.md files (default: ./skills)
+ * @property {string} [configPath] - Explicit config file path (default: ./jsclaw.json or JSCLAW_CONFIG_PATH)
  * @property {string} [mountAllowlistPath] - Path to mount allowlist JSON
  * @property {Logger} [logger] - Logger instance (default: console-based)
  */

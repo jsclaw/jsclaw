@@ -17,8 +17,12 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Identity Files** — `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` loaded into the system prompt, openclaw-style
 - **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
 - **Memory** — Per-group markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
-- **Webhooks** — HTTP ingress with `{{body.field}}` templates and secret auth (openclaw-compatible shape)
-- **CLI** — `npx jsclaw status|doctor|tasks|memory|run|heartbeat`
+- **Skills** — openclaw's SKILL.md format: YAML frontmatter, keyword/regex/attachment triggers, prompt injection
+- **Multi-Agent Bindings** — Route messages to agents by channel/peer/account, most-specific-wins
+- **Webhooks** — HTTP ingress with `{{body.field}}` templates and secret auth, plus outgoing event webhooks (openclaw-compatible shapes)
+- **Config File** — Optional `jsclaw.json` with `${ENV_VAR}` expansion; overrides > env > file > defaults
+- **CLI** — `npx jsclaw status|doctor|tasks|memory|skill|config|run|heartbeat`
+- **Tested** — Full `node:test` suite, zero dev-dependencies
 - **Mount Security** — Validate volume mounts against allowlists
 
 You bring your own I/O (chat, API, CLI) and storage. jsclaw handles the container orchestration.
@@ -224,7 +228,78 @@ curl -X POST http://localhost:18789/webhook/deploy-alert \
   -d '{"service": "api-v2", "status": "success"}'
 ```
 
-### 9. CLI
+### 9. Skills
+
+openclaw's SKILL.md format — YAML frontmatter + Markdown instructions:
+
+```markdown
+---
+name: deploy-helper
+description: "Helps with deployments"
+trigger: "deploy|ship|push to prod"
+tools: [shell, http]
+---
+# Deploy Helper
+When asked to deploy: run the test suite first, then tag the release.
+```
+
+Triggers: pipe-separated keywords (case-insensitive), `/regex/i`, `attachment:image`, or `*` (always-on).
+
+```javascript
+import { loadSkills, matchSkills, buildSkillContext } from 'jsclaw';
+
+const skills = loadSkills(config);                       // from config.skillsDir
+const matched = matchSkills(skills, { text: userMessage });
+const skillContext = buildSkillContext(matched);          // append to the agent prompt
+```
+
+### 10. Multi-agent bindings
+
+openclaw's routing shape — most specific match wins, deterministic:
+
+```javascript
+import { resolveBinding, resolveAgentConfig } from 'jsclaw';
+
+const bindings = [
+  { match: { channel: 'telegram', peer: 'boss-id' }, agentId: 'researcher' },
+  { match: { channel: 'telegram' }, agentId: 'assistant' },
+];
+
+const agentId = resolveBinding(bindings, { channel: 'telegram', peer: 'boss-id' });
+// 'researcher'
+
+const agent = resolveAgentConfig({
+  defaults: { model: 'claude-haiku-4-5-20251001' },
+  list: [{ id: 'researcher', model: 'claude-opus-4-8', folder: 'research' }],
+}, agentId);
+```
+
+### 11. Outgoing webhooks
+
+```javascript
+import { createWebhookEmitter } from 'jsclaw';
+
+const emit = createWebhookEmitter([
+  { event: 'agent.task.completed', url: 'https://hooks.slack.com/...', headers: { Authorization: 'Bearer ${HOOK_TOKEN}' } },
+  { event: 'agent.error', url: 'https://events.pagerduty.com/...', filter: { groupFolder: 'prod' } },
+]);
+
+await emit('agent.task.completed', { taskId: 't1', groupFolder: 'main' });
+```
+
+### 12. Config file
+
+Optional `jsclaw.json` (or `JSCLAW_CONFIG_PATH`), with `${ENV_VAR}` expansion. Precedence: explicit overrides > env vars > config file > defaults.
+
+```json
+{
+  "containerImage": "my-agent:latest",
+  "maxConcurrentContainers": 8,
+  "mountAllowlistPath": "${HOME}/.config/jsclaw/mount-allowlist.json"
+}
+```
+
+### 13. CLI
 
 ```bash
 npx jsclaw status                      # config, groups, task counts
@@ -235,6 +310,11 @@ npx jsclaw memory list main            # memory files for a group
 npx jsclaw memory search main "query"
 npx jsclaw run main "summarize my notes"   # one-shot agent run
 npx jsclaw heartbeat main --dry-run    # preview a heartbeat cycle
+npx jsclaw skill list                  # installed skills
+npx jsclaw skill install ./deploy.md   # install a SKILL.md
+npx jsclaw skill test ./deploy.md "deploy the api"   # trigger check
+npx jsclaw config list                 # effective configuration
+npx jsclaw config set maxConcurrentContainers 8      # writes jsclaw.json
 ```
 
 ## Architecture
@@ -307,6 +387,8 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_SCHEDULER_POLL_INTERVAL` | `60000` | Task scheduler poll interval (ms) |
 | `JSCLAW_HEARTBEAT_INTERVAL` | `1800000` | Heartbeat interval (ms, 30 min) |
 | `JSCLAW_MEMORY_MAX_CHARS` | `8000` | Memory budget loaded into system prompt (chars) |
+| `JSCLAW_SKILLS_PATH` | `./skills` | Directory of SKILL.md files |
+| `JSCLAW_CONFIG_PATH` | `./jsclaw.json` | Config file location |
 | `JSCLAW_GROUPS_DIR` | `./groups` | Group workspace directory |
 | `JSCLAW_LOG_LEVEL` | `info` | Log level |
 | `ANTHROPIC_API_KEY` | — | Required for Claude API |
