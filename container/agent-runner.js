@@ -64,8 +64,49 @@ function writeOutput(output) {
 }
 
 /**
- * Build the system prompt from identity files in the group workspace,
- * with any JSCLAW_SYSTEM_PROMPT appended.
+ * Load memory/*.md from the group workspace, truncated to a character
+ * budget (JSCLAW_MEMORY_MAX_CHARS, default 8000 ≈ 2k tokens).
+ * @returns {string} Memory section for the system prompt, or ''
+ */
+function loadMemory() {
+  const maxChars = Number(process.env.JSCLAW_MEMORY_MAX_CHARS) || 8000;
+  const dir = join(WORKSPACE_DIR, 'memory');
+  let names;
+  try {
+    names = readdirSync(dir).filter((n) => n.endsWith('.md')).sort();
+  } catch {
+    return '';
+  }
+
+  const parts = [];
+  let used = 0;
+  for (const name of names) {
+    let content;
+    try {
+      content = readFileSync(join(dir, name), 'utf-8').trim();
+    } catch {
+      continue;
+    }
+    if (!content || /^#[^\n]*$/.test(content)) continue; // empty or heading-only
+
+    const section = `## ${name}\n${content}`;
+    if (used + section.length > maxChars) {
+      const remaining = maxChars - used;
+      if (remaining > 100) parts.push(section.slice(0, remaining) + '\n[...memory truncated]');
+      break;
+    }
+    parts.push(section);
+    used += section.length + 2;
+  }
+
+  return parts.length > 0
+    ? `# Memory\n\nYour persistent memory (read/write these files under memory/ to remember things):\n\n${parts.join('\n\n')}`
+    : '';
+}
+
+/**
+ * Build the system prompt: identity files, then memory, then any
+ * JSCLAW_SYSTEM_PROMPT.
  * @returns {string|undefined}
  */
 function buildSystemPrompt() {
@@ -78,6 +119,8 @@ function buildSystemPrompt() {
       // file absent — identity files are all optional
     }
   }
+  const memory = loadMemory();
+  if (memory) parts.push(memory);
   const extra = process.env.JSCLAW_SYSTEM_PROMPT?.trim();
   if (extra) parts.push(extra);
   return parts.length > 0 ? parts.join('\n\n') : undefined;

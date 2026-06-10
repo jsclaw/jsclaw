@@ -1,6 +1,6 @@
 {
   "name": "jsclaw",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
   "type": "module",
   "license": "MIT",
@@ -10,9 +10,13 @@
   "files": [
     "src/",
     "container/",
+    "bin/",
     "README.md",
     "LICENSE"
   ],
+  "bin": {
+    "jsclaw": "./bin/jsclaw.js"
+  },
   "exports": {
     ".": "./src/index.js",
     "./config": "./src/config.js",
@@ -25,6 +29,8 @@
     "./task-scheduler": "./src/task-scheduler.js",
     "./heartbeat": "./src/heartbeat.js",
     "./channel": "./src/channel.js",
+    "./webhooks": "./src/webhooks.js",
+    "./memory": "./src/memory.js",
     "./mount-security": "./src/mount-security.js",
     "./types": "./src/types.js",
     "./container/agent-runner": "./container/agent-runner.js",
