@@ -24,7 +24,7 @@ import { fileURLToPath } from 'node:url';
 import { createConfig, loadConfigFile } from '../src/config.js';
 import { TaskStore, computeNextRun } from '../src/task-store.js';
 import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
-import { runContainerAgent } from '../src/container-runner.js';
+import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
 import { HEARTBEAT_OK } from '../src/heartbeat.js';
 import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
@@ -46,6 +46,7 @@ Usage:
   jsclaw memory clear <group>            Delete a group's memory
   jsclaw run <group> <prompt...>         Run an agent once with a prompt
   jsclaw heartbeat <group> [--dry-run]   Trigger a heartbeat cycle now
+  jsclaw reap                            Remove orphaned jsclaw containers
   jsclaw skill list                      List installed skills
   jsclaw skill install <path>            Install a SKILL.md file
   jsclaw skill remove <name>             Remove an installed skill
@@ -400,6 +401,13 @@ async function main() {
       return cmdRun(config, rest[0], rest.slice(1).join(' '));
     case 'heartbeat':
       return cmdHeartbeat(config, rest[0], opts['dry-run']);
+    case 'reap': {
+      const reaped = await reapOrphanContainers(config);
+      if (opts.json) return console.log(JSON.stringify(reaped));
+      if (reaped.length === 0) return console.log('no orphaned containers');
+      for (const name of reaped) console.log(`reaped ${name}`);
+      return;
+    }
     case 'skill':
       return cmdSkill(config, rest[0], rest.slice(1), opts);
     case 'config':

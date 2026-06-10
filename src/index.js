@@ -12,6 +12,7 @@ export {
   buildVolumeMounts,
   buildContainerArgs,
   parseContainerOutput,
+  reapOrphanContainers,
   writeTasksSnapshot,
 } from './container-runner.js';
 

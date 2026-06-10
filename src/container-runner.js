@@ -4,7 +4,8 @@
  * @module container-runner
  */
 
-import { spawn, exec } from 'node:child_process';
+import { spawn, exec, execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createConfig } from './config.js';
@@ -248,6 +249,51 @@ function killContainer(containerName, config) {
       exec(`${config.containerRuntime} kill ${containerName}`, () => {});
     }
   });
+}
+
+const execFileAsync = promisify(execFile);
+
+/**
+ * Remove orphaned jsclaw containers left behind by a crashed host.
+ *
+ * Call this at startup, before spawning any agents: if the previous
+ * host process died uncleanly, its containers keep running unsupervised
+ * — burning tokens — and the restarted host would otherwise spawn a
+ * duplicate agent over the same group folder and IPC directory.
+ *
+ * @param {import('./types.js').JsclawConfig} [config]
+ * @param {{ prefix?: string }} [opts] - Container-name prefix to sweep (default 'jsclaw-')
+ * @returns {Promise<string[]>} Names of the containers that were removed
+ */
+export async function reapOrphanContainers(config, opts = {}) {
+  config = config || createConfig();
+  const log = config.logger;
+  const { prefix = 'jsclaw-' } = opts;
+  const runtime = config.containerRuntime;
+
+  let stdout;
+  try {
+    ({ stdout } = await execFileAsync(runtime, ['ps', '--format', '{{.Names}}'], { timeout: 15000 }));
+  } catch (err) {
+    log.warn(`Orphan sweep skipped: ${runtime} ps failed`, { error: err.message });
+    return [];
+  }
+
+  const orphans = stdout.split('\n').map((n) => n.trim()).filter((n) => n.startsWith(prefix));
+  const reaped = [];
+
+  for (const name of orphans) {
+    try {
+      // rm -f kills and removes in one step, whether or not it ran with --rm
+      await execFileAsync(runtime, ['rm', '-f', name], { timeout: 30000 });
+      log.warn(`Reaped orphaned container: ${name}`);
+      reaped.push(name);
+    } catch (err) {
+      log.error(`Failed to reap orphaned container: ${name}`, { error: err.message });
+    }
+  }
+
+  return reaped;
 }
 
 /**
