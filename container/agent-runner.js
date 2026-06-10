@@ -10,6 +10,11 @@
  *   JSCLAW_SYSTEM_PROMPT   - Optional additional system prompt
  *   JSCLAW_ALLOWED_TOOLS   - Optional JSON array of allowed tools
  *   ANTHROPIC_API_KEY      - Required for Claude API access
+ *
+ * Identity files (optional, read from /workspace/group):
+ *   SOUL.md, IDENTITY.md, AGENTS.md, TOOLS.md, USER.md are concatenated
+ *   in that order into the system prompt, openclaw-style. Any
+ *   JSCLAW_SYSTEM_PROMPT content is appended after them.
  */
 
 import { query } from '@anthropic-ai/claude-code';
@@ -21,6 +26,10 @@ const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
 
 const IPC_INPUT_DIR = '/workspace/ipc/input';
 const WORKSPACE_DIR = '/workspace/group';
+
+// Loaded into the system prompt in this order (openclaw convention):
+// identity first, then instructions, then context.
+const IDENTITY_FILES = ['SOUL.md', 'IDENTITY.md', 'AGENTS.md', 'TOOLS.md', 'USER.md'];
 
 const DEFAULT_ALLOWED_TOOLS = [
   'Bash', 'Read', 'Write', 'Edit', 'Glob', 'Grep',
@@ -52,6 +61,26 @@ async function readStdin() {
  */
 function writeOutput(output) {
   process.stdout.write(`\n${OUTPUT_START_MARKER}\n${JSON.stringify(output)}\n${OUTPUT_END_MARKER}\n`);
+}
+
+/**
+ * Build the system prompt from identity files in the group workspace,
+ * with any JSCLAW_SYSTEM_PROMPT appended.
+ * @returns {string|undefined}
+ */
+function buildSystemPrompt() {
+  const parts = [];
+  for (const name of IDENTITY_FILES) {
+    try {
+      const content = readFileSync(join(WORKSPACE_DIR, name), 'utf-8').trim();
+      if (content) parts.push(content);
+    } catch {
+      // file absent — identity files are all optional
+    }
+  }
+  const extra = process.env.JSCLAW_SYSTEM_PROMPT?.trim();
+  if (extra) parts.push(extra);
+  return parts.length > 0 ? parts.join('\n\n') : undefined;
 }
 
 /**
@@ -196,7 +225,7 @@ async function main() {
     fullPrompt += '\n\n[Pending messages]\n' + pendingMessages.join('\n');
   }
 
-  const systemPrompt = process.env.JSCLAW_SYSTEM_PROMPT || undefined;
+  const systemPrompt = buildSystemPrompt();
   const allowedTools = process.env.JSCLAW_ALLOWED_TOOLS
     ? JSON.parse(process.env.JSCLAW_ALLOWED_TOOLS)
     : undefined;

@@ -30,6 +30,9 @@ export { startTaskScheduler } from './task-scheduler.js';
 // Heartbeat
 export { startHeartbeat, inQuietHours, HEARTBEAT_OK } from './heartbeat.js';
 
+// Channels
+export { ChannelManager } from './channel.js';
+
 // Security
 export {
   validateMount,
