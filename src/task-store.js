@@ -6,7 +6,10 @@
  * @module task-store
  */
 
-import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
+import {
+  readFileSync, writeFileSync, renameSync, mkdirSync,
+  openSync, writeSync, fsyncSync, closeSync,
+} from 'node:fs';
 import { join, dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { createConfig } from './config.js';
@@ -66,21 +69,56 @@ export class TaskStore {
     this._tasks = this._load();
   }
 
-  /** @returns {ScheduledTask[]} */
+  /**
+   * Load tasks from disk. A corrupt store file (torn write, stray edit,
+   * wrong shape) is quarantined — never silently overwritten — and
+   * reported at error level. A missing file is a normal first run.
+   * @returns {ScheduledTask[]}
+   */
   _load() {
+    let raw;
     try {
-      const raw = readFileSync(this._path, 'utf-8');
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      raw = readFileSync(this._path, 'utf-8');
     } catch {
-      return [];
+      return []; // first run
     }
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = undefined;
+    }
+    if (Array.isArray(parsed)) return parsed;
+
+    // Corrupt: preserve the evidence atomically, start empty, shout.
+    const quarantine = `${this._path}.corrupt-${new Date().toISOString().replace(/[:.]/g, '-')}`;
+    try {
+      renameSync(this._path, quarantine);
+    } catch {
+      // If even the rename fails, refuse to lose the only copy silently:
+      // leave the file in place; _save will still replace it, but the
+      // error below gives the operator a chance to intervene.
+    }
+    this._config.logger.error(
+      `tasks.json is corrupt — quarantined to ${quarantine}; starting with an empty task list`,
+      { path: this._path }
+    );
+    return [];
   }
 
   _save() {
     mkdirSync(dirname(this._path), { recursive: true });
     const tmp = this._path + '.tmp';
-    writeFileSync(tmp, JSON.stringify(this._tasks, null, 2));
+    // Write + fsync the temp file before the atomic rename so an OS
+    // crash can't leave a torn store file behind.
+    const fd = openSync(tmp, 'w');
+    try {
+      writeSync(fd, JSON.stringify(this._tasks, null, 2));
+      fsyncSync(fd);
+    } finally {
+      closeSync(fd);
+    }
     renameSync(tmp, this._path);
     this._writeSnapshots();
   }

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { TaskStore, createTaskIpcHandler } from '../src/task-store.js';
 import { startTaskScheduler } from '../src/task-scheduler.js';
@@ -149,4 +149,71 @@ test('scheduler records failures without stopping', async () => {
   const after = store.getTask(bad.id);
   assert.equal(after.status, 'completed'); // once-task completes even on error
   assert.equal(after.lastError, 'boom');
+});
+
+test('corrupt tasks.json is quarantined, not silently wiped', () => {
+  const config = tempConfig();
+  const errors = [];
+  config.logger = { ...config.logger, error: (msg, data) => errors.push({ msg, data }) };
+
+  // Simulate a torn write / stray edit
+  mkdirSync(config.dataDir, { recursive: true });
+  const storePath = join(config.dataDir, 'tasks.json');
+  writeFileSync(storePath, '{ "tasks": [ TORN');
+
+  const store = new TaskStore(config);
+  assert.deepEqual(store.listTasks(), [], 'store starts empty after corruption');
+
+  // The corruption was reported loudly
+  assert.equal(errors.length, 1, 'an error was logged');
+  assert.match(errors[0].msg, /corrupt/i);
+
+  // The evidence was preserved
+  const quarantined = readdirSync(config.dataDir).filter((n) => /^tasks\.json\.corrupt-/.test(n));
+  assert.equal(quarantined.length, 1, 'corrupt file quarantined');
+  assert.equal(
+    readFileSync(join(config.dataDir, quarantined[0]), 'utf-8'),
+    '{ "tasks": [ TORN',
+    'original bytes intact'
+  );
+
+  // A subsequent save writes fresh state without touching the evidence
+  store.createTask({
+    groupFolder: 'g', chatJid: 'c', prompt: 'recovered',
+    scheduleType: 'interval', scheduleValue: '60000',
+  });
+  const fresh = JSON.parse(readFileSync(storePath, 'utf-8'));
+  assert.equal(fresh.length, 1);
+  assert.equal(
+    readFileSync(join(config.dataDir, quarantined[0]), 'utf-8'),
+    '{ "tasks": [ TORN',
+    'quarantined evidence untouched by saves'
+  );
+});
+
+test('valid-JSON-but-wrong-shape is quarantined too', () => {
+  const config = tempConfig();
+  const errors = [];
+  config.logger = { ...config.logger, error: (msg) => errors.push(msg) };
+
+  mkdirSync(config.dataDir, { recursive: true });
+  writeFileSync(join(config.dataDir, 'tasks.json'), '{"not":"an array"}');
+
+  const store = new TaskStore(config);
+  assert.deepEqual(store.listTasks(), []);
+  assert.equal(errors.length, 1);
+  assert.equal(
+    readdirSync(config.dataDir).filter((n) => /^tasks\.json\.corrupt-/.test(n)).length,
+    1
+  );
+});
+
+test('missing tasks.json is a normal first run: no quarantine, no error', () => {
+  const config = tempConfig();
+  const errors = [];
+  config.logger = { ...config.logger, error: (msg) => errors.push(msg) };
+
+  const store = new TaskStore(config);
+  assert.deepEqual(store.listTasks(), []);
+  assert.equal(errors.length, 0);
 });
