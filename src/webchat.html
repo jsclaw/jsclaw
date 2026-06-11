@@ -126,9 +126,12 @@
       let frame;
       try { frame = JSON.parse(e.data); } catch { return; }
       if (frame.type === 'event' && frame.event === 'agent.output') {
+        // Each agent.output is a completed turn (status is always
+        // 'success' or 'error'); the chat.send res only arrives when
+        // the container exits, so the spinner must clear here, not there.
         setTyping(false);
         if (frame.payload.result) add('agent', frame.payload.result);
-        setTyping(true);
+        else if (frame.payload.status === 'error') add('err', frame.payload.error || 'agent error');
       } else if (frame.type === 'res') {
         const done = pending.get(frame.id);
         if (!done) return;
