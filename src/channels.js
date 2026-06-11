@@ -17,6 +17,7 @@
 import { resolveBinding } from './bindings.js';
 import { createNostrChannel } from './nostr.js';
 import { handleCommand } from './commands.js';
+import { SessionStore } from './sessions.js';
 
 /**
  * Built-in channel factories, keyed by config block name. A factory is
@@ -105,12 +106,13 @@ export function validateChannelBlock(name, block) {
  * @param {(agentId: string, prompt: string, onOutput: Function, extra?: Object) => Promise<Object>} params.runAgent
  * @param {Record<string, Function>} [params.registry]
  * @param {Object} [params.logger]
+ * @param {import('./sessions.js').SessionStore} [params.sessions] - Shared session store (persistent)
  * @returns {Promise<{ channels: Object[], stop: () => Promise<void> }>}
  */
-export async function startChannels({ config, runAgent, registry = CHANNEL_FACTORIES, logger }) {
+export async function startChannels({ config, runAgent, registry = CHANNEL_FACTORIES, logger, sessions }) {
   const log = logger || config.logger;
   const started = [];
-  const sessions = new Map(); // `${channel}:${peer}` -> sessionId
+  const store = sessions || new SessionStore(config); // `${channel}:${peer}` keys
 
   for (const [name, block] of Object.entries(config.channels || {})) {
     if (!block || block.enabled === false) continue;
@@ -132,7 +134,7 @@ export async function startChannels({ config, runAgent, registry = CHANNEL_FACTO
         const command = await handleCommand(text, {
           config,
           agentId,
-          reset: () => { sessions.delete(key); },
+          reset: () => { store.reset(key); },
         }).catch(() => null);
         if (command?.reply) {
           channel.sendMessage(peer, command.reply).catch(() => {});
@@ -140,10 +142,15 @@ export async function startChannels({ config, runAgent, registry = CHANNEL_FACTO
         }
         if (command?.prompt) text = command.prompt;
 
+        const session = store.resolve(key, agentId);
         runAgent(agentId, text, async (output) => {
           if (output.result) await channel.sendMessage(peer, output.result);
-          if (output.newSessionId) sessions.set(key, output.newSessionId);
-        }, { chatJid: String(peer), sessionId: sessions.get(key) }).catch((err) => {
+          if (output.newSessionId) store.advance(key, output.newSessionId);
+        }, {
+          chatJid: String(peer),
+          ...(session.sessionId && { sessionId: session.sessionId }),
+          ...(session.model && { model: session.model }),
+        }).catch((err) => {
           log.error(`${name} agent run failed: ${err.message}`);
           channel.sendMessage(peer, 'Sorry — something went wrong.').catch(() => {});
         });

@@ -377,3 +377,46 @@ test('openclaw list methods respond with usable shapes', async () => {
   client.close();
   await gateway.stop();
 });
+
+// --- sessions (#57) ---
+
+test('chat.send threads session continuity and honors per-session model', async () => {
+  const { SessionStore } = await import('../src/sessions.js');
+  const config = tempConfig();
+  const sessions = new SessionStore(config);
+  const calls = [];
+  const gateway = await startGateway({
+    runAgent: async (agentId, message, onOutput, extra = {}) => {
+      calls.push(extra);
+      const output = { status: 'success', result: 'ok', newSessionId: `s-${calls.length}` };
+      if (onOutput) await onOutput(output);
+      return output;
+    },
+    sessions,
+  }, config, { port: 0 });
+  const client = await connect(gateway.port);
+
+  await client.req('chat.send', { agentId: 'main', message: 'one' });
+  await client.req('chat.send', { agentId: 'main', message: 'two' });
+  assert.equal(calls[0].sessionId, undefined, 'first message starts fresh');
+  assert.equal(calls[1].sessionId, 's-1', 'second message continues the transcript');
+
+  // per-session model override flows into the run
+  await client.req('sessions.patch', { key: 'main', model: 'glm-4.5-air' });
+  await client.req('chat.send', { agentId: 'main', message: 'three' });
+  assert.equal(calls[2].model, 'glm-4.5-air');
+
+  // /reset drops continuity for real now
+  await client.req('chat.send', { agentId: 'main', message: '/reset' });
+  await client.req('chat.send', { agentId: 'main', message: 'four' });
+  assert.equal(calls[3].sessionId, undefined, 'post-reset message starts fresh');
+
+  const list = await client.req('sessions.list', {});
+  assert.equal(list.payload.sessions[0].key, 'main');
+
+  const reset = await client.req('sessions.reset', { key: 'main', reason: 'new' });
+  assert.deepEqual(reset.payload, { ok: true, key: 'main', reason: 'new' });
+
+  client.close();
+  await gateway.stop();
+});

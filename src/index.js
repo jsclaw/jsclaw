@@ -26,6 +26,7 @@ export { AgentQueue } from './agent-queue.js';
 
 // Scheduling
 export { parseCron, isValidCron, nextCron } from './cron.js';
+export { SessionStore } from './sessions.js';
 export { TaskStore, computeNextRun, createTaskIpcHandler } from './task-store.js';
 export { startTaskScheduler } from './task-scheduler.js';
 

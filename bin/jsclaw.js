@@ -30,6 +30,7 @@ import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
 import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
 import { startHeartbeat, HEARTBEAT_OK } from '../src/heartbeat.js';
 import { startGateway } from '../src/gateway.js';
+import { SessionStore } from '../src/sessions.js';
 import { startChannels } from '../src/channels.js';
 import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
@@ -392,6 +393,7 @@ async function cmdGateway(config, opts) {
 
   // 2. Core wiring: store, agent runner, queue-less direct runs
   const store = new TaskStore(config);
+  const sessions = new SessionStore(config);
   const agents = () => listAgents(config);
 
   const runAgent = (agentId, prompt, onOutput, extra = {}) =>
@@ -407,6 +409,7 @@ async function cmdGateway(config, opts) {
   const gateway = await startGateway({
     runAgent,
     store,
+    sessions,
     getAgents: agents,
     triggerHeartbeat: () => heartbeat.triggerNow(),
   }, config, { port, token });
@@ -432,7 +435,7 @@ async function cmdGateway(config, opts) {
   // 6. Channels from config (#44) — registry-built, bindings-routed
   let channels = { channels: [], stop: async () => {} };
   try {
-    channels = await startChannels({ config, runAgent, logger: config.logger });
+    channels = await startChannels({ config, runAgent, logger: config.logger, sessions });
   } catch (err) {
     fail(err.message, 2);
   }

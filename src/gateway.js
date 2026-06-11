@@ -44,6 +44,7 @@ function tokenMatches(provided, expected) {
  * @property {import('./task-store.js').TaskStore} [store] - Enables tasks.* methods
  * @property {() => Promise<void>} [triggerHeartbeat] - Enables heartbeat.trigger
  * @property {() => string[]} [getAgents] - Agent folders for status (defaults to agentsDir listing)
+ * @property {import('./sessions.js').SessionStore} [sessions] - Enables session continuity + sessions.* methods
  */
 
 /**
@@ -129,9 +130,11 @@ export function startGateway(deps, config, options = {}) {
         const sessionKey = params.sessionKey || agentId;
         const runId = params.runId || randomUUID().slice(0, 8);
 
-        // Slash commands are host-handled (webchat/TUI surface: each
-        // message is its own session today, so /reset is a no-op ack)
-        const command = await handleCommand(message, { config, agentId, version: VERSION }).catch(() => null);
+        // Slash commands are host-handled
+        const command = await handleCommand(message, {
+          config, agentId, version: VERSION,
+          reset: () => { deps.sessions?.reset(sessionKey); },
+        }).catch(() => null);
         if (command?.reply) {
           const output = { status: 'success', result: command.reply };
           conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
@@ -143,7 +146,9 @@ export function startGateway(deps, config, options = {}) {
         }
         if (command?.prompt) message = command.prompt;
 
+        const session = deps.sessions?.resolve(sessionKey, agentId);
         const result = await deps.runAgent(agentId, message, (output) => {
+          if (output.newSessionId) deps.sessions?.advance(sessionKey, output.newSessionId);
           conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
           // openclaw chat event shape (consumed by openclaw tui & friends)
           conn.sendFrame({ type: 'event', event: 'chat', payload: {
@@ -155,7 +160,7 @@ export function startGateway(deps, config, options = {}) {
               content: [{ type: 'text', text: output.result ?? output.error ?? '' }],
             },
           } });
-        });
+        }, session ? { ...(session.sessionId && { sessionId: session.sessionId }), ...(session.model && { model: session.model }) } : {});
         return { runId, ...result };
       }
 
@@ -184,7 +189,15 @@ export function startGateway(deps, config, options = {}) {
       case 'models.list':
         return { models: config.model ? [{ id: config.model, name: config.model }] : [] };
       case 'sessions.list':
-        return { sessions: [] };
+        return deps.sessions ? deps.sessions.list({ agentId: params.agentId }) : { sessions: [] };
+      case 'sessions.reset': {
+        if (!deps.sessions) throw new Error('sessions are not wired on this gateway');
+        return deps.sessions.reset(requireParam(params, 'key'), params.reason === 'new' ? 'new' : 'reset');
+      }
+      case 'sessions.patch': {
+        if (!deps.sessions) throw new Error('sessions are not wired on this gateway');
+        return { ok: true, session: deps.sessions.patch(requireParam(params, 'key'), params) };
+      }
       case 'commands.list':
         return { commands: listCommands(config) };
 
