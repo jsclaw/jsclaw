@@ -12,6 +12,7 @@
  * @property {string} chatJid - Identifier for the chat/conversation
  * @property {boolean} isMain - Whether this is the main/admin group
  * @property {boolean} [isScheduledTask] - Whether this is a scheduled task invocation
+ * @property {Record<string, Object>} [mcpServers] - MCP servers injected by the host (set automatically by runContainerAgent)
  */
 
 /**
@@ -39,6 +40,7 @@
  * @property {string} [mountAllowlistPath] - Path to mount allowlist JSON
  * @property {number} [queueMaxRetries] - GroupQueue retry attempts (default: 5)
  * @property {number} [queueRetryBaseDelayMs] - GroupQueue base retry delay in ms (default: 5000)
+ * @property {{ servers?: Record<string, Object> }} [mcp] - MCP servers for agents (openclaw's mcp.servers shape); passed to containers via stdin
  * @property {Logger} [logger] - Logger instance (default: console-based)
  */
 
@@ -58,6 +60,7 @@
  * @property {string} [jid] - Chat identifier
  * @property {boolean} [isMain] - Whether this is the admin group
  * @property {VolumeMount[]} [additionalMounts] - Extra volume mounts
+ * @property {Record<string, Object>} [mcpServers] - Per-group MCP servers, merged over config.mcp.servers by name
  */
 
 /**
