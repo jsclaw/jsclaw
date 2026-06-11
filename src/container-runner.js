@@ -9,6 +9,7 @@ import { promisify } from 'node:util';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createConfig } from './config.js';
+import { resolveProviderEnv } from './providers.js';
 
 const OUTPUT_START_MARKER = '---JSCLAW_OUTPUT_START---';
 const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
@@ -65,14 +66,10 @@ export function buildContainerArgs(mountArgs, containerName, config, envVars = {
     '--name', containerName,
   ];
 
-  // Environment variables
+  // Environment variables (non-secret JSCLAW_* only — credentials travel
+  // via stdin in ContainerInput.providerEnv; argv leaks into `ps`)
   for (const [key, value] of Object.entries(envVars)) {
     args.push('-e', `${key}=${value}`);
-  }
-
-  // Pass through ANTHROPIC_API_KEY if set
-  if (process.env.ANTHROPIC_API_KEY) {
-    args.push('-e', `ANTHROPIC_API_KEY=${process.env.ANTHROPIC_API_KEY}`);
   }
 
   args.push(...mountArgs);
@@ -148,9 +145,15 @@ export async function runContainerAgent(group, input, onProcess, onOutput, confi
   const containerName = `jsclaw-${group.folder}-${Date.now()}`;
 
   const mcpServers = resolveMcpServers(group, config);
-  if (mcpServers) {
-    input = { ...input, mcpServers };
-  }
+  const providerEnv = resolveProviderEnv(config);
+  // Model precedence: explicit input > group > config default
+  const model = input.model ?? group.model ?? config.model;
+  input = {
+    ...input,
+    ...(mcpServers && { mcpServers }),
+    ...(providerEnv && { providerEnv }),
+    ...(model && { model }),
+  };
 
   const mountArgs = buildVolumeMounts(group, config);
   const envVars = {

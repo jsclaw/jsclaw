@@ -23,6 +23,8 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
 - **Nostr** — Built-in decentralized channel: encrypted DMs (NIP-04) with zero-dep BIP340 Schnorr, verified against the official Bitcoin test vectors
 - **MCP Passthrough** — Wire any of the 32,000+ MCP servers into your agents via openclaw's `mcp.servers` config shape
+- **Models & Providers** — Per-agent and per-heartbeat model selection; Anthropic direct, GLM (Z.ai), Kimi (Moonshot), Bedrock, Vertex, or any Anthropic-compatible endpoint
+- **Onboarding** — `npx jsclaw onboard`: interactive setup wizard (environment checks, provider, models, scaffolding)
 - **Memory** — Per-group markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
 - **Skills** — openclaw's SKILL.md format: YAML frontmatter, keyword/regex/attachment triggers, prompt injection
 - **Multi-Agent Bindings** — Route messages to agents by channel/peer/account, most-specific-wins
@@ -41,6 +43,14 @@ npm install jsclaw
 ```
 
 ## Quick Start
+
+### -1. Even faster: the wizard
+
+```bash
+npx jsclaw onboard
+```
+
+Checks your environment, builds the agent image, walks you through provider + model selection (Anthropic, **GLM**, **Kimi**, Bedrock, Vertex, or a custom endpoint), scaffolds `groups/main` with starter `SOUL.md`/`HEARTBEAT.md`, and writes `jsclaw.json` — secrets as `${ENV_VAR}` references, never literals.
 
 ### 0. The fast path: a full agent host in one command
 
@@ -355,6 +365,24 @@ Declare MCP servers in `jsclaw.json` — openclaw's `mcp.servers` shape — and 
 ```
 
 `${ENV_VAR}` references expand at load time, so secrets never live in the file. Per-group overrides via `group.mcpServers` (merged by name, group wins). The configs travel to the container over **stdin** — never argv or env flags, which leak into `ps`. The `jsclaw` server name is reserved for the built-in IPC tools and can't be shadowed.
+
+### 11¾. Models & providers
+
+jsclaw agents run on the Claude Code runtime, so model routing works through the Anthropic API surface:
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "heartbeatModel": "claude-haiku-4-5-20251001",
+  "providerBaseUrl": "https://api.z.ai/api/anthropic",
+  "providerAuthToken": "${ZAI_API_KEY}"
+}
+```
+
+- **Precedence**: per-run `input.model` > `group.model` > `config.model`
+- **`heartbeatModel`** routes the autonomy loop to a cheap model (~90% cost reduction on 48 cycles/day)
+- **Providers**: Anthropic direct; **GLM (Z.ai)** and **Kimi (Moonshot)** via their Anthropic-compatible endpoints; AWS Bedrock / Google Vertex via the standard `CLAUDE_CODE_USE_*` env switches; everything else (OpenAI, Gemini, Grok, DeepSeek, Ollama) through a LiteLLM proxy as a custom endpoint
+- **Security**: model + credentials travel to containers via stdin (`ContainerInput.providerEnv`), never argv or `-e` flags — nothing provider-related is `ps`-visible
 
 ### 12. Config file
 
