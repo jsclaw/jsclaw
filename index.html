@@ -372,20 +372,20 @@
 <span class="kw">const</span> config = <span class="fn">createConfig</span>({
   <span class="prop">containerImage</span>: <span class="str">'jsclaw-agent:latest'</span>,
   <span class="prop">dataDir</span>:         <span class="str">'./data'</span>,
-  <span class="prop">groupsDir</span>:      <span class="str">'./groups'</span>,
+  <span class="prop">agentsDir</span>:      <span class="str">'./agents'</span>,
 });
 
-<span class="kw">const</span> group = { <span class="prop">name</span>: <span class="str">'my-agent'</span>, <span class="prop">folder</span>: <span class="str">'my-agent'</span> };
+<span class="kw">const</span> agent = { <span class="prop">name</span>: <span class="str">'my-agent'</span>, <span class="prop">folder</span>: <span class="str">'my-agent'</span> };
 
 <span class="kw">const</span> input = {
   <span class="prop">prompt</span>:      <span class="str">'Analyze the codebase and suggest improvements.'</span>,
-  <span class="prop">groupFolder</span>: <span class="str">'my-agent'</span>,
+  <span class="prop">agentId</span>: <span class="str">'my-agent'</span>,
   <span class="prop">chatJid</span>:     <span class="str">'user-1'</span>,
   <span class="prop">isMain</span>:      <span class="num">true</span>,
 };
 
 <span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">runContainerAgent</span>(
-  group,
+  agent,
   input,
   (proc, name) =&gt; console.<span class="fn">log</span>(<span class="str">`Container</span> <span class="str">${name} started`</span>),
   <span class="kw">async</span> (output) =&gt; console.<span class="fn">log</span>(<span class="str">'Agent:'</span>, output.result),
