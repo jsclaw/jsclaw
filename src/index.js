@@ -37,6 +37,22 @@ export { ChannelManager } from './channel.js';
 // Gateway
 export { startGateway } from './gateway.js';
 
+// Nostr
+export {
+  createNostrChannel,
+  generatePrivateKey,
+  getPublicKey,
+  schnorrSign,
+  schnorrVerify,
+  nip04Encrypt,
+  nip04Decrypt,
+  finalizeEvent,
+  verifyEvent,
+  eventId,
+  bech32Encode,
+  bech32Decode,
+} from './nostr.js';
+
 // Webhooks
 export { startWebhookIngress, renderTemplate, createWebhookEmitter } from './webhooks.js';
 

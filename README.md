@@ -17,6 +17,7 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Heartbeat** — Periodic agent wake-up for autonomous operation (`HEARTBEAT.md`)
 - **Identity Files** — `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` loaded into the system prompt, openclaw-style
 - **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
+- **Nostr** — Built-in decentralized channel: encrypted DMs (NIP-04) with zero-dep BIP340 Schnorr, verified against the official Bitcoin test vectors
 - **Memory** — Per-group markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
 - **Skills** — openclaw's SKILL.md format: YAML frontmatter, keyword/regex/attachment triggers, prompt injection
 - **Multi-Agent Bindings** — Route messages to agents by channel/peer/account, most-specific-wins
@@ -210,6 +211,28 @@ startIpcWatcher({
 ```
 
 A `Channel` implements: `name`, `connect()`, `disconnect()`, `sendMessage(jid, text, sender?)`, `ownsJid(jid)`, `isConnected()`, and optionally `setTyping()`. See [examples/telegram.js](examples/telegram.js) for a complete implementation.
+
+### 6½. Nostr (a decentralized agent)
+
+Give your agent a Nostr identity and DM it from Damus, Amethyst, or any client — no bot tokens, no platform accounts, no central server. The whole stack (BIP340 Schnorr, NIP-04 encryption, bech32, relay client) is built on `node:crypto` and Node's native WebSocket: still zero dependencies.
+
+```javascript
+import { createNostrChannel, generatePrivateKey } from 'jsclaw';
+
+const channel = createNostrChannel({
+  privateKey: process.env.NOSTR_PRIVATE_KEY,   // hex or nsec
+  relays: ['wss://relay.damus.io', 'wss://nos.lol'],
+  allowedPubkeys: ['npub1yourkey...'],          // default-closed
+  onMessage: (jid, text) => {
+    // run an agent, reply with channel.sendMessage(jid, result)
+  },
+});
+
+await channel.connect();
+console.log('DM your agent at', channel.npub);
+```
+
+Incoming events are signature-verified and decrypted; only allowlisted pubkeys reach the agent (set `open: true` to accept anyone — at your own risk). See [examples/nostr-agent.js](examples/nostr-agent.js) for the full loop. Schnorr signing is validated against the official [BIP340 test vectors](https://github.com/bitcoin/bips/blob/master/bip-0340/test-vectors.csv) and cross-checked against `node:crypto`'s independent secp256k1 implementation.
 
 ### 7. Memory (persistent context)
 
