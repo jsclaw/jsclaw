@@ -78,11 +78,16 @@ test('handshake, hello event, and status round-trip', async () => {
   }
 });
 
-test('token auth: wrong token rejected, right token accepted', async () => {
+test('token auth: wrong token rejected, right token accepted, no token pre-auths', async () => {
   const { gateway } = await startTestGateway({}, { token: 'secret-token' });
   try {
     await assert.rejects(connect(gateway.port, 'wrong'), /connection failed/);
-    await assert.rejects(connect(gateway.port), /connection failed/);
+    // No token upgrades into the pre-auth state (openclaw handshake, #45):
+    // the socket opens but methods are refused until a connect frame.
+    const preauth = await connect(gateway.port);
+    const denied = await preauth.req('status');
+    assert.equal(denied.ok, false);
+    preauth.close();
     const client = await connect(gateway.port, 'secret-token');
     const res = await client.req('status');
     assert.equal(res.ok, true);
@@ -272,4 +277,103 @@ test('memory methods work end to end', async () => {
     client.close();
     await gateway.stop();
   }
+});
+
+// --- openclaw connect handshake (#45) ---
+
+test('tokenless socket gets a challenge and authenticates via connect frame', async () => {
+  const { gateway } = await startTestGateway({}, { token: 'secret' });
+  const client = await connect(gateway.port); // no ?token=
+
+  await sleep(30);
+  const challenge = client.events.find((e) => e.event === 'connect.challenge');
+  assert.ok(challenge, 'expected a connect.challenge event');
+  assert.ok(challenge.payload.nonce.length > 0);
+
+  // Pre-auth methods are refused
+  const denied = await client.req('status', {});
+  assert.equal(denied.ok, false);
+  assert.match(denied.error.message, /connect/);
+
+  // connect with the password (openclaw style)
+  const hello = await client.req('connect', {
+    minProtocol: 4, maxProtocol: 4,
+    client: { id: 'test-client', mode: 'ui' },
+    auth: { password: 'secret' },
+    role: 'operator',
+  });
+  assert.equal(hello.ok, true);
+  assert.equal(hello.payload.protocol, 4);
+  assert.equal(typeof hello.payload.policy.tickIntervalMs, 'number');
+
+  // Now methods work
+  const status = await client.req('status', {});
+  assert.equal(status.ok, true);
+
+  client.close();
+  await gateway.stop();
+});
+
+test('connect with bad credentials is refused', async () => {
+  const { gateway } = await startTestGateway({}, { token: 'secret' });
+  const client = await connect(gateway.port);
+  const res = await client.req('connect', { auth: { password: 'wrong' } });
+  assert.equal(res.ok, false);
+  client.close();
+  await gateway.stop();
+});
+
+test('query-token sockets are authed at upgrade and still get ticks', async () => {
+  const { gateway } = await startTestGateway({}, { token: 'secret' });
+  const client = await connect(gateway.port, 'secret');
+  const status = await client.req('status', {});
+  assert.equal(status.ok, true);
+  assert.ok(!client.events.find((e) => e.event === 'connect.challenge'));
+  client.close();
+  await gateway.stop();
+});
+
+test('chat.send accepts sessionKey and emits openclaw chat events', async () => {
+  const { gateway } = await startTestGateway({}, { token: 'secret' });
+  const client = await connect(gateway.port, 'secret');
+
+  const res = await client.req('chat.send', { sessionKey: 'main', message: 'hi', runId: 'run-1' });
+  assert.equal(res.ok, true);
+  assert.equal(res.payload.runId, 'run-1');
+
+  const chatEvt = client.events.find((e) => e.event === 'chat');
+  assert.ok(chatEvt, 'expected an openclaw chat event');
+  assert.equal(chatEvt.payload.sessionKey, 'main');
+  assert.equal(chatEvt.payload.state, 'final');
+  assert.equal(chatEvt.payload.message.content[0].text, 'final answer');
+  // legacy event still present for the webchat
+  assert.ok(client.events.find((e) => e.event === 'agent.output'));
+
+  client.close();
+  await gateway.stop();
+});
+
+test('openclaw list methods respond with usable shapes', async () => {
+  const { gateway, config } = await startTestGateway({}, { token: 'secret' });
+  const client = await connect(gateway.port, 'secret');
+
+  const agents = await client.req('agents.list', {});
+  assert.equal(agents.ok, true);
+  assert.ok(Array.isArray(agents.payload.agents));
+
+  const models = await client.req('models.list', {});
+  assert.equal(models.ok, true);
+  assert.ok(Array.isArray(models.payload.models));
+
+  const history = await client.req('chat.history', { sessionKey: 'main', limit: 10 });
+  assert.equal(history.ok, true);
+  assert.deepEqual(history.payload.messages, []);
+
+  for (const m of ['sessions.list', 'commands.list', 'chat.abort']) {
+    const r = await client.req(m, {});
+    assert.equal(r.ok, true, `${m} should respond ok`);
+  }
+
+  client.close();
+  await gateway.stop();
 });

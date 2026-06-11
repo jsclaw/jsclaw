@@ -5,15 +5,17 @@
  *   server → { type: 'res',   id, ok, payload | error }
  *   server → { type: 'event', event, payload }
  *
- * Token auth on the upgrade (?token=...), default bind 127.0.0.1 on
- * openclaw's port 18789. Serves the embedded webchat at /chat.
- * Zero dependencies — the WebSocket layer is src/ws.js.
+ * Auth: ?token= on the upgrade (webchat path), or openclaw's connect
+ * handshake — tokenless sockets get a connect.challenge event and must
+ * send {method:'connect', params:{auth:{password|token}}} within 10s.
+ * Default bind 127.0.0.1 on openclaw's port 18789. Serves the embedded
+ * webchat at /chat. Zero dependencies — the WebSocket layer is src/ws.js.
  * @module gateway
  */
 
 import { createServer } from 'node:http';
 import { timingSafeEqual, randomUUID } from 'node:crypto';
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { acceptKey, attachWebSocket } from './ws.js';
@@ -80,6 +82,28 @@ export function startGateway(deps, config, options = {}) {
   // --- Method dispatch ---
 
   async function dispatch(method, params = {}, conn) {
+    // openclaw handshake: sockets without a valid ?token= upgrade in a
+    // pre-auth state and must authenticate with a connect frame
+    // (auth.password or auth.token) before any other method.
+    if (method === 'connect') {
+      // openclaw clients send every credential they hold (stale stored
+      // token alongside the typed password) — accept if ANY matches.
+      const creds = Object.values(params?.auth || {}).filter((v) => typeof v === 'string');
+      if (token && !creds.some((c) => tokenMatches(c, token))) {
+        log.warn('Gateway connect rejected: bad credentials');
+        setTimeout(() => conn.close?.(), 50);
+        throw new Error('unauthorized');
+      }
+      conn.authed = true;
+      clearTimeout(conn.preauthTimer);
+      return {
+        protocol: 4,
+        auth: { role: params?.role || 'operator', scopes: [] },
+        policy: { tickIntervalMs: 30000 },
+      };
+    }
+    if (!conn.authed) throw new Error('unauthorized: send a connect frame first');
+
     switch (method) {
       case 'status': {
         const tasks = deps.store ? deps.store.listTasks() : [];
@@ -97,14 +121,56 @@ export function startGateway(deps, config, options = {}) {
       }
 
       case 'chat.send': {
-        const { agentId, message } = params;
-        if (!agentId || !message) throw new Error('chat.send requires agentId and message');
-        const runId = randomUUID().slice(0, 8);
+        // openclaw clients address sessions; ours address agents — accept both
+        const agentId = params.agentId || params.sessionKey;
+        const { message } = params;
+        if (!agentId || !message) throw new Error('chat.send requires agentId (or sessionKey) and message');
+        const sessionKey = params.sessionKey || agentId;
+        const runId = params.runId || randomUUID().slice(0, 8);
         const result = await deps.runAgent(agentId, message, (output) => {
           conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
+          // openclaw chat event shape (consumed by openclaw tui & friends)
+          conn.sendFrame({ type: 'event', event: 'chat', payload: {
+            sessionKey,
+            runId,
+            state: output.status === 'error' ? 'error' : 'final',
+            message: {
+              role: 'assistant',
+              content: [{ type: 'text', text: output.result ?? output.error ?? '' }],
+            },
+          } });
         });
         return { runId, ...result };
       }
+
+      case 'chat.history': {
+        const agentId = params.agentId || params.sessionKey || 'main';
+        const limit = Number(params.limit) > 0 ? Number(params.limit) : 50;
+        const sessionsDir = join(config.agentsDir, agentId, '.jsclaw-micro', 'sessions');
+        try {
+          const newest = readdirSync(sessionsDir)
+            .filter((f) => f.endsWith('.json'))
+            .map((f) => ({ f, m: statSync(join(sessionsDir, f)).mtimeMs }))
+            .sort((a, b) => b.m - a.m)[0];
+          if (!newest) return { items: [], messages: [], hasMore: false };
+          const messages = JSON.parse(readFileSync(join(sessionsDir, newest.f), 'utf-8')).slice(-limit);
+          return { items: messages, messages, hasMore: false };
+        } catch {
+          // No local sessions (e.g. containerized runner) — empty history
+          return { items: [], messages: [], hasMore: false };
+        }
+      }
+
+      case 'chat.abort':
+        return { aborted: false }; // no per-run abort yet (#45)
+      case 'agents.list':
+        return { agents: getAgents().map((id) => ({ id, name: id })), defaultId: 'main' };
+      case 'models.list':
+        return { models: config.model ? [{ id: config.model, name: config.model }] : [] };
+      case 'sessions.list':
+        return { sessions: [] };
+      case 'commands.list':
+        return { commands: [] };
 
       case 'tasks.list': {
         requireStore();
@@ -181,12 +247,17 @@ export function startGateway(deps, config, options = {}) {
   server.on('upgrade', (req, socket, head) => {
     const url = new URL(req.url, 'http://localhost');
 
-    if (token && !tokenMatches(url.searchParams.get('token'), token)) {
+    // A correct ?token= authenticates at upgrade (webchat path). A wrong
+    // one is rejected. No token at all upgrades into a pre-auth state for
+    // the openclaw connect handshake.
+    const queryToken = url.searchParams.get('token');
+    if (token && queryToken !== null && !tokenMatches(queryToken, token)) {
       log.warn('Gateway upgrade rejected: bad token');
       socket.write('HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n');
       socket.destroy();
       return;
     }
+    const preAuthed = !token || (queryToken !== null && tokenMatches(queryToken, token));
 
     const key = req.headers['sec-websocket-key'];
     if (req.headers.upgrade?.toLowerCase() !== 'websocket' || !key) {
@@ -202,7 +273,7 @@ export function startGateway(deps, config, options = {}) {
       `Sec-WebSocket-Accept: ${acceptKey(key)}\r\n\r\n`
     );
 
-    const conn = {};
+    const conn = { authed: preAuthed };
     const ws = attachWebSocket(socket, {
       onMessage: async (text) => {
         let frame;
@@ -223,7 +294,11 @@ export function startGateway(deps, config, options = {}) {
           conn.sendFrame({ type: 'res', id: frame.id, ok: false, error: { message: err.message } });
         }
       },
-      onClose: () => connections.delete(conn),
+      onClose: () => {
+        clearTimeout(conn.preauthTimer);
+        clearInterval(conn.tickTimer);
+        connections.delete(conn);
+      },
     }, head);
 
     conn.sendFrame = (obj) => ws.send(JSON.stringify(obj));
@@ -231,6 +306,13 @@ export function startGateway(deps, config, options = {}) {
     connections.add(conn);
 
     conn.sendFrame({ type: 'event', event: 'hello', payload: { version: VERSION } });
+    if (!conn.authed) {
+      // openclaw connect handshake: challenge now, expect a connect frame
+      conn.sendFrame({ type: 'event', event: 'connect.challenge', payload: { nonce: randomUUID() } });
+      conn.preauthTimer = setTimeout(() => { if (!conn.authed) conn.close(); }, 10000);
+    }
+    // openclaw clients treat a silent gateway as dead (policy.tickIntervalMs)
+    conn.tickTimer = setInterval(() => conn.sendFrame({ type: 'event', event: 'tick', payload: {} }), 15000);
   });
 
   function broadcast(event, payload = {}) {
