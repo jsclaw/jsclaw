@@ -6,7 +6,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { startChannels, validateChannelBlock } from '../src/channels.js';
-import { nullLogger } from './helpers.js';
+import { nullLogger, tempConfig } from './helpers.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -39,6 +39,7 @@ function fakeRunAgent(calls, outputs = [{ status: 'success', result: 'reply', ne
 }
 
 const baseConfig = (channels, bindings) => ({
+  ...tempConfig(),
   channels,
   bindings,
   logger: nullLogger,
