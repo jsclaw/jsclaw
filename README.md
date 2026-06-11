@@ -492,6 +492,28 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_LOG_LEVEL` | `info` | Log level |
 | `ANTHROPIC_API_KEY` | — | Required for Claude API |
 
+### Channels — DM your agent
+
+```json
+{
+  "channels": {
+    "nostr": {
+      "privateKey": "${NOSTR_PRIVATE_KEY}",
+      "allowed": ["npub1...you"],
+      "relays": ["wss://relay.damus.io", "wss://nos.lol"],
+      "agentId": "main"
+    }
+  }
+}
+```
+
+With `channels.nostr` configured, `npx jsclaw gateway` also answers encrypted
+Nostr DMs (NIP-04) — message the npub it prints at boot from Damus, Amethyst,
+or any Nostr client. No bot token, no platform account, zero dependencies.
+`allowed` is required (an open DM agent answers anyone and burns tokens;
+set `open: true` to accept that). One session per peer. Telegram is next
+(#44).
+
 ### Sandboxing — openclaw-style, per agent
 
 ```json

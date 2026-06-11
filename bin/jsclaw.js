@@ -30,6 +30,7 @@ import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
 import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
 import { startHeartbeat, HEARTBEAT_OK } from '../src/heartbeat.js';
 import { startGateway } from '../src/gateway.js';
+import { createNostrChannel } from '../src/nostr.js';
 import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
 const VERSION = JSON.parse(
@@ -424,7 +425,39 @@ async function cmdGateway(config, opts) {
     },
   }, config);
 
-  // 6. Heartbeat wakes agents with a HEARTBEAT.md
+  // 6. Channels from config (#44) — gateway-hosted chat surfaces
+  let nostrChannel = null;
+  if (config.channels?.nostr) {
+    const nc = config.channels.nostr;
+    const allowed = Array.isArray(nc.allowed) ? nc.allowed.filter(Boolean) : [];
+    if (!nc.privateKey) {
+      fail('channels.nostr: privateKey is required (use a ${ENV_VAR} reference)', 2);
+    }
+    if (allowed.length === 0 && nc.open !== true) {
+      fail('channels.nostr: set allowed (npubs) — an open DM agent answers anyone and burns tokens. Set open: true to do it anyway.', 2);
+    }
+    const nostrAgentId = nc.agentId || 'main';
+    const nostrSessions = new Map(); // peer jid -> sessionId
+    nostrChannel = createNostrChannel({
+      privateKey: nc.privateKey,
+      relays: nc.relays || ['wss://relay.damus.io', 'wss://nos.lol'],
+      allowedPubkeys: allowed,
+      open: nc.open === true,
+      logger: config.logger,
+      onMessage: (jid, text) => {
+        runAgent(nostrAgentId, text, async (output) => {
+          if (output.result) await nostrChannel.sendMessage(jid, output.result);
+          if (output.newSessionId) nostrSessions.set(jid, output.newSessionId);
+        }, { chatJid: jid, sessionId: nostrSessions.get(jid) }).catch((err) => {
+          config.logger.error(`nostr agent run failed: ${err.message}`);
+          nostrChannel.sendMessage(jid, 'Sorry — something went wrong.').catch(() => {});
+        });
+      },
+    });
+    await nostrChannel.connect();
+  }
+
+  // 7. Heartbeat wakes agents with a HEARTBEAT.md
   const heartbeat = startHeartbeat({
     getAgents: () => agents().map((folder) => ({ name: folder, folder })),
     // Heartbeats run on the cheap model when one is configured —
@@ -440,6 +473,7 @@ async function cmdGateway(config, opts) {
   console.log(`  chat:    http://127.0.0.1:${gateway.port}/chat?token=${token}`);
   console.log(`  ws:      ws://127.0.0.1:${gateway.port}/?token=${token}`);
   console.log(`  agents:  ${agents().join(', ') || '(none yet — first chat creates one)'}`);
+  if (nostrChannel) console.log(`  nostr:   ${nostrChannel.npub} (agent: ${config.channels.nostr.agentId || 'main'})`);
   console.log(`  token:   ${token}${config.gatewayToken ? ' (pinned)' : ' (generated; set JSCLAW_GATEWAY_TOKEN or gatewayToken in jsclaw.json to pin)'}`);
   if (config.model) console.log(`  model:   ${config.model}${config.heartbeatModel ? ` (heartbeat: ${config.heartbeatModel})` : ''}`);
   console.log('\nCtrl-C to stop.');
@@ -451,6 +485,7 @@ async function cmdGateway(config, opts) {
   });
   console.log('\nshutting down…');
   heartbeat.stop();
+  if (nostrChannel) await nostrChannel.disconnect();
   await gateway.stop();
   process.exit(0);
 }
