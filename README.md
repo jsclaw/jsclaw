@@ -2,11 +2,11 @@
 
 [![CI](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml/badge.svg)](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
-[![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![license AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
 
 Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero host-side dependencies.
 
-A JavaScript port of [nanoclaw](https://github.com/qwibitai/nanoclaw) — the core engine without the channel-specific code.
+A JavaScript agent host inspired by [nanoclaw](https://github.com/qwibitai/nanoclaw) — the core engine without the channel-specific code, rewritten from scratch in plain JS.
 
 ## What is jsclaw?
 
@@ -501,4 +501,4 @@ The agent has access to these tools via the jsclaw MCP server:
 
 ## License
 
-MIT
+AGPL-3.0-or-later. Copyright (c) 2026 Melvin Carvalho.
