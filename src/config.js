@@ -19,6 +19,7 @@ function defaults() {
   return {
     containerImage: 'jsclaw-agent:latest',
     containerRuntime: 'docker',
+    sandboxMode: 'auto',
     localRunner: undefined,
     containerTimeout: 30 * 60 * 1000, // 30 minutes
     maxOutputSize: 10 * 1024 * 1024,  // 10 MB
@@ -81,6 +82,7 @@ export function loadConfigFile(explicitPath) {
 const ENV_KEYS = {
   JSCLAW_CONTAINER_IMAGE: ['containerImage', String],
   JSCLAW_CONTAINER_RUNTIME: ['containerRuntime', String],
+  JSCLAW_SANDBOX_MODE: ['sandboxMode', String],
   JSCLAW_LOCAL_RUNNER: ['localRunner', String],
   JSCLAW_CONTAINER_TIMEOUT: ['containerTimeout', Number],
   JSCLAW_MAX_OUTPUT_SIZE: ['maxOutputSize', Number],
