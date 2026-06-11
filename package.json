@@ -1,6 +1,6 @@
 {
   "name": "jsclaw",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
   "type": "module",
   "license": "MIT",
@@ -31,6 +31,7 @@
     "./channel": "./src/channel.js",
     "./gateway": "./src/gateway.js",
     "./ws": "./src/ws.js",
+    "./nostr": "./src/nostr.js",
     "./webhooks": "./src/webhooks.js",
     "./memory": "./src/memory.js",
     "./skills": "./src/skills.js",
@@ -54,7 +55,8 @@
     "container",
     "docker",
     "mcp",
-    "orchestration"
+    "orchestration",
+    "nostr"
   ],
   "repository": {
     "type": "git",
