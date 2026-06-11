@@ -15,7 +15,7 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Gateway** — WebSocket control plane (openclaw wire shape) with token auth + built-in webchat; `npx jsclaw gateway` runs the whole host
 - **Container Runner** — Spawn Docker containers, stream agent output via sentinel-delimited JSON
 - **IPC System** — Filesystem-based JSON communication between host and container
-- **Group Queue** — Per-group concurrency with configurable container limits
+- **Agent Queue** — Per-agent concurrency with configurable container limits
 - **MCP Tools** — Send messages and schedule tasks from inside the agent
 - **Task Scheduler** — Cron, interval, and one-shot tasks with zero-dep cron parsing
 - **Heartbeat** — Periodic agent wake-up for autonomous operation (`HEARTBEAT.md`)
@@ -25,7 +25,7 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **MCP Passthrough** — Wire any of the 32,000+ MCP servers into your agents via openclaw's `mcp.servers` config shape
 - **Models & Providers** — Per-agent and per-heartbeat model selection; Anthropic direct, GLM (Z.ai), Kimi (Moonshot), Bedrock, Vertex, or any Anthropic-compatible endpoint
 - **Onboarding** — `npx jsclaw onboard`: interactive setup wizard (environment checks, provider, models, scaffolding)
-- **Memory** — Per-group markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
+- **Memory** — Per-agent markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
 - **Skills** — openclaw's SKILL.md format: YAML frontmatter, keyword/regex/attachment triggers, prompt injection
 - **Multi-Agent Bindings** — Route messages to agents by channel/peer/account, most-specific-wins
 - **Webhooks** — HTTP ingress with `{{body.field}}` templates and secret auth, plus outgoing event webhooks (openclaw-compatible shapes)
@@ -50,7 +50,7 @@ npm install jsclaw
 npx jsclaw onboard
 ```
 
-Checks your environment, builds the agent image, walks you through provider + model selection (Anthropic, **GLM**, **Kimi**, Bedrock, Vertex, or a custom endpoint), scaffolds `groups/main` with starter `SOUL.md`/`HEARTBEAT.md`, and writes `jsclaw.json` — secrets as `${ENV_VAR}` references, never literals.
+Checks your environment, builds the agent image, walks you through provider + model selection (Anthropic, **GLM**, **Kimi**, Bedrock, Vertex, or a custom endpoint), scaffolds `agents/main` with starter `SOUL.md`/`HEARTBEAT.md`, and writes `jsclaw.json` — secrets as `${ENV_VAR}` references, never literals.
 
 ### 0. The fast path: a full agent host in one command
 
@@ -65,7 +65,7 @@ Open the printed `http://127.0.0.1:18789/chat?token=...` URL and talk to your co
 ```javascript
 // any WebSocket client
 ws.send(JSON.stringify({ type: 'req', id: 1, method: 'chat.send',
-  params: { groupFolder: 'main', message: 'Summarize my notes' } }));
+  params: { agentId: 'main', message: 'Summarize my notes' } }));
 // → { type: 'event', event: 'agent.output', payload: { ... } }  (streaming)
 // → { type: 'res', id: 1, ok: true, payload: { result, newSessionId } }
 ```
@@ -86,19 +86,19 @@ import { runContainerAgent, createConfig } from 'jsclaw';
 const config = createConfig({
   containerImage: 'jsclaw-agent:latest',
   dataDir: './data',
-  groupsDir: './groups',
+  agentsDir: './agents',
 });
 
-const group = { name: 'my-agent', folder: 'my-agent' };
+const agent = { name: 'my-agent', folder: 'my-agent' };
 const input = {
   prompt: 'Hello, what can you do?',
-  groupFolder: 'my-agent',
+  agentId: 'my-agent',
   chatJid: 'user-1',
   isMain: true,
 };
 
 const result = await runContainerAgent(
-  group,
+  agent,
   input,
   (proc, name) => console.log(`Container ${name} started`),
   async (output) => console.log('Agent:', output.result),
@@ -109,12 +109,12 @@ const result = await runContainerAgent(
 ### 3. With Queue + IPC
 
 ```javascript
-import { GroupQueue, startIpcWatcher, createConfig } from 'jsclaw';
+import { AgentQueue, startIpcWatcher, createConfig } from 'jsclaw';
 
 const config = createConfig();
-const queue = new GroupQueue(config);
+const queue = new AgentQueue(config);
 
-queue.setProcessMessagesFn(async (groupJid) => {
+queue.setProcessMessagesFn(async (agentJid) => {
   // Your logic: fetch messages, run agent, handle output
   return true;
 });
@@ -123,14 +123,14 @@ const ipc = startIpcWatcher({
   sendMessage: async (jid, text) => {
     // Send text via your channel
   },
-  onTask: async (type, data, sourceGroup, isMain) => {
+  onTask: async (type, data, sourceAgent, isMain) => {
     // Handle schedule_task, pause_task, etc.
   },
-  getRegisteredGroups: () => ({}),
+  getRegisteredAgents: () => ({}),
 }, config);
 
 // Trigger processing
-queue.enqueueMessageCheck('group-1');
+queue.enqueueMessageCheck('agent-1');
 
 // Cleanup
 // ipc.stop();
@@ -152,7 +152,7 @@ const store = new TaskStore(config);
 startIpcWatcher({
   sendMessage: async (jid, text) => { /* your channel */ },
   onTask: createTaskIpcHandler(store),
-  getRegisteredGroups: () => ({}),
+  getRegisteredAgents: () => ({}),
 }, config);
 
 // Execute due tasks (cron / interval / once)
@@ -160,8 +160,8 @@ startTaskScheduler({
   store,
   runTask: async (task) => {
     await runContainerAgent(
-      { name: task.groupFolder, folder: task.groupFolder },
-      { prompt: task.prompt, groupFolder: task.groupFolder,
+      { name: task.agentId, folder: task.agentId },
+      { prompt: task.prompt, agentId: task.agentId,
         chatJid: task.chatJid, isMain: true, isScheduledTask: true },
       null, null, config,
     );
@@ -170,17 +170,17 @@ startTaskScheduler({
 
 // Wake agents periodically to check their HEARTBEAT.md
 startHeartbeat({
-  getGroups: () => [{ name: 'main', folder: 'main' }],
-  runAgent: (group, prompt) => runContainerAgent(
-    group,
-    { prompt, groupFolder: group.folder, chatJid: 'heartbeat', isMain: true },
+  getAgents: () => [{ name: 'main', folder: 'main' }],
+  runAgent: (agent, prompt) => runContainerAgent(
+    agent,
+    { prompt, agentId: agent.folder, chatJid: 'heartbeat', isMain: true },
     null, null, config,
   ),
-  onAlert: async (group, result) => { /* deliver via your channel */ },
+  onAlert: async (agent, result) => { /* deliver via your channel */ },
 }, config, { quietHours: { start: '22:00', end: '07:00' } });
 ```
 
-Drop a `HEARTBEAT.md` in a group folder to give that agent standing tasks:
+Drop a `HEARTBEAT.md` in an agent folder to give that agent standing tasks:
 
 ```markdown
 ## Every heartbeat
@@ -194,10 +194,10 @@ The agent replies `HEARTBEAT_OK` when nothing needs attention (suppressed); anyt
 
 ### 5. Identity files (personality)
 
-Drop any of `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` into a group folder and the agent loads them into its system prompt in that order — same convention as openclaw:
+Drop any of `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` into an agent folder and the agent loads them into its system prompt in that order — same convention as openclaw:
 
 ```markdown
-<!-- groups/main/SOUL.md -->
+<!-- agents/main/SOUL.md -->
 # SOUL.md
 You are the colleague who actually gets things done.
 
@@ -221,7 +221,7 @@ await channels.connectAll();
 startIpcWatcher({
   sendMessage: channels.sendMessage,
   onTask: createTaskIpcHandler(store),
-  getRegisteredGroups: () => ({}),
+  getRegisteredAgents: () => ({}),
 }, createConfig());
 ```
 
@@ -251,7 +251,7 @@ Incoming events are signature-verified and decrypted; only allowlisted pubkeys r
 
 ### 7. Memory (persistent context)
 
-Each group gets a `memory/` directory of plain Markdown — openclaw's categories (`preferences.md`, `contacts.md`, `projects.md`, `learnings.md`) plus any custom files. It rides the existing group mount, so the agent reads and writes its own memory with ordinary fs tools, and the agent runner loads it into the system prompt (budget: `JSCLAW_MEMORY_MAX_CHARS`, default 8000).
+Each agent gets a `memory/` directory of plain Markdown — openclaw's categories (`preferences.md`, `contacts.md`, `projects.md`, `learnings.md`) plus any custom files. It rides the existing agent mount, so the agent reads and writes its own memory with ordinary fs tools, and the agent runner loads it into the system prompt (budget: `JSCLAW_MEMORY_MAX_CHARS`, default 8000).
 
 ```javascript
 import { initMemory, appendMemory, searchMemory, loadMemoryContext } from 'jsclaw';
@@ -273,7 +273,7 @@ const { stop } = await startWebhookIngress({
   port: 18789,
   secret: process.env.WEBHOOK_SECRET,
   endpoints: [
-    { path: '/deploy-alert', message: 'Deployment: {{body.service}} is {{body.status}}', groupFolder: 'main' },
+    { path: '/deploy-alert', message: 'Deployment: {{body.service}} is {{body.status}}', agentId: 'main' },
   ],
   onMessage: async (message, endpoint) => {
     // run an agent, enqueue it, forward to a channel...
@@ -340,10 +340,10 @@ import { createWebhookEmitter } from 'jsclaw';
 
 const emit = createWebhookEmitter([
   { event: 'agent.task.completed', url: 'https://hooks.slack.com/...', headers: { Authorization: 'Bearer ${HOOK_TOKEN}' } },
-  { event: 'agent.error', url: 'https://events.pagerduty.com/...', filter: { groupFolder: 'prod' } },
+  { event: 'agent.error', url: 'https://events.pagerduty.com/...', filter: { agentId: 'prod' } },
 ]);
 
-await emit('agent.task.completed', { taskId: 't1', groupFolder: 'main' });
+await emit('agent.task.completed', { taskId: 't1', agentId: 'main' });
 ```
 
 ### 11½. MCP servers (plug into the MCP ecosystem)
@@ -364,7 +364,7 @@ Declare MCP servers in `jsclaw.json` — openclaw's `mcp.servers` shape — and 
 }
 ```
 
-`${ENV_VAR}` references expand at load time, so secrets never live in the file. Per-group overrides via `group.mcpServers` (merged by name, group wins). The configs travel to the container over **stdin** — never argv or env flags, which leak into `ps`. The `jsclaw` server name is reserved for the built-in IPC tools and can't be shadowed.
+`${ENV_VAR}` references expand at load time, so secrets never live in the file. Per-agent overrides via `agent.mcpServers` (merged by name, agent wins). The configs travel to the container over **stdin** — never argv or env flags, which leak into `ps`. The `jsclaw` server name is reserved for the built-in IPC tools and can't be shadowed.
 
 ### 11¾. Models & providers
 
@@ -379,7 +379,7 @@ jsclaw agents run on the Claude Code runtime, so model routing works through the
 }
 ```
 
-- **Precedence**: per-run `input.model` > `group.model` > `config.model`
+- **Precedence**: per-run `input.model` > `agent.model` > `config.model`
 - **`heartbeatModel`** routes the autonomy loop to a cheap model (~90% cost reduction on 48 cycles/day)
 - **Providers**: Anthropic direct; **GLM (Z.ai)** and **Kimi (Moonshot)** via their Anthropic-compatible endpoints; AWS Bedrock / Google Vertex via the standard `CLAUDE_CODE_USE_*` env switches; everything else (OpenAI, Gemini, Grok, DeepSeek, Ollama) through a LiteLLM proxy as a custom endpoint
 - **Security**: model + credentials travel to containers via stdin (`ContainerInput.providerEnv`), never argv or `-e` flags — nothing provider-related is `ps`-visible
@@ -399,11 +399,11 @@ Optional `jsclaw.json` (or `JSCLAW_CONFIG_PATH`), with `${ENV_VAR}` expansion. P
 ### 13. CLI
 
 ```bash
-npx jsclaw status                      # config, groups, task counts
+npx jsclaw status                      # config, agents, task counts
 npx jsclaw doctor                      # environment health checks
 npx jsclaw tasks list                  # scheduled tasks (file-based, no daemon needed)
 npx jsclaw tasks pause|resume|cancel <id>
-npx jsclaw memory list main            # memory files for a group
+npx jsclaw memory list main            # memory files for an agent
 npx jsclaw memory search main "query"
 npx jsclaw run main "summarize my notes"   # one-shot agent run
 npx jsclaw heartbeat main --dry-run    # preview a heartbeat cycle
@@ -425,13 +425,13 @@ Host Process                    Docker Container
 │ ipc.js        │<──files───  │ mcp-server.js     │
 │ (polls ipc/)  │              │  (MCP tools)      │
 │                │───files──>  │                   │
-│ group-queue.js │              │ /workspace/       │
+│ agent-queue.js │              │ /workspace/       │
 └───────────────┘              └──────────────────┘
 ```
 
 - **stdin/stdout**: ContainerInput JSON in, sentinel-delimited ContainerOutput JSON out
-- **IPC files**: Atomic JSON files in `data/ipc/{group}/{messages,tasks,input}/`
-- **Container workspace**: Isolated at `/workspace/group/` per group
+- **IPC files**: Atomic JSON files in `data/ipc/{agent}/{messages,tasks,input}/`
+- **Container workspace**: Isolated at `/workspace/agent/` per agent
 
 ## API
 
@@ -439,13 +439,13 @@ Host Process                    Docker Container
 
 Create configuration. All settings have sensible defaults and can be overridden via env vars (`JSCLAW_*`).
 
-### `runContainerAgent(group, input, onProcess?, onOutput?, config?)`
+### `runContainerAgent(agent, input, onProcess?, onOutput?, config?)`
 
 Spawn a container, run a Claude agent, stream results.
 
-### `GroupQueue`
+### `AgentQueue`
 
-Per-group concurrency queue. Ensures one container per group with a global limit.
+Per-agent concurrency queue. Ensures one container per agent with a global limit.
 
 ### `startIpcWatcher(deps, config?)`
 
@@ -455,7 +455,7 @@ Poll IPC directories for messages and task operations from containers.
 
 Low-level atomic IPC file operations.
 
-### `validateAdditionalMounts(mounts, groupName, isMain, allowlistPath?)`
+### `validateAdditionalMounts(mounts, agentName, isMain, allowlistPath?)`
 
 Validate volume mounts against a security allowlist.
 
@@ -486,7 +486,7 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_MEMORY_MAX_CHARS` | `8000` | Memory budget loaded into system prompt (chars) |
 | `JSCLAW_SKILLS_PATH` | `./skills` | Directory of SKILL.md files |
 | `JSCLAW_CONFIG_PATH` | `./jsclaw.json` | Config file location |
-| `JSCLAW_GROUPS_DIR` | `./groups` | Group workspace directory |
+| `JSCLAW_AGENTS_DIR` | `./agents` | Agent workspace directory |
 | `JSCLAW_LOG_LEVEL` | `info` | Log level |
 | `ANTHROPIC_API_KEY` | — | Required for Claude API |
 

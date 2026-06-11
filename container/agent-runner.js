@@ -5,13 +5,13 @@
  *
  * Environment variables (set by host):
  *   JSCLAW_CHAT_JID       - Chat identifier
- *   JSCLAW_GROUP_FOLDER    - Group folder name
- *   JSCLAW_IS_MAIN         - 'true' if admin group
+ *   JSCLAW_AGENT_ID    - Agent folder name
+ *   JSCLAW_IS_MAIN         - 'true' if admin agent
  *   JSCLAW_SYSTEM_PROMPT   - Optional additional system prompt
  *   JSCLAW_ALLOWED_TOOLS   - Optional JSON array of allowed tools
  *   ANTHROPIC_API_KEY      - Required for Claude API access
  *
- * Identity files (optional, read from /workspace/group):
+ * Identity files (optional, read from /workspace/agent):
  *   SOUL.md, IDENTITY.md, AGENTS.md, TOOLS.md, USER.md are concatenated
  *   in that order into the system prompt, openclaw-style. Any
  *   JSCLAW_SYSTEM_PROMPT content is appended after them.
@@ -25,7 +25,7 @@ const OUTPUT_START_MARKER = '---JSCLAW_OUTPUT_START---';
 const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
 
 const IPC_INPUT_DIR = '/workspace/ipc/input';
-const WORKSPACE_DIR = '/workspace/group';
+const WORKSPACE_DIR = '/workspace/agent';
 
 // Loaded into the system prompt in this order (openclaw convention):
 // identity first, then instructions, then context.
@@ -64,7 +64,7 @@ function writeOutput(output) {
 }
 
 /**
- * Load memory/*.md from the group workspace, truncated to a character
+ * Load memory/*.md from the agent workspace, truncated to a character
  * budget (JSCLAW_MEMORY_MAX_CHARS, default 8000 ≈ 2k tokens).
  * @returns {string} Memory section for the system prompt, or ''
  */
@@ -227,7 +227,7 @@ async function runQuery(prompt, options = {}) {
           args: [join(import.meta.dirname || '/app', 'mcp-server.js')],
           env: {
             JSCLAW_CHAT_JID: process.env.JSCLAW_CHAT_JID || '',
-            JSCLAW_GROUP_FOLDER: process.env.JSCLAW_GROUP_FOLDER || '',
+            JSCLAW_AGENT_ID: process.env.JSCLAW_AGENT_ID || '',
             JSCLAW_IS_MAIN: process.env.JSCLAW_IS_MAIN || 'false',
           },
         },
@@ -261,7 +261,7 @@ async function main() {
   const {
     prompt,
     sessionId,
-    groupFolder,
+    agentId,
     isMain,
     isScheduledTask,
     mcpServers: extraMcpServers,

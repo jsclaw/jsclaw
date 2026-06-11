@@ -5,8 +5,8 @@ import { join } from 'node:path';
 import { startHeartbeat, inQuietHours, HEARTBEAT_OK } from '../src/heartbeat.js';
 import { tempConfig } from './helpers.js';
 
-function setupGroup(config, folder, heartbeatContent) {
-  const dir = join(config.groupsDir, folder);
+function setupAgent(config, folder, heartbeatContent) {
+  const dir = join(config.agentsDir, folder);
   mkdirSync(dir, { recursive: true });
   if (heartbeatContent !== undefined) {
     writeFileSync(join(dir, 'HEARTBEAT.md'), heartbeatContent);
@@ -15,14 +15,14 @@ function setupGroup(config, folder, heartbeatContent) {
 
 test('HEARTBEAT_OK responses are suppressed, alerts delivered', async () => {
   const config = tempConfig({ heartbeatInterval: 1e9 });
-  setupGroup(config, 'hb', '- check the thing');
+  setupAgent(config, 'hb', '- check the thing');
 
   const alerts = [];
   let response = HEARTBEAT_OK;
   const hb = startHeartbeat({
-    getGroups: () => [{ name: 'hb', folder: 'hb' }],
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
     runAgent: async () => ({ status: 'success', result: response }),
-    onAlert: async (group, result) => alerts.push(result),
+    onAlert: async (agent, result) => alerts.push(result),
   }, config);
 
   await hb.triggerNow();
@@ -38,14 +38,14 @@ test('HEARTBEAT_OK responses are suppressed, alerts delivered', async () => {
   hb.stop();
 });
 
-test('groups without HEARTBEAT.md are skipped', async () => {
+test('agents without HEARTBEAT.md are skipped', async () => {
   const config = tempConfig({ heartbeatInterval: 1e9 });
-  setupGroup(config, 'no-file');
-  setupGroup(config, 'empty', '   \n');
+  setupAgent(config, 'no-file');
+  setupAgent(config, 'empty', '   \n');
 
   let calls = 0;
   const hb = startHeartbeat({
-    getGroups: () => [{ name: 'no-file', folder: 'no-file' }, { name: 'empty', folder: 'empty' }],
+    getAgents: () => [{ name: 'no-file', folder: 'no-file' }, { name: 'empty', folder: 'empty' }],
     runAgent: async () => { calls++; return { status: 'success', result: HEARTBEAT_OK }; },
   }, config);
 
@@ -56,12 +56,12 @@ test('groups without HEARTBEAT.md are skipped', async () => {
 
 test('heartbeat prompt includes the HEARTBEAT.md tasks', async () => {
   const config = tempConfig({ heartbeatInterval: 1e9 });
-  setupGroup(config, 'hb', '- watch the deploys');
+  setupAgent(config, 'hb', '- watch the deploys');
 
   let seenPrompt = '';
   const hb = startHeartbeat({
-    getGroups: () => [{ name: 'hb', folder: 'hb' }],
-    runAgent: async (group, prompt) => { seenPrompt = prompt; return { result: HEARTBEAT_OK }; },
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
+    runAgent: async (agent, prompt) => { seenPrompt = prompt; return { result: HEARTBEAT_OK }; },
   }, config);
 
   await hb.triggerNow();
@@ -73,10 +73,10 @@ test('heartbeat prompt includes the HEARTBEAT.md tasks', async () => {
 
 test('agent errors do not break the loop', async () => {
   const config = tempConfig({ heartbeatInterval: 1e9 });
-  setupGroup(config, 'hb', '- task');
+  setupAgent(config, 'hb', '- task');
 
   const hb = startHeartbeat({
-    getGroups: () => [{ name: 'hb', folder: 'hb' }],
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
     runAgent: async () => { throw new Error('container exploded'); },
   }, config);
 
@@ -103,11 +103,11 @@ test('inQuietHours handles same-day and midnight-crossing windows', () => {
 
 test('triggerNow bypasses quiet hours', async () => {
   const config = tempConfig({ heartbeatInterval: 1e9 });
-  setupGroup(config, 'hb', '- task');
+  setupAgent(config, 'hb', '- task');
 
   let calls = 0;
   const hb = startHeartbeat({
-    getGroups: () => [{ name: 'hb', folder: 'hb' }],
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
     runAgent: async () => { calls++; return { result: HEARTBEAT_OK }; },
   }, config, { quietHours: { start: '00:00', end: '23:59' } });
 

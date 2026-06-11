@@ -1,9 +1,9 @@
 /**
- * Markdown memory — openclaw's convention, per group.
+ * Markdown memory — openclaw's convention, per agent.
  *
- * Memory lives in {groupsDir}/{folder}/memory/ as plain Markdown files
+ * Memory lives in {agentsDir}/{folder}/memory/ as plain Markdown files
  * (preferences.md, contacts.md, projects.md, learnings.md + custom).
- * Because the group folder is already mounted into the container, the
+ * Because the agent folder is already mounted into the container, the
  * agent reads and writes its own memory with ordinary fs tools; the
  * agent runner loads it into the system prompt at startup.
  * @module memory
@@ -20,25 +20,25 @@ import { createConfig } from './config.js';
 export const MEMORY_CATEGORIES = ['preferences', 'contacts', 'projects', 'learnings'];
 
 /**
- * Path to a group's memory directory.
- * @param {string} groupFolder
+ * Path to an agent's memory directory.
+ * @param {string} agentId
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {string}
  */
-export function memoryDir(groupFolder, config) {
+export function memoryDir(agentId, config) {
   config = config || createConfig();
-  return join(config.groupsDir, groupFolder, 'memory');
+  return join(config.agentsDir, agentId, 'memory');
 }
 
 /**
  * Create the memory directory with seeded category files.
  * Existing files are left untouched.
- * @param {string} groupFolder
+ * @param {string} agentId
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {string} The memory directory path
  */
-export function initMemory(groupFolder, config) {
-  const dir = memoryDir(groupFolder, config);
+export function initMemory(agentId, config) {
+  const dir = memoryDir(agentId, config);
   mkdirSync(dir, { recursive: true });
   for (const category of MEMORY_CATEGORIES) {
     const file = join(dir, `${category}.md`);
@@ -51,13 +51,13 @@ export function initMemory(groupFolder, config) {
 }
 
 /**
- * List a group's memory files.
- * @param {string} groupFolder
+ * List an agent's memory files.
+ * @param {string} agentId
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {{ name: string, path: string, size: number }[]}
  */
-export function listMemoryFiles(groupFolder, config) {
-  const dir = memoryDir(groupFolder, config);
+export function listMemoryFiles(agentId, config) {
+  const dir = memoryDir(agentId, config);
   let entries;
   try {
     entries = readdirSync(dir, { withFileTypes: true });
@@ -80,17 +80,17 @@ export function listMemoryFiles(groupFolder, config) {
 }
 
 /**
- * Load a group's memory as one string for the system prompt,
+ * Load an agent's memory as one string for the system prompt,
  * truncated to a character budget (most files survive truncation
  * in listing order; a file that would overflow is cut with a marker).
- * @param {string} groupFolder
+ * @param {string} agentId
  * @param {import('./types.js').JsclawConfig} [config]
  * @param {{ maxChars?: number }} [opts] - Default 8000 chars (~2k tokens)
  * @returns {string} Concatenated memory, or '' if none
  */
-export function loadMemoryContext(groupFolder, config, opts = {}) {
+export function loadMemoryContext(agentId, config, opts = {}) {
   const { maxChars = 8000 } = opts;
-  const files = listMemoryFiles(groupFolder, config);
+  const files = listMemoryFiles(agentId, config);
   const parts = [];
   let used = 0;
 
@@ -121,14 +121,14 @@ export function loadMemoryContext(groupFolder, config, opts = {}) {
 
 /**
  * Append a fact to a memory category file.
- * @param {string} groupFolder
+ * @param {string} agentId
  * @param {string} category - Category name ('preferences') or filename ('recipes.md')
  * @param {string} text - The fact to record
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {string} Path of the file written
  */
-export function appendMemory(groupFolder, category, text, config) {
-  const dir = memoryDir(groupFolder, config);
+export function appendMemory(agentId, category, text, config) {
+  const dir = memoryDir(agentId, config);
   mkdirSync(dir, { recursive: true });
   const name = category.endsWith('.md') ? category : `${category}.md`;
   // basename() prevents path traversal out of the memory dir
@@ -138,16 +138,16 @@ export function appendMemory(groupFolder, category, text, config) {
 }
 
 /**
- * Case-insensitive line search across a group's memory.
- * @param {string} groupFolder
+ * Case-insensitive line search across an agent's memory.
+ * @param {string} agentId
  * @param {string} query
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {{ file: string, line: number, text: string }[]}
  */
-export function searchMemory(groupFolder, query, config) {
+export function searchMemory(agentId, query, config) {
   const needle = query.toLowerCase();
   const results = [];
-  for (const file of listMemoryFiles(groupFolder, config)) {
+  for (const file of listMemoryFiles(agentId, config)) {
     let content;
     try {
       content = readFileSync(file.path, 'utf-8');
@@ -164,10 +164,10 @@ export function searchMemory(groupFolder, query, config) {
 }
 
 /**
- * Delete a group's memory directory.
- * @param {string} groupFolder
+ * Delete an agent's memory directory.
+ * @param {string} agentId
  * @param {import('./types.js').JsclawConfig} [config]
  */
-export function clearMemory(groupFolder, config) {
-  rmSync(memoryDir(groupFolder, config), { recursive: true, force: true });
+export function clearMemory(agentId, config) {
+  rmSync(memoryDir(agentId, config), { recursive: true, force: true });
 }

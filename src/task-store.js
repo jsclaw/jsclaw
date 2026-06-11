@@ -1,8 +1,8 @@
 /**
  * JSON file-backed task persistence. Zero dependencies.
  * Tasks live in {dataDir}/tasks.json (atomic writes). After every
- * mutation a per-group current_tasks.json snapshot is written into the
- * group folder so the list_tasks MCP tool works inside containers.
+ * mutation a per-agent current_tasks.json snapshot is written into the
+ * agent folder so the list_tasks MCP tool works inside containers.
  * @module task-store
  */
 
@@ -18,7 +18,7 @@ import { nextCron, isValidCron } from './cron.js';
 /**
  * @typedef {Object} ScheduledTask
  * @property {string} id
- * @property {string} groupFolder - Group whose container runs the task
+ * @property {string} agentId - Agent whose container runs the task
  * @property {string} chatJid - Chat the task reports to
  * @property {string} prompt - Prompt to run when the task fires
  * @property {'cron'|'interval'|'once'} scheduleType
@@ -123,16 +123,16 @@ export class TaskStore {
     this._writeSnapshots();
   }
 
-  /** Write current_tasks.json into each group folder that has tasks. */
+  /** Write current_tasks.json into each agent folder that has tasks. */
   _writeSnapshots() {
-    const byGroup = new Map();
+    const byAgent = new Map();
     for (const task of this._tasks) {
-      if (!byGroup.has(task.groupFolder)) byGroup.set(task.groupFolder, []);
-      byGroup.get(task.groupFolder).push(task);
+      if (!byAgent.has(task.agentId)) byAgent.set(task.agentId, []);
+      byAgent.get(task.agentId).push(task);
     }
-    for (const [folder, tasks] of byGroup) {
+    for (const [folder, tasks] of byAgent) {
       try {
-        const dir = join(this._config.groupsDir, folder);
+        const dir = join(this._config.agentsDir, folder);
         mkdirSync(dir, { recursive: true });
         const snapshot = tasks.map((t) => ({
           id: t.id,
@@ -152,11 +152,11 @@ export class TaskStore {
 
   /**
    * Create a new scheduled task.
-   * @param {{ groupFolder: string, chatJid: string, prompt: string, scheduleType: 'cron'|'interval'|'once', scheduleValue: string, contextMode?: 'fresh'|'resume' }} params
+   * @param {{ agentId: string, chatJid: string, prompt: string, scheduleType: 'cron'|'interval'|'once', scheduleValue: string, contextMode?: 'fresh'|'resume' }} params
    * @returns {ScheduledTask}
    */
   createTask(params) {
-    const { groupFolder, chatJid, prompt, scheduleType, scheduleValue, contextMode = 'fresh' } = params;
+    const { agentId, chatJid, prompt, scheduleType, scheduleValue, contextMode = 'fresh' } = params;
 
     if (!prompt) throw new Error('Task prompt is required');
     if (scheduleType === 'cron' && !isValidCron(scheduleValue)) {
@@ -166,7 +166,7 @@ export class TaskStore {
     /** @type {ScheduledTask} */
     const task = {
       id: randomUUID().slice(0, 8),
-      groupFolder,
+      agentId,
       chatJid,
       prompt,
       scheduleType,
@@ -193,12 +193,12 @@ export class TaskStore {
   }
 
   /**
-   * @param {string} [groupFolder] - Filter by group
+   * @param {string} [agentId] - Filter by agent
    * @returns {ScheduledTask[]}
    */
-  listTasks(groupFolder) {
-    return groupFolder
-      ? this._tasks.filter((t) => t.groupFolder === groupFolder)
+  listTasks(agentId) {
+    return agentId
+      ? this._tasks.filter((t) => t.agentId === agentId)
       : [...this._tasks];
   }
 
@@ -267,28 +267,28 @@ export class TaskStore {
  * schedule_task / pause_task / resume_task / cancel_task MCP tools
  * into a TaskStore — completing the in-container scheduling loop.
  *
- * Authorization: non-main groups may only manage their own tasks.
+ * Authorization: non-main agents may only manage their own tasks.
  *
  * @param {TaskStore} store
  * @param {{ logger?: import('./types.js').Logger }} [opts]
- * @returns {(type: string, data: Object, sourceGroup: string, isMain: boolean) => Promise<void>}
+ * @returns {(type: string, data: Object, sourceAgent: string, isMain: boolean) => Promise<void>}
  */
 export function createTaskIpcHandler(store, opts = {}) {
   const log = opts.logger;
 
-  return async function onTask(type, data, sourceGroup, isMain) {
+  return async function onTask(type, data, sourceAgent, isMain) {
     switch (type) {
       case 'schedule_task': {
-        const groupFolder = isMain && data.group_folder ? data.group_folder : sourceGroup;
+        const agentId = isMain && data.agent_folder ? data.agent_folder : sourceAgent;
         const task = store.createTask({
-          groupFolder,
+          agentId,
           chatJid: data.chat_jid,
           prompt: data.prompt,
           scheduleType: data.schedule_type,
           scheduleValue: data.schedule_value,
           contextMode: data.context_mode,
         });
-        log?.info(`Task scheduled: ${task.id}`, { groupFolder, type: task.scheduleType });
+        log?.info(`Task scheduled: ${task.id}`, { agentId, type: task.scheduleType });
         break;
       }
       case 'pause_task':
@@ -299,8 +299,8 @@ export function createTaskIpcHandler(store, opts = {}) {
           log?.warn(`Task not found: ${data.task_id}`);
           return;
         }
-        if (!isMain && task.groupFolder !== sourceGroup) {
-          log?.warn(`Group ${sourceGroup} denied access to task ${data.task_id}`);
+        if (!isMain && task.agentId !== sourceAgent) {
+          log?.warn(`Agent ${sourceAgent} denied access to task ${data.task_id}`);
           return;
         }
         if (type === 'cancel_task') {

@@ -26,7 +26,7 @@ function defaults() {
     schedulerPollInterval: 60 * 1000,   // 1 minute
     heartbeatInterval: 30 * 60 * 1000,  // 30 minutes
     dataDir: join(process.cwd(), 'data'),
-    groupsDir: join(process.cwd(), 'groups'),
+    agentsDir: join(process.cwd(), 'agents'),
     skillsDir: join(process.cwd(), 'skills'),
     mountAllowlistPath: undefined,
     model: undefined,
@@ -87,7 +87,7 @@ const ENV_KEYS = {
   JSCLAW_SCHEDULER_POLL_INTERVAL: ['schedulerPollInterval', Number],
   JSCLAW_HEARTBEAT_INTERVAL: ['heartbeatInterval', Number],
   JSCLAW_DATA_DIR: ['dataDir', String],
-  JSCLAW_GROUPS_DIR: ['groupsDir', String],
+  JSCLAW_AGENTS_DIR: ['agentsDir', String],
   JSCLAW_SKILLS_PATH: ['skillsDir', String],
   JSCLAW_MOUNT_ALLOWLIST: ['mountAllowlistPath', String],
   JSCLAW_MODEL: ['model', String],

@@ -1,7 +1,7 @@
 /**
  * Task scheduler. Polls a TaskStore for due tasks and executes them
  * through a consumer-provided runner (typically wrapping runContainerAgent,
- * optionally via a GroupQueue).
+ * optionally via a AgentQueue).
  * @module task-scheduler
  */
 
@@ -40,7 +40,7 @@ export function startTaskScheduler(deps, config) {
       running.add(task.id);
 
       const startedAt = Date.now();
-      log.info(`Running task ${task.id}`, { group: task.groupFolder });
+      log.info(`Running task ${task.id}`, { agent: task.agentId });
 
       // Fire-and-forget so one long task doesn't block the rest
       runTask(task)

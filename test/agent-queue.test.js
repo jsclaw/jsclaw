@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { GroupQueue } from '../src/group-queue.js';
+import { AgentQueue } from '../src/agent-queue.js';
 import { tempConfig } from './helpers.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -22,7 +22,7 @@ function queueConfig(overrides = {}) {
 }
 
 test('successful tasks release their slots (no deadlock after N tasks)', async () => {
-  const queue = new GroupQueue(queueConfig({ maxConcurrentContainers: 1 }));
+  const queue = new AgentQueue(queueConfig({ maxConcurrentContainers: 1 }));
   const ran = [];
 
   // With a global cap of 1, the third task only runs if the first two
@@ -35,20 +35,20 @@ test('successful tasks release their slots (no deadlock after N tasks)', async (
   assert.equal(queue._activeCount, 0, 'all slots released');
 });
 
-test('same group runs queued tasks sequentially, both complete', async () => {
-  const queue = new GroupQueue(queueConfig());
+test('same agent runs queued tasks sequentially, both complete', async () => {
+  const queue = new AgentQueue(queueConfig());
   const order = [];
 
   const p1 = queue.enqueueTask('g1', 'a', async () => { order.push('a-start'); await sleep(50); order.push('a-end'); return true; });
   const p2 = queue.enqueueTask('g1', 'b', async () => { order.push('b-start'); return true; });
 
-  await withTimeout(Promise.all([p1, p2]), 2000, 'same-group tasks');
+  await withTimeout(Promise.all([p1, p2]), 2000, 'same-agent tasks');
   assert.deepEqual(order, ['a-start', 'a-end', 'b-start'], 'serialized, no overlap');
   assert.equal(queue._activeCount, 0);
 });
 
 test('message retry path keeps accounting consistent', async () => {
-  const queue = new GroupQueue(queueConfig());
+  const queue = new AgentQueue(queueConfig());
   let calls = 0;
   queue.setProcessMessagesFn(async () => {
     calls++;
@@ -66,8 +66,8 @@ test('message retry path keeps accounting consistent', async () => {
   assert.equal(queue._activeCount, 0);
 });
 
-test('slot stays held during retries (no concurrent run of the same group)', async () => {
-  const queue = new GroupQueue(queueConfig({ maxConcurrentContainers: 1 }));
+test('slot stays held during retries (no concurrent run of the same agent)', async () => {
+  const queue = new AgentQueue(queueConfig({ maxConcurrentContainers: 1 }));
   let active = 0;
   let peak = 0;
   let calls = 0;
@@ -86,12 +86,12 @@ test('slot stays held during retries (no concurrent run of the same group)', asy
   const p2 = queue.enqueueMessageCheck('g1');
 
   await withTimeout(Promise.all([p1, p2]), 5000, 'retry overlap');
-  assert.equal(peak, 1, 'the group never ran concurrently with itself');
+  assert.equal(peak, 1, 'the agent never ran concurrently with itself');
   assert.equal(queue._activeCount, 0);
 });
 
 test('exhausted retries reject and release the slot', async () => {
-  const queue = new GroupQueue(queueConfig({ queueMaxRetries: 1 }));
+  const queue = new AgentQueue(queueConfig({ queueMaxRetries: 1 }));
   queue.setProcessMessagesFn(async () => { throw new Error('permanent'); });
 
   await assert.rejects(
@@ -105,8 +105,8 @@ test('exhausted retries reject and release the slot', async () => {
   await withTimeout(queue.enqueueMessageCheck('g1'), 2000, 'recovery message');
 });
 
-test('global concurrency cap holds across groups', async () => {
-  const queue = new GroupQueue(queueConfig({ maxConcurrentContainers: 2 }));
+test('global concurrency cap holds across agents', async () => {
+  const queue = new AgentQueue(queueConfig({ maxConcurrentContainers: 2 }));
   let active = 0;
   let peak = 0;
   const work = async () => {
@@ -127,8 +127,8 @@ test('global concurrency cap holds across groups', async () => {
   assert.equal(queue._activeCount, 0);
 });
 
-test('tasks are prioritized ahead of queued messages in the same group', async () => {
-  const queue = new GroupQueue(queueConfig({ maxConcurrentContainers: 1 }));
+test('tasks are prioritized ahead of queued messages in the same agent', async () => {
+  const queue = new AgentQueue(queueConfig({ maxConcurrentContainers: 1 }));
   const order = [];
   queue.setProcessMessagesFn(async () => { order.push('message'); return true; });
 

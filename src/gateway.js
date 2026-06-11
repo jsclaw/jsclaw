@@ -36,11 +36,11 @@ function tokenMatches(provided, expected) {
 
 /**
  * @typedef {Object} GatewayDeps
- * @property {(groupFolder: string, message: string, onOutput: (output: Object) => void) => Promise<Object>} runAgent
- *   Runs an agent for a group; onOutput receives each streaming output.
+ * @property {(agentId: string, message: string, onOutput: (output: Object) => void) => Promise<Object>} runAgent
+ *   Runs an agent for an agent; onOutput receives each streaming output.
  * @property {import('./task-store.js').TaskStore} [store] - Enables tasks.* methods
  * @property {() => Promise<void>} [triggerHeartbeat] - Enables heartbeat.trigger
- * @property {() => string[]} [getGroups] - Group folders for status (defaults to groupsDir listing)
+ * @property {() => string[]} [getAgents] - Agent folders for status (defaults to agentsDir listing)
  */
 
 /**
@@ -67,9 +67,9 @@ export function startGateway(deps, config, options = {}) {
   const startedAt = Date.now();
   const connections = new Set();
 
-  const getGroups = deps.getGroups || (() => {
+  const getAgents = deps.getAgents || (() => {
     try {
-      return readdirSync(config.groupsDir, { withFileTypes: true })
+      return readdirSync(config.agentsDir, { withFileTypes: true })
         .filter((e) => e.isDirectory())
         .map((e) => e.name);
     } catch {
@@ -87,7 +87,7 @@ export function startGateway(deps, config, options = {}) {
           version: VERSION,
           uptimeMs: Date.now() - startedAt,
           model: config.model ?? null,
-          groups: getGroups(),
+          agents: getAgents(),
           tasks: {
             total: tasks.length,
             active: tasks.filter((t) => t.status === 'active').length,
@@ -97,18 +97,18 @@ export function startGateway(deps, config, options = {}) {
       }
 
       case 'chat.send': {
-        const { groupFolder, message } = params;
-        if (!groupFolder || !message) throw new Error('chat.send requires groupFolder and message');
+        const { agentId, message } = params;
+        if (!agentId || !message) throw new Error('chat.send requires agentId and message');
         const runId = randomUUID().slice(0, 8);
-        const result = await deps.runAgent(groupFolder, message, (output) => {
-          conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, groupFolder, ...output } });
+        const result = await deps.runAgent(agentId, message, (output) => {
+          conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
         });
         return { runId, ...result };
       }
 
       case 'tasks.list': {
         requireStore();
-        return deps.store.listTasks(params.groupFolder);
+        return deps.store.listTasks(params.agentId);
       }
       case 'tasks.pause':
       case 'tasks.resume': {
@@ -133,11 +133,11 @@ export function startGateway(deps, config, options = {}) {
       }
 
       case 'memory.list':
-        return listMemoryFiles(requireParam(params, 'groupFolder'), config)
+        return listMemoryFiles(requireParam(params, 'agentId'), config)
           .map(({ name, size }) => ({ name, size }));
       case 'memory.search':
         return searchMemory(
-          requireParam(params, 'groupFolder'),
+          requireParam(params, 'agentId'),
           requireParam(params, 'query'),
           config
         );

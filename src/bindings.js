@@ -19,7 +19,7 @@
 /**
  * @typedef {Object} AgentEntry
  * @property {string} id
- * @property {string} [folder] - Group folder (defaults to id)
+ * @property {string} [folder] - Agent folder (defaults to id)
  * @property {string} [model]
  * @property {Object} [heartbeat]
  */

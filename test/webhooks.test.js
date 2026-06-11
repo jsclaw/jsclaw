@@ -20,8 +20,8 @@ test('ingress: auth, routing, and template rendering', async () => {
   const { stop } = await startWebhookIngress({
     port: 19876,
     secret: 's3cret',
-    endpoints: [{ path: '/deploy', message: 'Deploy: {{body.service}}', groupFolder: 'main' }],
-    onMessage: async (message, endpoint) => received.push({ message, group: endpoint.groupFolder }),
+    endpoints: [{ path: '/deploy', message: 'Deploy: {{body.service}}', agentId: 'main' }],
+    onMessage: async (message, endpoint) => received.push({ message, agent: endpoint.agentId }),
   }, config);
 
   const post = (path, body, headers = {}) =>
@@ -33,7 +33,7 @@ test('ingress: auth, routing, and template rendering', async () => {
 
   try {
     assert.equal((await post('/webhook/deploy', { service: 'api' }, { 'X-Webhook-Secret': 's3cret' })).status, 200);
-    assert.deepEqual(received, [{ message: 'Deploy: api', group: 'main' }]);
+    assert.deepEqual(received, [{ message: 'Deploy: api', agent: 'main' }]);
 
     assert.equal((await post('/webhook/deploy', {}, { 'X-Webhook-Secret': 'wrong' })).status, 401);
     assert.equal((await post('/webhook/deploy', {})).status, 401);
@@ -85,7 +85,7 @@ test('egress: event matching, filters, env header expansion', async () => {
     {
       event: 'agent.error',
       url: 'http://127.0.0.1:19878/errors',
-      filter: { groupFolder: 'prod' },
+      filter: { agentId: 'prod' },
     },
     { event: '*', url: 'http://127.0.0.1:19878/all' },
   ], tempConfig());
@@ -96,11 +96,11 @@ test('egress: event matching, filters, env header expansion', async () => {
     assert.equal(count, 2);
 
     // Filter mismatch: only the wildcard fires
-    count = await emit('agent.error', { groupFolder: 'dev' });
+    count = await emit('agent.error', { agentId: 'dev' });
     assert.equal(count, 1);
 
     // Filter match
-    count = await emit('agent.error', { groupFolder: 'prod' });
+    count = await emit('agent.error', { agentId: 'prod' });
     assert.equal(count, 2);
 
     const done = deliveries.find((d) => d.url === '/done');

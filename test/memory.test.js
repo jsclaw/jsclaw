@@ -43,9 +43,9 @@ test('custom categories and search', () => {
 test('append neutralizes path traversal', () => {
   const config = tempConfig();
   appendMemory('main', '../../escape.md', 'nope', config);
-  const root = dirname(config.groupsDir);
+  const root = dirname(config.agentsDir);
   assert.ok(!existsSync(join(root, 'escape.md')));
-  assert.ok(existsSync(join(config.groupsDir, 'main', 'memory', 'escape.md')));
+  assert.ok(existsSync(join(config.agentsDir, 'main', 'memory', 'escape.md')));
 });
 
 test('context respects the char budget', () => {
@@ -58,12 +58,12 @@ test('context respects the char budget', () => {
   assert.ok(!ctx.includes('should be cut'));
 });
 
-test('clearMemory removes everything; empty group is safe', () => {
+test('clearMemory removes everything; empty agent is safe', () => {
   const config = tempConfig();
   initMemory('main', config);
   clearMemory('main', config);
   assert.equal(listMemoryFiles('main', config).length, 0);
-  // Operations on a group with no memory don't throw
+  // Operations on an agent with no memory don't throw
   assert.equal(loadMemoryContext('ghost', config), '');
   assert.equal(searchMemory('ghost', 'x', config).length, 0);
   clearMemory('ghost', config);

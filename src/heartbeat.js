@@ -1,7 +1,7 @@
 /**
  * Heartbeat — periodic agent wake-up for autonomous operation.
  *
- * Every interval, for each registered group whose folder contains a
+ * Every interval, for each registered agent whose folder contains a
  * HEARTBEAT.md, the agent is woken with the file's tasks. If the agent
  * decides nothing needs doing it replies HEARTBEAT_OK and the output is
  * suppressed; anything else is delivered via the onAlert callback.
@@ -42,10 +42,10 @@ export function inQuietHours(quietHours, now = new Date()) {
 
 /**
  * @typedef {Object} HeartbeatDeps
- * @property {() => import('./types.js').GroupConfig[]} getGroups - Groups to check
- * @property {(group: import('./types.js').GroupConfig, prompt: string) => Promise<import('./types.js').ContainerOutput>} runAgent
- *   Runs the agent for a group (typically wraps runContainerAgent).
- * @property {(group: import('./types.js').GroupConfig, result: string) => Promise<void>} [onAlert]
+ * @property {() => import('./types.js').AgentConfig[]} getAgents - Agents to check
+ * @property {(agent: import('./types.js').AgentConfig, prompt: string) => Promise<import('./types.js').ContainerOutput>} runAgent
+ *   Runs the agent for an agent (typically wraps runContainerAgent).
+ * @property {(agent: import('./types.js').AgentConfig, result: string) => Promise<void>} [onAlert]
  *   Called when a heartbeat produces a non-OK result worth delivering.
  */
 
@@ -65,14 +65,14 @@ export function inQuietHours(quietHours, now = new Date()) {
 export function startHeartbeat(deps, config, options = {}) {
   config = config || createConfig();
   const log = config.logger;
-  const { getGroups, runAgent, onAlert } = deps;
+  const { getAgents, runAgent, onAlert } = deps;
 
-  /** Group folders currently running a heartbeat. */
+  /** Agent folders currently running a heartbeat. */
   const running = new Set();
   let stopped = false;
 
-  async function beatGroup(group) {
-    const heartbeatPath = join(config.groupsDir, group.folder, 'HEARTBEAT.md');
+  async function beatAgent(agent) {
+    const heartbeatPath = join(config.agentsDir, agent.folder, 'HEARTBEAT.md');
     if (!existsSync(heartbeatPath)) return;
 
     let tasks;
@@ -83,27 +83,27 @@ export function startHeartbeat(deps, config, options = {}) {
     }
     if (!tasks) return;
 
-    if (running.has(group.folder)) {
-      log.debug(`Heartbeat skipped, previous still running`, { group: group.folder });
+    if (running.has(agent.folder)) {
+      log.debug(`Heartbeat skipped, previous still running`, { agent: agent.folder });
       return;
     }
-    running.add(group.folder);
+    running.add(agent.folder);
 
     try {
-      const output = await runAgent(group, HEARTBEAT_PROMPT + tasks);
+      const output = await runAgent(agent, HEARTBEAT_PROMPT + tasks);
       const result = output?.result?.trim() || '';
 
       if (!result || result === HEARTBEAT_OK || result.startsWith(HEARTBEAT_OK)) {
-        log.debug(`Heartbeat OK`, { group: group.folder });
+        log.debug(`Heartbeat OK`, { agent: agent.folder });
         return;
       }
 
-      log.info(`Heartbeat alert`, { group: group.folder });
-      if (onAlert) await onAlert(group, result);
+      log.info(`Heartbeat alert`, { agent: agent.folder });
+      if (onAlert) await onAlert(agent, result);
     } catch (err) {
-      log.error(`Heartbeat failed`, { group: group.folder, error: err.message });
+      log.error(`Heartbeat failed`, { agent: agent.folder, error: err.message });
     } finally {
-      running.delete(group.folder);
+      running.delete(agent.folder);
     }
   }
 
@@ -113,7 +113,7 @@ export function startHeartbeat(deps, config, options = {}) {
       log.debug('Heartbeat suppressed: quiet hours');
       return;
     }
-    await Promise.all(getGroups().map(beatGroup));
+    await Promise.all(getAgents().map(beatAgent));
   }
 
   const handle = setInterval(beat, config.heartbeatInterval);

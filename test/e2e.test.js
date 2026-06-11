@@ -16,7 +16,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { runContainerAgent } from '../src/container-runner.js';
-import { GroupQueue } from '../src/group-queue.js';
+import { AgentQueue } from '../src/agent-queue.js';
 import { drainIpcDir } from '../src/ipc-utils.js';
 import { TaskStore, createTaskIpcHandler } from '../src/task-store.js';
 import { tempConfig } from './helpers.js';
@@ -44,42 +44,42 @@ function e2eConfig() {
   return tempConfig({ containerImage: IMAGE, containerTimeout: 30000 });
 }
 
-const GROUP = { name: 'e2e', folder: 'e2e' };
+const AGENT = { name: 'e2e', folder: 'e2e' };
 
 function input(prompt, extra = {}) {
-  return { prompt, groupFolder: 'e2e', chatJid: 'jid-1', isMain: true, ...extra };
+  return { prompt, agentId: 'e2e', chatJid: 'jid-1', isMain: true, ...extra };
 }
 
 test('echo: full stdin → sentinel stdout round-trip', opts, async () => {
-  const result = await runContainerAgent(GROUP, input('echo:hello world'), null, null, e2eConfig());
+  const result = await runContainerAgent(AGENT, input('echo:hello world'), null, null, e2eConfig());
   assert.equal(result.status, 'success');
   assert.equal(result.result, 'hello world');
   assert.equal(result.newSessionId, 'mock-session-1');
 });
 
 test('env: JSCLAW_* variables reach the container', opts, async () => {
-  const result = await runContainerAgent(GROUP, input('env'), null, null, e2eConfig());
+  const result = await runContainerAgent(AGENT, input('env'), null, null, e2eConfig());
   assert.equal(result.status, 'success');
   const env = JSON.parse(result.result);
   assert.equal(env.chatJid, 'jid-1');
-  assert.equal(env.groupFolder, 'e2e');
+  assert.equal(env.agentId, 'e2e');
   assert.equal(env.isMain, 'true');
 });
 
-test('mounts: container reads SOUL.md from the host group folder', opts, async () => {
+test('mounts: container reads SOUL.md from the host agent folder', opts, async () => {
   const config = e2eConfig();
-  const groupDir = join(config.groupsDir, 'e2e');
-  mkdirSync(groupDir, { recursive: true });
-  writeFileSync(join(groupDir, 'SOUL.md'), 'You are the e2e test soul.');
+  const agentDir = join(config.agentsDir, 'e2e');
+  mkdirSync(agentDir, { recursive: true });
+  writeFileSync(join(agentDir, 'SOUL.md'), 'You are the e2e test soul.');
 
-  const result = await runContainerAgent(GROUP, input('read:SOUL.md'), null, null, config);
+  const result = await runContainerAgent(AGENT, input('read:SOUL.md'), null, null, config);
   assert.equal(result.status, 'success');
   assert.equal(result.result, 'You are the e2e test soul.');
 });
 
 test('ipc: container message file lands in the host messages dir', opts, async () => {
   const config = e2eConfig();
-  const result = await runContainerAgent(GROUP, input('ipc-message:hello from inside'), null, null, config);
+  const result = await runContainerAgent(AGENT, input('ipc-message:hello from inside'), null, null, config);
   assert.equal(result.status, 'success');
 
   const messages = drainIpcDir(join(config.dataDir, 'ipc', 'e2e', 'messages'));
@@ -90,7 +90,7 @@ test('ipc: container message file lands in the host messages dir', opts, async (
 
 test('ipc: container task file round-trips into the TaskStore', opts, async () => {
   const config = e2eConfig();
-  const result = await runContainerAgent(GROUP, input('ipc-task'), null, null, config);
+  const result = await runContainerAgent(AGENT, input('ipc-task'), null, null, config);
   assert.equal(result.status, 'success');
 
   // Same wiring a real host uses: drain the dir, feed the handler
@@ -118,23 +118,23 @@ test('mcp: config.mcp.servers reaches the container via stdin', opts, async () =
     },
   };
 
-  const group = {
-    ...GROUP,
+  const agent = {
+    ...AGENT,
     mcpServers: { weather: { command: 'node', args: ['weather.js'] } },
   };
 
-  const result = await runContainerAgent(group, input('mcp-dump'), null, null, config);
+  const result = await runContainerAgent(agent, input('mcp-dump'), null, null, config);
   assert.equal(result.status, 'success');
   const received = JSON.parse(result.result);
 
-  assert.deepEqual(Object.keys(received).sort(), ['github', 'weather'], 'global + group servers merged');
+  assert.deepEqual(Object.keys(received).sort(), ['github', 'weather'], 'global + agent servers merged');
   assert.equal(received.github.env.TOKEN, 'tok');
   assert.equal(received.weather.command, 'node');
   assert.ok(!('jsclaw' in received), 'reserved jsclaw name stripped');
 });
 
 test('mcp: absent config means no mcpServers field at all', opts, async () => {
-  const result = await runContainerAgent(GROUP, input('mcp-dump'), null, null, e2eConfig());
+  const result = await runContainerAgent(AGENT, input('mcp-dump'), null, null, e2eConfig());
   assert.equal(result.status, 'success');
   assert.equal(JSON.parse(result.result), null);
 });
@@ -146,7 +146,7 @@ test('model + credentials cross via stdin, never argv', opts, async () => {
   config.providerAuthToken = 'secret-glm-token';
 
   const result = await runContainerAgent(
-    { ...GROUP, model: undefined },
+    { ...AGENT, model: undefined },
     input('model-dump'),
     null, null, config,
   );
@@ -159,30 +159,30 @@ test('model + credentials cross via stdin, never argv', opts, async () => {
   assert.equal(dump.envApiKey, null, 'no credentials via docker -e flags');
 });
 
-test('model precedence: input > group > config', opts, async () => {
+test('model precedence: input > agent > config', opts, async () => {
   const config = e2eConfig();
   config.model = 'config-model';
 
   let result = await runContainerAgent(
-    { ...GROUP, model: 'group-model' }, input('model-dump'), null, null, config,
+    { ...AGENT, model: 'agent-model' }, input('model-dump'), null, null, config,
   );
-  assert.equal(JSON.parse(result.result).model, 'group-model');
+  assert.equal(JSON.parse(result.result).model, 'agent-model');
 
   result = await runContainerAgent(
-    { ...GROUP, model: 'group-model' },
+    { ...AGENT, model: 'agent-model' },
     input('model-dump', { model: 'input-model' }),
     null, null, config,
   );
   assert.equal(JSON.parse(result.result).model, 'input-model');
 });
 
-test('conversation: follow-up via GroupQueue, shutdown via close sentinel', opts, async () => {
+test('conversation: follow-up via AgentQueue, shutdown via close sentinel', opts, async () => {
   const config = e2eConfig();
-  const queue = new GroupQueue(config);
+  const queue = new AgentQueue(config);
   const outputs = [];
 
   const done = runContainerAgent(
-    GROUP,
+    AGENT,
     input('converse'),
     (proc, name) => queue.registerProcess('jid-1', proc, name, 'e2e'),
     async (output) => {
@@ -203,13 +203,13 @@ test('conversation: follow-up via GroupQueue, shutdown via close sentinel', opts
 });
 
 test('failure: non-zero exit with no output resolves as error', opts, async () => {
-  const result = await runContainerAgent(GROUP, input('fail'), null, null, e2eConfig());
+  const result = await runContainerAgent(AGENT, input('fail'), null, null, e2eConfig());
   assert.equal(result.status, 'error');
   assert.match(result.error, /exited with code 1/);
 });
 
 test('failure: explicit error output is surfaced', opts, async () => {
-  const result = await runContainerAgent(GROUP, input('error-output'), null, null, e2eConfig());
+  const result = await runContainerAgent(AGENT, input('error-output'), null, null, e2eConfig());
   assert.equal(result.status, 'error');
   assert.equal(result.error, 'mock failure');
 });

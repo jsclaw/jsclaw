@@ -2,15 +2,15 @@
 /**
  * jsclaw CLI — same verbs as openclaw where they map.
  *
- *   jsclaw status                          Config, groups, task counts
+ *   jsclaw status                          Config, agents, task counts
  *   jsclaw doctor                          Environment health checks
- *   jsclaw tasks list [--group <folder>]   List scheduled tasks
+ *   jsclaw tasks list [--agent <folder>]   List scheduled tasks
  *   jsclaw tasks pause|resume|cancel <id>  Manage a task
- *   jsclaw memory list <group>             List memory files
- *   jsclaw memory search <group> <query>   Search memory
- *   jsclaw memory clear <group>            Delete a group's memory
- *   jsclaw run <group> <prompt...>         One-shot agent run
- *   jsclaw heartbeat <group> [--dry-run]   Trigger a heartbeat cycle now
+ *   jsclaw memory list <agent>             List memory files
+ *   jsclaw memory search <agent> <query>   Search memory
+ *   jsclaw memory clear <agent>            Delete an agent's memory
+ *   jsclaw run <agent> <prompt...>         One-shot agent run
+ *   jsclaw heartbeat <agent> [--dry-run]   Trigger a heartbeat cycle now
  *
  * Exit codes: 0 success, 1 error, 2 usage/config error.
  */
@@ -40,17 +40,17 @@ const USAGE = `jsclaw v${VERSION} — container orchestration for Claude AI agen
 
 Usage:
   jsclaw onboard                         Interactive setup wizard
-  jsclaw status                          Show config, groups, task counts
+  jsclaw status                          Show config, agents, task counts
   jsclaw doctor                          Check environment health
-  jsclaw tasks list [--group <folder>]   List scheduled tasks
+  jsclaw tasks list [--agent <folder>]   List scheduled tasks
   jsclaw tasks pause <id>                Pause a task
   jsclaw tasks resume <id>               Resume a task
   jsclaw tasks cancel <id>               Cancel a task
-  jsclaw memory list <group>             List a group's memory files
-  jsclaw memory search <group> <query>   Search a group's memory
-  jsclaw memory clear <group>            Delete a group's memory
-  jsclaw run <group> <prompt...>         Run an agent once with a prompt
-  jsclaw heartbeat <group> [--dry-run]   Trigger a heartbeat cycle now
+  jsclaw memory list <agent>             List an agent's memory files
+  jsclaw memory search <agent> <query>   Search an agent's memory
+  jsclaw memory clear <agent>            Delete an agent's memory
+  jsclaw run <agent> <prompt...>         Run an agent once with a prompt
+  jsclaw heartbeat <agent> [--dry-run]   Trigger a heartbeat cycle now
   jsclaw reap                            Remove orphaned jsclaw containers
   jsclaw gateway [--port <n>]            Run the full agent host: gateway,
                                          webchat, scheduler, heartbeat, IPC
@@ -63,7 +63,7 @@ Usage:
   jsclaw config set <key> <value>        Write a value to jsclaw.json
 
 Options:
-  --group <folder>   Filter tasks by group
+  --agent <folder>   Filter tasks by agent
   --dry-run          Show what would run without running it
   --json             Machine-readable output
   --version, -v      Show version
@@ -81,9 +81,9 @@ function fail(message, code = 1) {
   process.exit(code);
 }
 
-function listGroups(config) {
+function listAgents(config) {
   try {
-    return readdirSync(config.groupsDir, { withFileTypes: true })
+    return readdirSync(config.agentsDir, { withFileTypes: true })
       .filter((e) => e.isDirectory())
       .map((e) => e.name);
   } catch {
@@ -94,7 +94,7 @@ function listGroups(config) {
 // --- Commands ---
 
 function cmdStatus(config, store, json) {
-  const groups = listGroups(config);
+  const agents = listAgents(config);
   const tasks = store.listTasks();
   const active = tasks.filter((t) => t.status === 'active').length;
 
@@ -104,8 +104,8 @@ function cmdStatus(config, store, json) {
       containerRuntime: config.containerRuntime,
       containerImage: config.containerImage,
       dataDir: config.dataDir,
-      groupsDir: config.groupsDir,
-      groups,
+      agentsDir: config.agentsDir,
+      agents,
       tasks: { total: tasks.length, active },
     }, null, 2));
     return;
@@ -114,12 +114,12 @@ function cmdStatus(config, store, json) {
   console.log(`jsclaw v${VERSION}`);
   console.log(`  runtime:  ${config.containerRuntime} (${config.containerImage})`);
   console.log(`  data:     ${config.dataDir}`);
-  console.log(`  groups:   ${config.groupsDir} (${groups.length}: ${groups.join(', ') || 'none'})`);
+  console.log(`  agents:   ${config.agentsDir} (${agents.length}: ${agents.join(', ') || 'none'})`);
   console.log(`  tasks:    ${tasks.length} total, ${active} active`);
-  for (const g of groups) {
-    const hb = existsSync(join(config.groupsDir, g, 'HEARTBEAT.md'));
-    const soul = existsSync(join(config.groupsDir, g, 'SOUL.md'));
-    const mem = existsSync(join(config.groupsDir, g, 'memory'));
+  for (const g of agents) {
+    const hb = existsSync(join(config.agentsDir, g, 'HEARTBEAT.md'));
+    const soul = existsSync(join(config.agentsDir, g, 'SOUL.md'));
+    const mem = existsSync(join(config.agentsDir, g, 'memory'));
     const flags = [hb && 'heartbeat', soul && 'soul', mem && 'memory'].filter(Boolean);
     if (flags.length) console.log(`    ${g}: ${flags.join(', ')}`);
   }
@@ -162,8 +162,8 @@ function cmdDoctor(config) {
     execSync(`mkdir -p ${JSON.stringify(config.dataDir)}`);
     return '';
   });
-  check(`groupsDir writable: ${config.groupsDir}`, () => {
-    execSync(`mkdir -p ${JSON.stringify(config.groupsDir)}`);
+  check(`agentsDir writable: ${config.agentsDir}`, () => {
+    execSync(`mkdir -p ${JSON.stringify(config.agentsDir)}`);
     return '';
   });
 
@@ -177,11 +177,11 @@ function cmdDoctor(config) {
 function cmdTasks(config, store, sub, args, opts) {
   switch (sub) {
     case 'list': {
-      const tasks = store.listTasks(opts.group);
+      const tasks = store.listTasks(opts.agent);
       if (opts.json) return console.log(JSON.stringify(tasks, null, 2));
       if (tasks.length === 0) return console.log('no tasks');
       for (const t of tasks) {
-        console.log(`${t.id}  [${t.status}]  ${t.scheduleType}:${t.scheduleValue}  ${t.groupFolder}  next:${t.nextRun || '-'}`);
+        console.log(`${t.id}  [${t.status}]  ${t.scheduleType}:${t.scheduleValue}  ${t.agentId}  next:${t.nextRun || '-'}`);
         console.log(`          ${t.prompt.slice(0, 100)}`);
       }
       break;
@@ -211,11 +211,11 @@ function cmdTasks(config, store, sub, args, opts) {
 }
 
 function cmdMemory(config, sub, args, opts) {
-  const group = args[0];
-  if (!group) fail(`memory ${sub || ''} requires a group`, 2);
+  const agent = args[0];
+  if (!agent) fail(`memory ${sub || ''} requires an agent`, 2);
   switch (sub) {
     case 'list': {
-      const files = listMemoryFiles(group, config);
+      const files = listMemoryFiles(agent, config);
       if (opts.json) return console.log(JSON.stringify(files, null, 2));
       if (files.length === 0) return console.log('no memory files');
       for (const f of files) console.log(`${f.name}  ${f.size} chars`);
@@ -224,26 +224,26 @@ function cmdMemory(config, sub, args, opts) {
     case 'search': {
       const query = args.slice(1).join(' ');
       if (!query) fail('memory search requires a query', 2);
-      const hits = searchMemory(group, query, config);
+      const hits = searchMemory(agent, query, config);
       if (opts.json) return console.log(JSON.stringify(hits, null, 2));
       if (hits.length === 0) return console.log('no matches');
       for (const h of hits) console.log(`${h.file}:${h.line}  ${h.text}`);
       break;
     }
     case 'clear':
-      clearMemory(group, config);
-      console.log(`cleared memory for ${group}`);
+      clearMemory(agent, config);
+      console.log(`cleared memory for ${agent}`);
       break;
     default:
       fail(`unknown memory subcommand: ${sub || '(none)'}`, 2);
   }
 }
 
-async function cmdRun(config, group, prompt) {
-  if (!group || !prompt) fail('run requires a group and a prompt', 2);
+async function cmdRun(config, agent, prompt) {
+  if (!agent || !prompt) fail('run requires an agent and a prompt', 2);
   const result = await runContainerAgent(
-    { name: group, folder: group },
-    { prompt, groupFolder: group, chatJid: 'cli', isMain: true },
+    { name: agent, folder: agent },
+    { prompt, agentId: agent, chatJid: 'cli', isMain: true },
     null,
     async (output) => {
       if (output.result) console.log(output.result);
@@ -253,10 +253,10 @@ async function cmdRun(config, group, prompt) {
   if (result.status === 'error') fail(result.error || 'agent run failed');
 }
 
-async function cmdHeartbeat(config, group, dryRun) {
-  if (!group) fail('heartbeat requires a group', 2);
-  const hbPath = join(config.groupsDir, group, 'HEARTBEAT.md');
-  if (!existsSync(hbPath)) fail(`no HEARTBEAT.md in ${join(config.groupsDir, group)}`);
+async function cmdHeartbeat(config, agent, dryRun) {
+  if (!agent) fail('heartbeat requires an agent', 2);
+  const hbPath = join(config.agentsDir, agent, 'HEARTBEAT.md');
+  if (!existsSync(hbPath)) fail(`no HEARTBEAT.md in ${join(config.agentsDir, agent)}`);
   const tasks = readFileSync(hbPath, 'utf-8').trim();
 
   const prompt = `[HEARTBEAT]
@@ -274,8 +274,8 @@ ${tasks}`;
   }
 
   const result = await runContainerAgent(
-    { name: group, folder: group },
-    { prompt, groupFolder: group, chatJid: 'heartbeat', isMain: true },
+    { name: agent, folder: agent },
+    { prompt, agentId: agent, chatJid: 'heartbeat', isMain: true },
     null, null, config,
   );
   const text = result.result?.trim() || '';
@@ -336,7 +336,7 @@ function cmdSkill(config, sub, args, opts) {
 const CONFIG_KEYS = [
   'containerImage', 'containerRuntime', 'containerTimeout', 'maxOutputSize',
   'maxConcurrentContainers', 'ipcPollInterval', 'schedulerPollInterval',
-  'heartbeatInterval', 'dataDir', 'groupsDir', 'skillsDir', 'mountAllowlistPath',
+  'heartbeatInterval', 'dataDir', 'agentsDir', 'skillsDir', 'mountAllowlistPath',
 ];
 
 function cmdConfig(config, sub, args, opts) {
@@ -387,12 +387,12 @@ async function cmdGateway(config, opts) {
 
   // 2. Core wiring: store, agent runner, queue-less direct runs
   const store = new TaskStore(config);
-  const groups = () => listGroups(config);
+  const agents = () => listAgents(config);
 
-  const runAgent = (groupFolder, prompt, onOutput, extra = {}) =>
+  const runAgent = (agentId, prompt, onOutput, extra = {}) =>
     runContainerAgent(
-      { name: groupFolder, folder: groupFolder },
-      { prompt, groupFolder, chatJid: `gateway:${groupFolder}`, isMain: true, ...extra },
+      { name: agentId, folder: agentId },
+      { prompt, agentId, chatJid: `gateway:${agentId}`, isMain: true, ...extra },
       null,
       onOutput ? async (output) => onOutput(output) : null,
       config,
@@ -402,7 +402,7 @@ async function cmdGateway(config, opts) {
   const gateway = await startGateway({
     runAgent,
     store,
-    getGroups: groups,
+    getAgents: agents,
     triggerHeartbeat: () => heartbeat.triggerNow(),
   }, config, { port, token });
 
@@ -412,34 +412,34 @@ async function cmdGateway(config, opts) {
       gateway.broadcast('message', { jid, text, sender });
     },
     onTask: createTaskIpcHandler(store, { logger: config.logger }),
-    getRegisteredGroups: () => ({}),
+    getRegisteredAgents: () => ({}),
   }, config);
 
   // 5. Scheduler executes what agents schedule
   startTaskScheduler({
     store,
     runTask: async (task) => {
-      const result = await runAgent(task.groupFolder, task.prompt, null);
+      const result = await runAgent(task.agentId, task.prompt, null);
       gateway.broadcast('task.completed', { taskId: task.id, status: result.status });
     },
   }, config);
 
-  // 6. Heartbeat wakes groups with a HEARTBEAT.md
+  // 6. Heartbeat wakes agents with a HEARTBEAT.md
   const heartbeat = startHeartbeat({
-    getGroups: () => groups().map((folder) => ({ name: folder, folder })),
+    getAgents: () => agents().map((folder) => ({ name: folder, folder })),
     // Heartbeats run on the cheap model when one is configured —
     // openclaw's biggest cost lever for the 48-cycles/day loop
-    runAgent: (group, prompt) => runAgent(group.folder, prompt, null,
+    runAgent: (agent, prompt) => runAgent(agent.folder, prompt, null,
       config.heartbeatModel ? { model: config.heartbeatModel } : {}),
-    onAlert: async (group, result) => {
-      gateway.broadcast('heartbeat.alert', { groupFolder: group.folder, result });
+    onAlert: async (agent, result) => {
+      gateway.broadcast('heartbeat.alert', { agentId: agent.folder, result });
     },
   }, config);
 
   console.log(`\njsclaw gateway v${VERSION}`);
   console.log(`  chat:    http://127.0.0.1:${gateway.port}/chat?token=${token}`);
   console.log(`  ws:      ws://127.0.0.1:${gateway.port}/?token=${token}`);
-  console.log(`  groups:  ${groups().join(', ') || '(none yet — first chat creates one)'}`);
+  console.log(`  agents:  ${agents().join(', ') || '(none yet — first chat creates one)'}`);
   console.log(`  token:   ${token}${config.gatewayToken ? ' (pinned)' : ' (generated; set JSCLAW_GATEWAY_TOKEN or gatewayToken in jsclaw.json to pin)'}`);
   if (config.model) console.log(`  model:   ${config.model}${config.heartbeatModel ? ` (heartbeat: ${config.heartbeatModel})` : ''}`);
   console.log('\nCtrl-C to stop.');
@@ -460,7 +460,7 @@ async function cmdGateway(config, opts) {
 async function main() {
   const { values: opts, positionals } = parseArgs({
     options: {
-      group: { type: 'string' },
+      agent: { type: 'string' },
       port: { type: 'string' },
       'dry-run': { type: 'boolean', default: false },
       json: { type: 'boolean', default: false },

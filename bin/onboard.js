@@ -4,7 +4,7 @@
  *
  * Checks the environment, picks a provider/model (Anthropic, GLM, Kimi,
  * Bedrock, Vertex, or any Anthropic-compatible endpoint), scaffolds
- * groups/main with starter identity files, and writes jsclaw.json with
+ * agents/main with starter identity files, and writes jsclaw.json with
  * ${ENV_VAR} references — never literal secrets.
  *
  * The config-building logic is pure and exported for tests; only the
@@ -116,9 +116,9 @@ export function mergeConfigFile(path, patch) {
   return merged;
 }
 
-/** Scaffold a group folder with starter identity files (idempotent). */
-export function scaffoldGroup(folder, config) {
-  const dir = join(config.groupsDir, folder);
+/** Scaffold an agent folder with starter identity files (idempotent). */
+export function scaffoldAgent(folder, config) {
+  const dir = join(config.agentsDir, folder);
   mkdirSync(dir, { recursive: true });
   const created = [];
   for (const [name, content] of [['SOUL.md', SOUL_TEMPLATE], ['HEARTBEAT.md', HEARTBEAT_TEMPLATE]]) {
@@ -221,10 +221,10 @@ export async function runOnboard(ctx) {
     mergeConfigFile(configPath, patch);
     console.log(`\nWrote ${configPath}`);
 
-    const created = scaffoldGroup('main', config);
+    const created = scaffoldAgent('main', config);
     console.log(created.length > 0
-      ? `Scaffolded groups/main (${created.join(', ')} + memory/)`
-      : 'groups/main already set up — left untouched');
+      ? `Scaffolded agents/main (${created.join(', ')} + memory/)`
+      : 'agents/main already set up — left untouched');
 
     // 4. Next steps
     console.log('\nNext steps:');

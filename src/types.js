@@ -8,12 +8,12 @@
  * @typedef {Object} ContainerInput
  * @property {string} prompt - The prompt/messages to send to the agent
  * @property {string} [sessionId] - Resume an existing Claude session
- * @property {string} groupFolder - Folder name for this group's workspace
+ * @property {string} agentId - Folder name for this agent's workspace
  * @property {string} chatJid - Identifier for the chat/conversation
- * @property {boolean} isMain - Whether this is the main/admin group
+ * @property {boolean} isMain - Whether this is the main/admin agent
  * @property {boolean} [isScheduledTask] - Whether this is a scheduled task invocation
  * @property {Record<string, Object>} [mcpServers] - MCP servers injected by the host (set automatically by runContainerAgent)
- * @property {string} [model] - Model for this run (input > group > config precedence)
+ * @property {string} [model] - Model for this run (input > agent > config precedence)
  * @property {Record<string, string>} [providerEnv] - Provider credentials/endpoint injected by the host via stdin
  */
 
@@ -36,12 +36,12 @@
  * @property {number} schedulerPollInterval - Task scheduler poll interval in ms (default: 60000)
  * @property {number} heartbeatInterval - Heartbeat interval in ms (default: 1800000)
  * @property {string} dataDir - Base directory for IPC/data files
- * @property {string} groupsDir - Base directory for group workspace folders
+ * @property {string} agentsDir - Base directory for agent workspace folders
  * @property {string} skillsDir - Directory of SKILL.md files (default: ./skills)
  * @property {string} [configPath] - Explicit config file path (default: ./jsclaw.json or JSCLAW_CONFIG_PATH)
  * @property {string} [mountAllowlistPath] - Path to mount allowlist JSON
- * @property {number} [queueMaxRetries] - GroupQueue retry attempts (default: 5)
- * @property {number} [queueRetryBaseDelayMs] - GroupQueue base retry delay in ms (default: 5000)
+ * @property {number} [queueMaxRetries] - AgentQueue retry attempts (default: 5)
+ * @property {number} [queueRetryBaseDelayMs] - AgentQueue base retry delay in ms (default: 5000)
  * @property {{ servers?: Record<string, Object> }} [mcp] - MCP servers for agents (openclaw's mcp.servers shape); passed to containers via stdin
  * @property {string} [model] - Default model for agents (e.g. 'claude-sonnet-4-6')
  * @property {string} [heartbeatModel] - Cheaper model for heartbeat cycles
@@ -61,14 +61,14 @@
  */
 
 /**
- * @typedef {Object} GroupConfig
- * @property {string} name - Display name of the group
+ * @typedef {Object} AgentConfig
+ * @property {string} name - Display name of the agent
  * @property {string} folder - Folder name for workspace isolation
  * @property {string} [jid] - Chat identifier
- * @property {boolean} [isMain] - Whether this is the admin group
+ * @property {boolean} [isMain] - Whether this is the admin agent
  * @property {VolumeMount[]} [additionalMounts] - Extra volume mounts
- * @property {Record<string, Object>} [mcpServers] - Per-group MCP servers, merged over config.mcp.servers by name
- * @property {string} [model] - Model override for this group's agents
+ * @property {Record<string, Object>} [mcpServers] - Per-agent MCP servers, merged over config.mcp.servers by name
+ * @property {string} [model] - Model override for this agent's agents
  */
 
 /**
@@ -92,17 +92,17 @@
  */
 
 /**
- * @typedef {Object} GroupState
+ * @typedef {Object} AgentState
  * @property {string} jid - Chat identifier
  * @property {import('node:child_process').ChildProcess|null} process - Active container process
  * @property {string|null} containerName - Name of the running container
- * @property {string|null} groupFolder - Folder name for this group
+ * @property {string|null} agentId - Folder name for this agent
  * @property {boolean} processing - Whether a message is being processed
  * @property {Array<{resolve: Function, reject: Function, fn?: Function, taskId?: string}>} queue - Pending work items
  */
 
 /**
- * @typedef {Object} RegisteredGroup
+ * @typedef {Object} RegisteredAgent
  * @property {string} jid - Chat identifier
  * @property {string} name - Display name
  * @property {string} folder - Folder name
@@ -126,8 +126,8 @@
 /**
  * @typedef {Object} IpcDeps
  * @property {(jid: string, text: string, sender?: string) => Promise<void>} sendMessage - Send a message to a chat
- * @property {(type: string, data: Object, sourceGroup: string, isMain: boolean) => Promise<void>} onTask - Handle task IPC
- * @property {() => Record<string, RegisteredGroup>} getRegisteredGroups - Get registered groups
+ * @property {(type: string, data: Object, sourceAgent: string, isMain: boolean) => Promise<void>} onTask - Handle task IPC
+ * @property {() => Record<string, RegisteredAgent>} getRegisteredAgents - Get registered agents
  */
 
 export {};

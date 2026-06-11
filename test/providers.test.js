@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import { PROVIDERS, PROVIDER_ENV_KEYS, resolveProviderEnv } from '../src/providers.js';
 import { buildContainerArgs } from '../src/container-runner.js';
-import { buildOnboardConfig, mergeConfigFile, scaffoldGroup } from '../bin/onboard.js';
+import { buildOnboardConfig, mergeConfigFile, scaffoldAgent } from '../bin/onboard.js';
 import { tempConfig } from './helpers.js';
 import { readFileSync, writeFileSync, existsSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -133,15 +133,15 @@ test('mergeConfigFile preserves unrelated keys and raw ${ENV} refs', () => {
   assert.equal(onDisk.providerAuthToken, '${NEW_KEY}', 'reference stored raw, not expanded');
 });
 
-test('scaffoldGroup is idempotent and seeds identity + memory', () => {
+test('scaffoldAgent is idempotent and seeds identity + memory', () => {
   const config = tempConfig();
-  const created = scaffoldGroup('main', config);
+  const created = scaffoldAgent('main', config);
   assert.deepEqual(created.sort(), ['HEARTBEAT.md', 'SOUL.md']);
-  assert.ok(existsSync(join(config.groupsDir, 'main', 'memory', 'preferences.md')));
+  assert.ok(existsSync(join(config.agentsDir, 'main', 'memory', 'preferences.md')));
 
   // Second run must not clobber
-  writeFileSync(join(config.groupsDir, 'main', 'SOUL.md'), 'customized');
-  const again = scaffoldGroup('main', config);
+  writeFileSync(join(config.agentsDir, 'main', 'SOUL.md'), 'customized');
+  const again = scaffoldAgent('main', config);
   assert.deepEqual(again, []);
-  assert.equal(readFileSync(join(config.groupsDir, 'main', 'SOUL.md'), 'utf-8'), 'customized');
+  assert.equal(readFileSync(join(config.agentsDir, 'main', 'SOUL.md'), 'utf-8'), 'customized');
 });

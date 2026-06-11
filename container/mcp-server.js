@@ -3,9 +3,9 @@
  * Exposes tools for the Claude agent: send_message, schedule_task, etc.
  *
  * Environment variables (set by host):
- *   JSCLAW_CHAT_JID     - Chat identifier for this group
- *   JSCLAW_GROUP_FOLDER  - Group folder name
- *   JSCLAW_IS_MAIN       - 'true' if this is the admin group
+ *   JSCLAW_CHAT_JID     - Chat identifier for this agent
+ *   JSCLAW_AGENT_ID  - Agent folder name
+ *   JSCLAW_IS_MAIN       - 'true' if this is the admin agent
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -19,7 +19,7 @@ import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
 const CHAT_JID = process.env.JSCLAW_CHAT_JID || '';
-const GROUP_FOLDER = process.env.JSCLAW_GROUP_FOLDER || '';
+const AGENT_FOLDER = process.env.JSCLAW_AGENT_ID || '';
 const IS_MAIN = process.env.JSCLAW_IS_MAIN === 'true';
 const IPC_MESSAGES_DIR = '/workspace/ipc/messages';
 const IPC_TASKS_DIR = '/workspace/ipc/tasks';
@@ -37,11 +37,11 @@ function writeIpcFile(dir, data) {
 }
 
 /**
- * Read current_tasks.json from the group workspace.
+ * Read current_tasks.json from the agent workspace.
  */
 function readCurrentTasks() {
   try {
-    const raw = readFileSync('/workspace/group/current_tasks.json', 'utf-8');
+    const raw = readFileSync('/workspace/agent/current_tasks.json', 'utf-8');
     return JSON.parse(raw);
   } catch {
     return [];
@@ -57,7 +57,7 @@ const TOOLS = [
       properties: {
         text: { type: 'string', description: 'Message text to send' },
         sender: { type: 'string', description: 'Optional sender name for multi-persona' },
-        target_jid: { type: 'string', description: 'Target chat JID (main group only, for cross-group messaging)' },
+        target_jid: { type: 'string', description: 'Target chat JID (main agent only, for cross-agent messaging)' },
       },
       required: ['text'],
     },
@@ -72,14 +72,14 @@ const TOOLS = [
         schedule_type: { type: 'string', enum: ['cron', 'interval', 'once'], description: 'Type of schedule' },
         schedule_value: { type: 'string', description: 'Cron expression, interval in ms, or ISO date' },
         context_mode: { type: 'string', enum: ['fresh', 'resume'], description: 'Whether to resume existing session or start fresh' },
-        target_group_jid: { type: 'string', description: 'Target group for the task (main only)' },
+        target_agent_jid: { type: 'string', description: 'Target agent for the task (main only)' },
       },
       required: ['prompt', 'schedule_type', 'schedule_value'],
     },
   },
   {
     name: 'list_tasks',
-    description: 'List all scheduled tasks for this group.',
+    description: 'List all scheduled tasks for this agent.',
     inputSchema: {
       type: 'object',
       properties: {},
@@ -125,16 +125,16 @@ async function handleToolCall(name, args) {
     case 'send_message': {
       const { text, sender, target_jid } = args;
 
-      // Authorization: non-main groups can't send cross-group
+      // Authorization: non-main agents can't send cross-agent
       if (target_jid && !IS_MAIN) {
-        return { content: [{ type: 'text', text: 'Error: Only the main group can send cross-group messages.' }] };
+        return { content: [{ type: 'text', text: 'Error: Only the main agent can send cross-agent messages.' }] };
       }
 
       writeIpcFile(IPC_MESSAGES_DIR, {
         text,
         sender: sender || undefined,
         targetJid: target_jid || CHAT_JID,
-        sourceGroup: GROUP_FOLDER,
+        sourceAgent: AGENT_FOLDER,
         timestamp: new Date().toISOString(),
       });
 
@@ -142,7 +142,7 @@ async function handleToolCall(name, args) {
     }
 
     case 'schedule_task': {
-      const { prompt, schedule_type, schedule_value, context_mode, target_group_jid } = args;
+      const { prompt, schedule_type, schedule_value, context_mode, target_agent_jid } = args;
 
       // Validate cron expression if applicable
       if (schedule_type === 'cron') {
@@ -154,8 +154,8 @@ async function handleToolCall(name, args) {
         }
       }
 
-      if (target_group_jid && !IS_MAIN) {
-        return { content: [{ type: 'text', text: 'Error: Only the main group can schedule tasks for other groups.' }] };
+      if (target_agent_jid && !IS_MAIN) {
+        return { content: [{ type: 'text', text: 'Error: Only the main agent can schedule tasks for other agents.' }] };
       }
 
       writeIpcFile(IPC_TASKS_DIR, {
@@ -165,10 +165,10 @@ async function handleToolCall(name, args) {
           schedule_type,
           schedule_value,
           context_mode: context_mode || 'fresh',
-          chat_jid: target_group_jid || CHAT_JID,
-          group_folder: GROUP_FOLDER,
+          chat_jid: target_agent_jid || CHAT_JID,
+          agent_folder: AGENT_FOLDER,
         },
-        sourceGroup: GROUP_FOLDER,
+        sourceAgent: AGENT_FOLDER,
         timestamp: new Date().toISOString(),
       });
 
@@ -193,7 +193,7 @@ async function handleToolCall(name, args) {
       writeIpcFile(IPC_TASKS_DIR, {
         type: name,
         data: { task_id },
-        sourceGroup: GROUP_FOLDER,
+        sourceAgent: AGENT_FOLDER,
         timestamp: new Date().toISOString(),
       });
       return { content: [{ type: 'text', text: `Task ${name.replace('_task', '')}: ${task_id}` }] };

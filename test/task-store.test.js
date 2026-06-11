@@ -11,7 +11,7 @@ test('creates, persists, and snapshots tasks', () => {
   const store = new TaskStore(config);
 
   const task = store.createTask({
-    groupFolder: 'main', chatJid: 'c1', prompt: 'check weather',
+    agentId: 'main', chatJid: 'c1', prompt: 'check weather',
     scheduleType: 'interval', scheduleValue: '60000',
   });
   assert.ok(task.id);
@@ -20,7 +20,7 @@ test('creates, persists, and snapshots tasks', () => {
 
   // Snapshot for list_tasks MCP tool
   const snapshot = JSON.parse(
-    readFileSync(join(config.groupsDir, 'main', 'current_tasks.json'), 'utf-8')
+    readFileSync(join(config.agentsDir, 'main', 'current_tasks.json'), 'utf-8')
   );
   assert.equal(snapshot.length, 1);
   assert.equal(snapshot[0].schedule_type, 'interval');
@@ -33,11 +33,11 @@ test('creates, persists, and snapshots tasks', () => {
 test('rejects invalid cron and empty prompts', () => {
   const store = new TaskStore(tempConfig());
   assert.throws(() => store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'x',
+    agentId: 'g', chatJid: 'c', prompt: 'x',
     scheduleType: 'cron', scheduleValue: 'bad cron',
   }));
   assert.throws(() => store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: '',
+    agentId: 'g', chatJid: 'c', prompt: '',
     scheduleType: 'once', scheduleValue: new Date().toISOString(),
   }));
 });
@@ -45,11 +45,11 @@ test('rejects invalid cron and empty prompts', () => {
 test('getDueTasks respects status and nextRun', () => {
   const store = new TaskStore(tempConfig());
   const past = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'due',
+    agentId: 'g', chatJid: 'c', prompt: 'due',
     scheduleType: 'once', scheduleValue: new Date(Date.now() - 1000).toISOString(),
   });
   store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'future',
+    agentId: 'g', chatJid: 'c', prompt: 'future',
     scheduleType: 'once', scheduleValue: new Date(Date.now() + 1e7).toISOString(),
   });
   const due = store.getDueTasks();
@@ -63,7 +63,7 @@ test('getDueTasks respects status and nextRun', () => {
 test('recordRun completes one-shots and reschedules intervals', () => {
   const store = new TaskStore(tempConfig());
   const once = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'once',
+    agentId: 'g', chatJid: 'c', prompt: 'once',
     scheduleType: 'once', scheduleValue: new Date(Date.now() - 1000).toISOString(),
   });
   store.recordRun(once.id);
@@ -71,7 +71,7 @@ test('recordRun completes one-shots and reschedules intervals', () => {
   assert.equal(store.getTask(once.id).nextRun, null);
 
   const interval = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'rep',
+    agentId: 'g', chatJid: 'c', prompt: 'rep',
     scheduleType: 'interval', scheduleValue: '60000',
   });
   store.recordRun(interval.id);
@@ -88,12 +88,12 @@ test('IPC handler enforces authorization', async () => {
 
   await onTask('schedule_task', {
     prompt: 'p', schedule_type: 'interval', schedule_value: '9999999', chat_jid: 'c',
-  }, 'group-a', false);
-  const task = store.listTasks('group-a')[0];
+  }, 'agent-a', false);
+  const task = store.listTasks('agent-a')[0];
   assert.ok(task);
 
-  // Another non-main group cannot cancel it
-  await onTask('cancel_task', { task_id: task.id }, 'group-b', false);
+  // Another non-main agent cannot cancel it
+  await onTask('cancel_task', { task_id: task.id }, 'agent-b', false);
   assert.ok(store.getTask(task.id));
 
   // Main can pause/resume/cancel anything
@@ -109,11 +109,11 @@ test('scheduler runs due tasks exactly once and repeats intervals', async () => 
   const config = tempConfig({ schedulerPollInterval: 50 });
   const store = new TaskStore(config);
   const once = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'once',
+    agentId: 'g', chatJid: 'c', prompt: 'once',
     scheduleType: 'once', scheduleValue: new Date(Date.now() - 1000).toISOString(),
   });
   const interval = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'rep',
+    agentId: 'g', chatJid: 'c', prompt: 'rep',
     scheduleType: 'interval', scheduleValue: '30',
   });
 
@@ -135,7 +135,7 @@ test('scheduler records failures without stopping', async () => {
   const config = tempConfig({ schedulerPollInterval: 50 });
   const store = new TaskStore(config);
   const bad = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'fails',
+    agentId: 'g', chatJid: 'c', prompt: 'fails',
     scheduleType: 'once', scheduleValue: new Date(Date.now() - 1000).toISOString(),
   });
 
@@ -179,7 +179,7 @@ test('corrupt tasks.json is quarantined, not silently wiped', () => {
 
   // A subsequent save writes fresh state without touching the evidence
   store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'recovered',
+    agentId: 'g', chatJid: 'c', prompt: 'recovered',
     scheduleType: 'interval', scheduleValue: '60000',
   });
   const fresh = JSON.parse(readFileSync(storePath, 'utf-8'));

@@ -1,12 +1,12 @@
 /**
  * Mock agent — speaks jsclaw's full container protocol with no Claude SDK
  * and no API key. Used by test/e2e.test.js to validate the real pipeline:
- * stdin input, sentinel stdout, group mounts, IPC files, close sentinel.
+ * stdin input, sentinel stdout, agent mounts, IPC files, close sentinel.
  *
  * The ContainerInput prompt selects a scenario:
  *   echo:<text>        → output result "<text>"
  *   env                → output JSCLAW_* env vars as JSON
- *   read:<file>        → output the contents of /workspace/group/<file>
+ *   read:<file>        → output the contents of /workspace/agent/<file>
  *   ipc-message:<text> → write a message IPC file, then output ok
  *   ipc-task           → write a schedule_task IPC file, then output ok
  *   mcp-dump           → output input.mcpServers as JSON (passthrough check)
@@ -22,7 +22,7 @@ import { join } from 'node:path';
 
 const OUTPUT_START = '---JSCLAW_OUTPUT_START---';
 const OUTPUT_END = '---JSCLAW_OUTPUT_END---';
-const GROUP_DIR = '/workspace/group';
+const AGENT_DIR = '/workspace/agent';
 const IPC_INPUT = '/workspace/ipc/input';
 const IPC_MESSAGES = '/workspace/ipc/messages';
 const IPC_TASKS = '/workspace/ipc/tasks';
@@ -107,7 +107,7 @@ async function main() {
   if (prompt === 'env') {
     const env = {
       chatJid: process.env.JSCLAW_CHAT_JID,
-      groupFolder: process.env.JSCLAW_GROUP_FOLDER,
+      agentId: process.env.JSCLAW_AGENT_ID,
       isMain: process.env.JSCLAW_IS_MAIN,
     };
     writeOutput({ status: 'success', result: JSON.stringify(env) });
@@ -117,7 +117,7 @@ async function main() {
   if (prompt.startsWith('read:')) {
     const file = prompt.slice(5);
     try {
-      const content = readFileSync(join(GROUP_DIR, file), 'utf-8');
+      const content = readFileSync(join(AGENT_DIR, file), 'utf-8');
       writeOutput({ status: 'success', result: content });
     } catch (err) {
       writeOutput({ status: 'error', result: null, error: err.message });
@@ -129,7 +129,7 @@ async function main() {
     writeIpcFile(IPC_MESSAGES, {
       text: prompt.slice('ipc-message:'.length),
       targetJid: input.chatJid,
-      sourceGroup: input.groupFolder,
+      sourceAgent: input.agentId,
       timestamp: new Date().toISOString(),
     });
     writeOutput({ status: 'success', result: 'message written' });
@@ -144,9 +144,9 @@ async function main() {
         schedule_type: 'interval',
         schedule_value: '60000',
         chat_jid: input.chatJid,
-        group_folder: input.groupFolder,
+        agent_folder: input.agentId,
       },
-      sourceGroup: input.groupFolder,
+      sourceAgent: input.agentId,
       timestamp: new Date().toISOString(),
     });
     writeOutput({ status: 'success', result: 'task written' });
