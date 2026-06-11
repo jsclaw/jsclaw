@@ -86,6 +86,7 @@ export function startGateway(deps, config, options = {}) {
         return {
           version: VERSION,
           uptimeMs: Date.now() - startedAt,
+          model: config.model ?? null,
           groups: getGroups(),
           tasks: {
             total: tasks.length,
