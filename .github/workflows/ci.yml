@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install (one dependency: grammy)
+      - name: Install dependencies (grammy)
         run: npm ci
 
       - name: Lint (syntax check every shipped file)
