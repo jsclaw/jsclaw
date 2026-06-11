@@ -1,5 +1,9 @@
 # jsclaw
 
+[![CI](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml/badge.svg)](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml)
+[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
+[![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero host-side dependencies.
 
 A JavaScript port of [nanoclaw](https://github.com/qwibitai/nanoclaw) — the core engine without the channel-specific code.

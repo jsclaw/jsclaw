@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # No `npm install` — jsclaw has zero dependencies, runtime and dev.
+
+      - name: Lint (syntax check every shipped file)
+        run: npm run lint
+
+      - name: Test (unit + Docker E2E + gateway + Nostr)
+        run: npm test
