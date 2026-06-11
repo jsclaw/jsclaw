@@ -1,6 +1,6 @@
 {
   "name": "jsclaw",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
   "type": "module",
   "license": "AGPL-3.0-or-later",
