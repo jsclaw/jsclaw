@@ -1,18 +1,42 @@
 /**
- * Container execution engine. Spawns Docker/Podman/Apple containers
- * and streams Claude agent output via sentinel-delimited JSON.
+ * Container execution engine. Spawns Docker/Podman/Apple containers —
+ * or, with containerRuntime 'local', plain child processes with NO
+ * isolation — and streams Claude agent output via sentinel-delimited JSON.
  * @module container-runner
  */
 
 import { spawn, exec, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createConfig } from './config.js';
 import { resolveProviderEnv } from './providers.js';
 
 const OUTPUT_START_MARKER = '---JSCLAW_OUTPUT_START---';
 const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
+
+/** Live local-mode child processes, keyed by container name. */
+const localProcs = new Map();
+
+/** Pidfile directory for local-mode orphan reaping across host restarts. */
+function localPidDir(config) {
+  return join(config.dataDir, 'local-runners');
+}
+
+/**
+ * Resolve (and create) the host-side directories for an agent.
+ * @param {import('./types.js').AgentConfig} agent
+ * @param {import('./types.js').JsclawConfig} config
+ * @returns {{ agentDir: string, ipcDir: string }}
+ */
+export function ensureAgentDirs(agent, config) {
+  const agentDir = join(config.agentsDir, agent.folder);
+  const ipcDir = join(config.dataDir, 'ipc', agent.folder);
+  for (const dir of [agentDir, join(ipcDir, 'messages'), join(ipcDir, 'tasks'), join(ipcDir, 'input')]) {
+    mkdirSync(dir, { recursive: true });
+  }
+  return { agentDir, ipcDir };
+}
 
 /**
  * Build the volume mount arguments for the container runtime.
@@ -22,13 +46,7 @@ const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
  */
 export function buildVolumeMounts(agent, config) {
   const args = [];
-  const agentDir = join(config.agentsDir, agent.folder);
-  const ipcDir = join(config.dataDir, 'ipc', agent.folder);
-
-  // Ensure directories exist
-  for (const dir of [agentDir, join(ipcDir, 'messages'), join(ipcDir, 'tasks'), join(ipcDir, 'input')]) {
-    mkdirSync(dir, { recursive: true });
-  }
+  const { agentDir, ipcDir } = ensureAgentDirs(agent, config);
 
   // Agent workspace (read-write)
   args.push('-v', `${agentDir}:/workspace/agent`);
@@ -155,20 +173,55 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
     ...(model && { model }),
   };
 
-  const mountArgs = buildVolumeMounts(agent, config);
+  const isLocal = config.containerRuntime === 'local';
   const envVars = {
     JSCLAW_CHAT_JID: input.chatJid,
     JSCLAW_AGENT_ID: input.agentId,
     JSCLAW_IS_MAIN: String(input.isMain),
   };
-  const args = buildContainerArgs(mountArgs, containerName, config, envVars);
 
-  log.info(`Spawning container: ${containerName}`, { agent: agent.folder });
+  let spawnCmd, spawnArgs, spawnOpts;
+  if (isLocal) {
+    if (!config.localRunner) {
+      return Promise.reject(new Error(`containerRuntime is 'local' but localRunner is not set`));
+    }
+    if (!existsSync(config.localRunner)) {
+      return Promise.reject(new Error(`localRunner not found: ${config.localRunner}`));
+    }
+    const { agentDir, ipcDir } = ensureAgentDirs(agent, config);
+    if (agent.additionalMounts?.length) {
+      log.warn(`additionalMounts are ignored in local mode (no isolation): ${agent.folder}`);
+    }
+    spawnCmd = process.execPath;
+    spawnArgs = [config.localRunner];
+    spawnOpts = {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env: {
+        ...process.env,
+        ...envVars,
+        JSCLAW_WORKSPACE: agentDir,
+        JSCLAW_IPC_BASE: ipcDir,
+      },
+    };
+    log.info(`Spawning local agent process (NO isolation): ${containerName}`, { agent: agent.folder });
+  } else {
+    const mountArgs = buildVolumeMounts(agent, config);
+    spawnCmd = config.containerRuntime;
+    spawnArgs = buildContainerArgs(mountArgs, containerName, config, envVars);
+    spawnOpts = { stdio: ['pipe', 'pipe', 'pipe'] };
+    log.info(`Spawning container: ${containerName}`, { agent: agent.folder });
+  }
 
   return new Promise((resolve, reject) => {
-    const proc = spawn(config.containerRuntime, args, {
-      stdio: ['pipe', 'pipe', 'pipe'],
-    });
+    const proc = spawn(spawnCmd, spawnArgs, spawnOpts);
+
+    if (isLocal) {
+      localProcs.set(containerName, proc);
+      try {
+        mkdirSync(localPidDir(config), { recursive: true });
+        if (proc.pid) writeFileSync(join(localPidDir(config), `${containerName}.pid`), String(proc.pid));
+      } catch { /* pidfile is best-effort; reaping degrades gracefully */ }
+    }
 
     if (onProcess) {
       onProcess(proc, containerName);
@@ -232,6 +285,11 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
     proc.on('close', (code) => {
       clearTimeout(timeoutHandle);
 
+      if (isLocal) {
+        localProcs.delete(containerName);
+        try { rmSync(join(localPidDir(config), `${containerName}.pid`), { force: true }); } catch { /* best-effort */ }
+      }
+
       if (timedOut) {
         resolve({
           status: 'error',
@@ -267,11 +325,21 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
 }
 
 /**
- * Kill a running container.
+ * Kill a running container or local agent process.
  * @param {string} containerName
  * @param {import('./types.js').JsclawConfig} config
  */
 function killContainer(containerName, config) {
+  const proc = localProcs.get(containerName);
+  if (proc) {
+    proc.kill('SIGTERM');
+    // Escalate if the runner ignores SIGTERM
+    const force = setTimeout(() => {
+      try { proc.kill('SIGKILL'); } catch { /* already gone */ }
+    }, 5000);
+    force.unref?.();
+    return;
+  }
   exec(`${config.containerRuntime} stop ${containerName}`, (err) => {
     if (err) {
       // Force kill if stop fails
@@ -300,6 +368,10 @@ export async function reapOrphanContainers(config, opts = {}) {
   const { prefix = 'jsclaw-' } = opts;
   const runtime = config.containerRuntime;
 
+  if (runtime === 'local') {
+    return reapOrphanLocalRunners(config, prefix);
+  }
+
   let stdout;
   try {
     ({ stdout } = await execFileAsync(runtime, ['ps', '--format', '{{.Names}}'], { timeout: 15000 }));
@@ -320,6 +392,44 @@ export async function reapOrphanContainers(config, opts = {}) {
     } catch (err) {
       log.error(`Failed to reap orphaned container: ${name}`, { error: err.message });
     }
+  }
+
+  return reaped;
+}
+
+/**
+ * Reap orphaned local-mode agent processes via pidfiles. A pidfile with
+ * a dead pid is just cleaned up; a live pid from a previous host run is
+ * killed (same rationale as the container sweep: an unsupervised agent
+ * burns tokens and races a fresh spawn over the same IPC dirs).
+ * @param {import('./types.js').JsclawConfig} config
+ * @param {string} prefix
+ * @returns {Promise<string[]>} Names of the runners that were reaped
+ */
+async function reapOrphanLocalRunners(config, prefix) {
+  const log = config.logger;
+  const dir = localPidDir(config);
+  let files;
+  try {
+    files = readdirSync(dir).filter((f) => f.endsWith('.pid') && f.startsWith(prefix));
+  } catch {
+    return []; // no pidfile dir yet — nothing to reap
+  }
+
+  const reaped = [];
+  for (const file of files) {
+    const name = file.slice(0, -4);
+    if (localProcs.has(name)) continue; // supervised by this process
+    const pidPath = join(dir, file);
+    const pid = Number(readFileSync(pidPath, 'utf-8').trim());
+    if (pid > 0) {
+      try {
+        process.kill(pid, 'SIGKILL');
+        log.warn(`Reaped orphaned local runner: ${name} (pid ${pid})`);
+        reaped.push(name);
+      } catch { /* already dead — stale pidfile */ }
+    }
+    rmSync(pidPath, { force: true });
   }
 
   return reaped;
