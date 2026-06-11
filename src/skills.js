@@ -6,8 +6,8 @@
  * @module skills
  */
 
-import { readFileSync, readdirSync, writeFileSync, unlinkSync, mkdirSync, existsSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { readFileSync, readdirSync, writeFileSync, unlinkSync, mkdirSync, existsSync, statSync, cpSync, rmSync } from 'node:fs';
+import { join, basename, dirname } from 'node:path';
 import { createConfig } from './config.js';
 
 /**
@@ -172,35 +172,63 @@ export function loadSkills(config) {
   const log = config.logger;
   let entries;
   try {
-    entries = readdirSync(config.skillsDir).filter((n) => n.endsWith('.md')).sort();
+    entries = readdirSync(config.skillsDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
   } catch {
     return [];
   }
 
   const skills = [];
-  for (const name of entries) {
-    const path = join(config.skillsDir, name);
+  for (const entry of entries) {
+    // Flat <name>.md files, or folder skills (<name>/SKILL.md + resources)
+    // — the openclaw/Anthropic layout; nearly all real skills are folders.
+    let path = null;
+    if (entry.isDirectory()) {
+      const candidate = join(config.skillsDir, entry.name, 'SKILL.md');
+      if (existsSync(candidate)) path = candidate;
+    } else if (entry.name.endsWith('.md')) {
+      path = join(config.skillsDir, entry.name);
+    }
+    if (!path) continue;
     try {
       skills.push(parseSkill(readFileSync(path, 'utf-8'), path));
     } catch (err) {
-      log.warn(`Skipping invalid skill: ${name}`, { error: err.message });
+      log.warn(`Skipping invalid skill: ${entry.name}`, { error: err.message });
     }
   }
   return skills;
 }
 
 /**
- * Install a skill file into the skills directory (named <name>.md).
+ * Install a skill into the skills directory. Accepts a flat .md file, a
+ * folder containing SKILL.md (resources are copied along), or a path to
+ * the SKILL.md inside such a folder.
  * @param {string} sourcePath
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {Skill} The installed skill
  */
 export function installSkill(sourcePath, config) {
   config = config || createConfig();
-  const skill = parseSkill(readFileSync(sourcePath, 'utf-8'), sourcePath);
+
+  let sourceDir = null;
+  let skillFile = sourcePath;
+  if (statSync(sourcePath).isDirectory()) {
+    sourceDir = sourcePath;
+    skillFile = join(sourcePath, 'SKILL.md');
+  } else if (basename(sourcePath) === 'SKILL.md') {
+    sourceDir = dirname(sourcePath);
+  }
+
+  const skill = parseSkill(readFileSync(skillFile, 'utf-8'), skillFile);
   mkdirSync(config.skillsDir, { recursive: true });
+
+  if (sourceDir) {
+    // Folder skill: copy the whole folder so relative resources survive
+    const dest = join(config.skillsDir, basename(skill.name));
+    cpSync(sourceDir, dest, { recursive: true });
+    return { ...skill, path: join(dest, 'SKILL.md') };
+  }
   const dest = join(config.skillsDir, `${basename(skill.name)}.md`);
-  writeFileSync(dest, readFileSync(sourcePath, 'utf-8'));
+  writeFileSync(dest, readFileSync(skillFile, 'utf-8'));
   return { ...skill, path: dest };
 }
 
@@ -212,10 +240,17 @@ export function installSkill(sourcePath, config) {
  */
 export function removeSkill(name, config) {
   config = config || createConfig();
-  const path = join(config.skillsDir, `${basename(name)}.md`);
-  if (!existsSync(path)) return false;
-  unlinkSync(path);
-  return true;
+  const flat = join(config.skillsDir, `${basename(name)}.md`);
+  if (existsSync(flat)) {
+    unlinkSync(flat);
+    return true;
+  }
+  const folder = join(config.skillsDir, basename(name));
+  if (existsSync(join(folder, 'SKILL.md'))) {
+    rmSync(folder, { recursive: true });
+    return true;
+  }
+  return false;
 }
 
 // --- Trigger matching ---

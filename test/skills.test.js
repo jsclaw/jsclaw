@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   parseFrontmatter, parseSkill, loadSkills, installSkill, removeSkill,
@@ -129,4 +129,55 @@ test('buildSkillContext formats matched skills for the prompt', () => {
   assert.ok(ctx.includes('## Skill: deploy-helper'));
   assert.ok(ctx.includes('Run the test suite first'));
   assert.equal(buildSkillContext([]), '');
+});
+
+// --- Folder skills (#47 audit finding 1) ---
+
+test('loadSkills discovers folder skills alongside flat files', (t) => {
+  const config = tempConfig();
+  mkdirSync(join(config.skillsDir, 'folder-skill'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'folder-skill', 'SKILL.md'),
+    '---\nname: folder-skill\ndescription: lives in a folder\n---\nBody here.');
+  writeFileSync(join(config.skillsDir, 'folder-skill', 'helper.sh'), 'echo resource');
+  writeFileSync(join(config.skillsDir, 'flat.md'),
+    '---\nname: flat\ndescription: flat file\n---\nFlat body.');
+  mkdirSync(join(config.skillsDir, 'not-a-skill'), { recursive: true }); // no SKILL.md
+
+  const skills = loadSkills(config);
+  assert.deepEqual(skills.map((s) => s.name).sort(), ['flat', 'folder-skill']);
+  const folder = skills.find((s) => s.name === 'folder-skill');
+  assert.match(folder.path, /folder-skill\/SKILL\.md$/);
+});
+
+test('installSkill copies folder skills with their resources; removeSkill deletes them', (t) => {
+  const config = tempConfig();
+  const src = join(config.dataDir, 'incoming', 'my-skill');
+  mkdirSync(src, { recursive: true });
+  writeFileSync(join(src, 'SKILL.md'), '---\nname: my-skill\ndescription: folder install\n---\nUse helper.py.');
+  writeFileSync(join(src, 'helper.py'), 'print("hi")');
+
+  // install by folder path
+  const installed = installSkill(src, config);
+  assert.equal(installed.name, 'my-skill');
+  assert.ok(existsSync(join(config.skillsDir, 'my-skill', 'SKILL.md')));
+  assert.ok(existsSync(join(config.skillsDir, 'my-skill', 'helper.py')), 'resources copied');
+
+  // install by SKILL.md path resolves the folder too
+  const again = installSkill(join(src, 'SKILL.md'), config);
+  assert.equal(again.name, 'my-skill');
+
+  assert.equal(removeSkill('my-skill', config), true);
+  assert.equal(existsSync(join(config.skillsDir, 'my-skill')), false);
+  assert.equal(removeSkill('my-skill', config), false);
+});
+
+test('a real openclaw bundled skill loads when the layout exists', (t) => {
+  const fixture = '/usr/local/lib/node_modules/openclaw/skills/gh-issues';
+  if (!existsSync(join(fixture, 'SKILL.md'))) return t.skip('openclaw not installed');
+  const config = tempConfig();
+  const installed = installSkill(fixture, config);
+  assert.equal(installed.name, 'gh-issues');
+  const skills = loadSkills(config);
+  assert.equal(skills.length, 1);
+  assert.equal(skills[0].name, 'gh-issues');
 });
