@@ -295,7 +295,7 @@ function cmdSkill(config, sub, args, opts) {
       if (opts.json) return console.log(JSON.stringify(skills.map(({ body, ...s }) => s), null, 2));
       if (skills.length === 0) return console.log('no skills installed');
       for (const s of skills) {
-        console.log(`${s.name}${s.version ? ` v${s.version}` : ''}  trigger:${s.trigger}`);
+        console.log(`${s.name}${s.version ? ` v${s.version}` : ''}  ${s.trigger ? `trigger:${s.trigger}` : 'description-driven'}`);
         console.log(`          ${s.description}`);
       }
       break;
@@ -319,6 +319,10 @@ function cmdSkill(config, sub, args, opts) {
       const message = messageParts.join(' ');
       if (!path || !message) fail('skill test requires a path and a message', 2);
       const skill = parseSkill(readFileSync(path, 'utf-8'), path);
+      if (skill.trigger == null) {
+        console.log(`description-driven  ${skill.name} — always surfaced in the skills index; the agent decides from the description`);
+        break;
+      }
       const matched = matchSkills([skill], { text: message });
       if (matched.length > 0) {
         console.log(`MATCH  ${skill.name} (trigger: ${skill.trigger})`);

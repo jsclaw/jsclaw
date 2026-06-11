@@ -69,6 +69,7 @@ export {
   removeSkill,
   skillMatches,
   matchSkills,
+  buildSkillsIndex,
   buildSkillContext,
 } from './skills.js';
 
