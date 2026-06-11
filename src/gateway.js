@@ -149,8 +149,14 @@ export function startGateway(deps, config, options = {}) {
         if (command?.prompt) message = command.prompt;
 
         const session = deps.sessions?.resolve(sessionKey, agentId);
-        const result = await deps.runAgent(agentId, message, (output) => {
+        // Resolve on the first terminal output: every ContainerOutput is a
+        // completed turn, but the runner process lingers for follow-up IPC
+        // (up to the idle timeout) and runAgent only settles when it exits.
+        let settleFirst;
+        const firstOutput = new Promise((r) => { settleFirst = r; });
+        const run = deps.runAgent(agentId, message, (output) => {
           if (output.newSessionId) deps.sessions?.advance(sessionKey, output.newSessionId);
+          settleFirst(output);
           conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
           // openclaw chat event shape (consumed by openclaw tui & friends)
           conn.sendFrame({ type: 'event', event: 'chat', payload: {
@@ -163,6 +169,8 @@ export function startGateway(deps, config, options = {}) {
             },
           } });
         }, session ? { ...(session.sessionId && { sessionId: session.sessionId }), ...(session.model && { model: session.model }) } : {});
+        run.then((result) => settleFirst(result)).catch((err) => settleFirst({ status: 'error', result: null, error: err.message }));
+        const result = await firstOutput;
         return { runId, ...result };
       }
 

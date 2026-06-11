@@ -108,9 +108,12 @@ test('chat.send streams agent.output events then resolves', async () => {
   try {
     const res = await client.req('chat.send', { agentId: 'main', message: 'hi' });
     assert.equal(res.ok, true);
-    assert.equal(res.payload.result, 'final answer');
+    // chat.send resolves on the FIRST terminal output (the runner process
+    // lingers for follow-ups); later outputs still stream as events.
+    assert.equal(res.payload.result, 'thinking out loud');
     assert.ok(res.payload.runId);
 
+    await sleep(20); // let the second output stream
     const outputs = client.events.filter((e) => e.event === 'agent.output');
     assert.equal(outputs.length, 2);
     assert.equal(outputs[0].payload.result, 'thinking out loud');
