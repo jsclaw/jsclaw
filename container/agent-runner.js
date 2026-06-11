@@ -199,6 +199,7 @@ async function runQuery(prompt, options = {}) {
     systemPrompt,
     allowedTools,
     extraMcpServers,
+    model,
   } = options;
 
   let resultText = null;
@@ -215,6 +216,7 @@ async function runQuery(prompt, options = {}) {
       cwd: WORKSPACE_DIR,
       allowedTools: effectiveTools,
       permissionMode: 'bypassPermissions',
+      ...(model && { model }),
       ...(sessionId && { sessionId }),
       ...(systemPrompt && { systemPrompt }),
       mcpServers: {
@@ -263,7 +265,17 @@ async function main() {
     isMain,
     isScheduledTask,
     mcpServers: extraMcpServers,
+    providerEnv,
+    model,
   } = input;
+
+  // Provider credentials/endpoint arrive via stdin (never argv); apply
+  // before any SDK query so ANTHROPIC_BASE_URL / keys take effect.
+  if (providerEnv && typeof providerEnv === 'object') {
+    for (const [key, value] of Object.entries(providerEnv)) {
+      if (typeof value === 'string') process.env[key] = value;
+    }
+  }
 
   // Build initial prompt
   let fullPrompt = prompt;
@@ -292,6 +304,7 @@ async function main() {
         systemPrompt,
         allowedTools,
         extraMcpServers,
+        model,
       });
 
       if (newSessionId) currentSessionId = newSessionId;

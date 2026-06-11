@@ -13,6 +13,8 @@
  * @property {boolean} isMain - Whether this is the main/admin group
  * @property {boolean} [isScheduledTask] - Whether this is a scheduled task invocation
  * @property {Record<string, Object>} [mcpServers] - MCP servers injected by the host (set automatically by runContainerAgent)
+ * @property {string} [model] - Model for this run (input > group > config precedence)
+ * @property {Record<string, string>} [providerEnv] - Provider credentials/endpoint injected by the host via stdin
  */
 
 /**
@@ -41,6 +43,11 @@
  * @property {number} [queueMaxRetries] - GroupQueue retry attempts (default: 5)
  * @property {number} [queueRetryBaseDelayMs] - GroupQueue base retry delay in ms (default: 5000)
  * @property {{ servers?: Record<string, Object> }} [mcp] - MCP servers for agents (openclaw's mcp.servers shape); passed to containers via stdin
+ * @property {string} [model] - Default model for agents (e.g. 'claude-sonnet-4-6')
+ * @property {string} [heartbeatModel] - Cheaper model for heartbeat cycles
+ * @property {string} [providerBaseUrl] - Anthropic-compatible endpoint (GLM, Kimi, LiteLLM, ...)
+ * @property {string} [providerAuthToken] - Bearer token for the endpoint (use ${ENV_VAR} in jsclaw.json)
+ * @property {string} [gatewayToken] - Pinned gateway auth token
  * @property {Logger} [logger] - Logger instance (default: console-based)
  */
 
@@ -61,6 +68,7 @@
  * @property {boolean} [isMain] - Whether this is the admin group
  * @property {VolumeMount[]} [additionalMounts] - Extra volume mounts
  * @property {Record<string, Object>} [mcpServers] - Per-group MCP servers, merged over config.mcp.servers by name
+ * @property {string} [model] - Model override for this group's agents
  */
 
 /**

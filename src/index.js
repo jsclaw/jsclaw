@@ -38,6 +38,9 @@ export { ChannelManager } from './channel.js';
 // Gateway
 export { startGateway } from './gateway.js';
 
+// Providers
+export { PROVIDERS, PROVIDER_ENV_KEYS, resolveProviderEnv } from './providers.js';
+
 // Nostr
 export {
   createNostrChannel,

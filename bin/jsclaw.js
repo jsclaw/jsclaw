@@ -39,6 +39,7 @@ const VERSION = JSON.parse(
 const USAGE = `jsclaw v${VERSION} — container orchestration for Claude AI agents
 
 Usage:
+  jsclaw onboard                         Interactive setup wizard
   jsclaw status                          Show config, groups, task counts
   jsclaw doctor                          Check environment health
   jsclaw tasks list [--group <folder>]   List scheduled tasks
@@ -378,7 +379,7 @@ async function cmdGateway(config, opts) {
   const verboseLogger = createConfig().logger; // real logger for a long-running host
   config = createConfig({ logger: verboseLogger });
   const port = opts.port ? Number(opts.port) : 18789;
-  const token = process.env.JSCLAW_GATEWAY_TOKEN || randomBytes(16).toString('hex');
+  const token = config.gatewayToken || randomBytes(16).toString('hex');
 
   // 1. Clean up after any previous crashed host
   const reaped = await reapOrphanContainers(config);
@@ -388,10 +389,10 @@ async function cmdGateway(config, opts) {
   const store = new TaskStore(config);
   const groups = () => listGroups(config);
 
-  const runAgent = (groupFolder, prompt, onOutput) =>
+  const runAgent = (groupFolder, prompt, onOutput, extra = {}) =>
     runContainerAgent(
       { name: groupFolder, folder: groupFolder },
-      { prompt, groupFolder, chatJid: `gateway:${groupFolder}`, isMain: true },
+      { prompt, groupFolder, chatJid: `gateway:${groupFolder}`, isMain: true, ...extra },
       null,
       onOutput ? async (output) => onOutput(output) : null,
       config,
@@ -426,7 +427,10 @@ async function cmdGateway(config, opts) {
   // 6. Heartbeat wakes groups with a HEARTBEAT.md
   const heartbeat = startHeartbeat({
     getGroups: () => groups().map((folder) => ({ name: folder, folder })),
-    runAgent: (group, prompt) => runAgent(group.folder, prompt, null),
+    // Heartbeats run on the cheap model when one is configured —
+    // openclaw's biggest cost lever for the 48-cycles/day loop
+    runAgent: (group, prompt) => runAgent(group.folder, prompt, null,
+      config.heartbeatModel ? { model: config.heartbeatModel } : {}),
     onAlert: async (group, result) => {
       gateway.broadcast('heartbeat.alert', { groupFolder: group.folder, result });
     },
@@ -436,7 +440,8 @@ async function cmdGateway(config, opts) {
   console.log(`  chat:    http://127.0.0.1:${gateway.port}/chat?token=${token}`);
   console.log(`  ws:      ws://127.0.0.1:${gateway.port}/?token=${token}`);
   console.log(`  groups:  ${groups().join(', ') || '(none yet — first chat creates one)'}`);
-  console.log(`  token:   ${token}${process.env.JSCLAW_GATEWAY_TOKEN ? ' (from JSCLAW_GATEWAY_TOKEN)' : ' (generated; set JSCLAW_GATEWAY_TOKEN to pin)'}`);
+  console.log(`  token:   ${token}${config.gatewayToken ? ' (pinned)' : ' (generated; set JSCLAW_GATEWAY_TOKEN or gatewayToken in jsclaw.json to pin)'}`);
+  if (config.model) console.log(`  model:   ${config.model}${config.heartbeatModel ? ` (heartbeat: ${config.heartbeatModel})` : ''}`);
   console.log('\nCtrl-C to stop.');
 
   await new Promise((resolve) => {
@@ -484,6 +489,10 @@ async function main() {
       return cmdRun(config, rest[0], rest.slice(1).join(' '));
     case 'heartbeat':
       return cmdHeartbeat(config, rest[0], opts['dry-run']);
+    case 'onboard': {
+      const { runOnboard } = await import('./onboard.js');
+      return runOnboard({ config });
+    }
     case 'gateway':
       return cmdGateway(config, opts);
     case 'reap': {

@@ -10,6 +10,7 @@
  *   ipc-message:<text> → write a message IPC file, then output ok
  *   ipc-task           → write a schedule_task IPC file, then output ok
  *   mcp-dump           → output input.mcpServers as JSON (passthrough check)
+ *   model-dump         → output {model, providerEnv, envApiKey} as JSON
  *   converse           → output "ready", then echo each follow-up from
  *                        /workspace/ipc/input as its own output until _close
  *   fail               → exit 1 without emitting any output
@@ -87,6 +88,19 @@ async function main() {
 
   if (prompt === 'mcp-dump') {
     writeOutput({ status: 'success', result: JSON.stringify(input.mcpServers ?? null) });
+    return;
+  }
+
+  if (prompt === 'model-dump') {
+    writeOutput({
+      status: 'success',
+      result: JSON.stringify({
+        model: input.model ?? null,
+        providerEnv: input.providerEnv ?? null,
+        // Proves credentials do NOT arrive via docker -e flags
+        envApiKey: process.env.ANTHROPIC_API_KEY ?? null,
+      }),
+    });
     return;
   }
 

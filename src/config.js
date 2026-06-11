@@ -29,6 +29,11 @@ function defaults() {
     groupsDir: join(process.cwd(), 'groups'),
     skillsDir: join(process.cwd(), 'skills'),
     mountAllowlistPath: undefined,
+    model: undefined,
+    heartbeatModel: undefined,
+    providerBaseUrl: undefined,
+    providerAuthToken: undefined,
+    gatewayToken: undefined,
     logger: undefined,
   };
 }
@@ -85,6 +90,10 @@ const ENV_KEYS = {
   JSCLAW_GROUPS_DIR: ['groupsDir', String],
   JSCLAW_SKILLS_PATH: ['skillsDir', String],
   JSCLAW_MOUNT_ALLOWLIST: ['mountAllowlistPath', String],
+  JSCLAW_MODEL: ['model', String],
+  JSCLAW_HEARTBEAT_MODEL: ['heartbeatModel', String],
+  JSCLAW_PROVIDER_BASE_URL: ['providerBaseUrl', String],
+  JSCLAW_GATEWAY_TOKEN: ['gatewayToken', String],
 };
 
 /**

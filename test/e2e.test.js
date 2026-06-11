@@ -139,6 +139,43 @@ test('mcp: absent config means no mcpServers field at all', opts, async () => {
   assert.equal(JSON.parse(result.result), null);
 });
 
+test('model + credentials cross via stdin, never argv', opts, async () => {
+  const config = e2eConfig();
+  config.model = 'glm-4.6';
+  config.providerBaseUrl = 'https://api.z.ai/api/anthropic';
+  config.providerAuthToken = 'secret-glm-token';
+
+  const result = await runContainerAgent(
+    { ...GROUP, model: undefined },
+    input('model-dump'),
+    null, null, config,
+  );
+  assert.equal(result.status, 'success');
+  const dump = JSON.parse(result.result);
+
+  assert.equal(dump.model, 'glm-4.6', 'config model delivered');
+  assert.equal(dump.providerEnv.ANTHROPIC_BASE_URL, 'https://api.z.ai/api/anthropic');
+  assert.equal(dump.providerEnv.ANTHROPIC_AUTH_TOKEN, 'secret-glm-token');
+  assert.equal(dump.envApiKey, null, 'no credentials via docker -e flags');
+});
+
+test('model precedence: input > group > config', opts, async () => {
+  const config = e2eConfig();
+  config.model = 'config-model';
+
+  let result = await runContainerAgent(
+    { ...GROUP, model: 'group-model' }, input('model-dump'), null, null, config,
+  );
+  assert.equal(JSON.parse(result.result).model, 'group-model');
+
+  result = await runContainerAgent(
+    { ...GROUP, model: 'group-model' },
+    input('model-dump', { model: 'input-model' }),
+    null, null, config,
+  );
+  assert.equal(JSON.parse(result.result).model, 'input-model');
+});
+
 test('conversation: follow-up via GroupQueue, shutdown via close sentinel', opts, async () => {
   const config = e2eConfig();
   const queue = new GroupQueue(config);
