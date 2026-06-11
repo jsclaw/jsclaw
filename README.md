@@ -1,10 +1,10 @@
 # jsclaw
 
 [![CI](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml/badge.svg)](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml)
-[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
+[![one dependency](https://img.shields.io/badge/dependencies-1_(grammy)-brightgreen)](package.json)
 [![license AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
 
-Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero host-side dependencies.
+Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM; one dependency (grammy, for the Telegram channel).
 
 A JavaScript agent host inspired by [nanoclaw](https://github.com/qwibitai/nanoclaw) — the core engine without the channel-specific code, rewritten from scratch in plain JS.
 
@@ -501,6 +501,10 @@ The agent has access to these tools via the jsclaw MCP server:
       "privateKey": "${NOSTR_PRIVATE_KEY}",
       "allowFrom": ["npub1...you"],
       "relays": ["wss://relay.damus.io", "wss://nos.lol"]
+    },
+    "telegram": {
+      "botToken": "${TELEGRAM_BOT_TOKEN}",
+      "allowFrom": ["@yourusername"]
     }
   }
 }

@@ -66,5 +66,8 @@
   "homepage": "https://github.com/jsclaw/jsclaw",
   "bugs": {
     "url": "https://github.com/jsclaw/jsclaw/issues"
+  },
+  "dependencies": {
+    "grammy": "^1.43.0"
   }
 }
