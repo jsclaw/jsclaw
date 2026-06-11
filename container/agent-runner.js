@@ -237,14 +237,23 @@ async function runQuery(prompt, options = {}) {
 
   const conversation = query(queryOptions);
 
+  let usage = null;
   for await (const event of conversation) {
     if (event.type === 'result') {
       resultText = typeof event.result === 'string' ? event.result : JSON.stringify(event.result);
       newSessionId = event.session_id || null;
+      if (event.usage) {
+        usage = {
+          input_tokens: (event.usage.input_tokens || 0)
+            + (event.usage.cache_read_input_tokens || 0)
+            + (event.usage.cache_creation_input_tokens || 0),
+          output_tokens: event.usage.output_tokens || 0,
+        };
+      }
     }
   }
 
-  return { result: resultText, sessionId: newSessionId };
+  return { result: resultText, sessionId: newSessionId, usage };
 }
 
 // --- Main ---
@@ -299,7 +308,7 @@ async function main() {
   // Query loop: run query, wait for IPC, run again
   while (true) {
     try {
-      const { result, sessionId: newSessionId } = await runQuery(fullPrompt, {
+      const { result, sessionId: newSessionId, usage } = await runQuery(fullPrompt, {
         sessionId: currentSessionId,
         systemPrompt,
         allowedTools,
@@ -313,6 +322,7 @@ async function main() {
         status: 'success',
         result,
         newSessionId: currentSessionId,
+        ...(usage && { usage }),
       });
     } catch (err) {
       writeOutput({

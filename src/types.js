@@ -23,6 +23,9 @@
  * @property {string|null} result - The agent's response text
  * @property {string} [newSessionId] - Session ID for conversation continuity
  * @property {string} [error] - Error message if status is 'error'
+ * @property {{input_tokens: number, output_tokens: number}} [usage] - Tokens
+ *   consumed this turn, summed across the runner's API calls; cache
+ *   reads/writes count as input
  */
 
 /**

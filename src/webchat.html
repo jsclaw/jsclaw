@@ -56,6 +56,7 @@
   .msg.md pre { background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 10px 12px; overflow-x: auto; }
   .msg.md pre code { background: none; padding: 0; color: inherit; }
   .msg.md a { color: var(--terra); }
+  .tok { align-self: flex-start; color: var(--muted); font-size: .72rem; font-family: var(--mono); padding: 0 6px; margin-top: -9px; }
   .typing { align-self: flex-start; color: var(--muted); font-size: .82rem; padding: 0 4px; }
   .typing .d { display: inline-block; animation: blink 1.2s infinite; }
   .typing .d:nth-child(2) { animation-delay: .2s; } .typing .d:nth-child(3) { animation-delay: .4s; }
@@ -80,12 +81,13 @@
   <span class="mark">&gt;_</span><span class="name">jsclaw</span>
   <div class="agent">
     <span class="dot" id="dot"></span>
+    <span class="model" id="tokens" hidden></span>
     <span class="model" id="model" hidden></span>
     agent <input id="agent" value="main" spellcheck="false">
   </div>
 </header>
 <main><div class="feed" id="feed">
-  <div class="msg sys">Messages run a containerized Claude agent for the chosen agent.</div>
+  <div class="msg sys">Each message runs the chosen agent in its container.</div>
 </div></main>
 <footer><div class="bar">
   <textarea id="input" placeholder="Message your agent…" rows="1"></textarea>
@@ -98,7 +100,24 @@
   const sendBtn = document.getElementById('send');
   const dot = document.getElementById('dot');
   const modelEl = document.getElementById('model');
+  const tokensEl = document.getElementById('tokens');
   const agentEl = document.getElementById('agent');
+  let totIn = 0, totOut = 0;
+
+  function fmtTok(n) {
+    return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
+  }
+
+  function addUsage(usage) {
+    const inTok = usage.input_tokens || 0, outTok = usage.output_tokens || 0;
+    const el = document.createElement('div');
+    el.className = 'tok';
+    el.textContent = fmtTok(inTok) + ' in · ' + fmtTok(outTok) + ' out';
+    feed.appendChild(el);
+    totIn += inTok; totOut += outTok;
+    tokensEl.textContent = fmtTok(totIn) + ' in · ' + fmtTok(totOut) + ' out';
+    tokensEl.hidden = false;
+  }
 
   const token = new URLSearchParams(location.search).get('token') || '';
   const wsUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://')
@@ -198,6 +217,7 @@
         setTyping(false);
         if (frame.payload.result) add('agent', frame.payload.result, true);
         else if (frame.payload.status === 'error') add('err', frame.payload.error || 'agent error');
+        if (frame.payload.usage) addUsage(frame.payload.usage);
       } else if (frame.type === 'res') {
         const done = pending.get(frame.id);
         if (!done) return;
