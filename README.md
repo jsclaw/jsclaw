@@ -1,8 +1,8 @@
 # jsclaw
 
 [![CI](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml/badge.svg)](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/jsclaw)](https://www.npmjs.com/package/jsclaw)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
+[![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero host-side dependencies.
 
