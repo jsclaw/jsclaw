@@ -110,7 +110,12 @@ test('NIP-04 decryption fails for the wrong key pair', () => {
   const eve = generatePrivateKey();
 
   const content = nip04Encrypt(alice, getPublicKey(bob), 'secret');
-  assert.throws(() => nip04Decrypt(eve, getPublicKey(alice), content));
+  // Unauthenticated AES-CBC: a wrong key usually throws on padding, but
+  // ~1/256 runs produces valid padding and returns garbage — either way
+  // it must never yield the plaintext. (Was a CI flake.)
+  let decrypted = null;
+  try { decrypted = nip04Decrypt(eve, getPublicKey(alice), content); } catch { /* expected most runs */ }
+  assert.notEqual(decrypted, 'secret');
 });
 
 // --- events ---

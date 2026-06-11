@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { acceptKey, attachWebSocket } from './ws.js';
 import { createConfig } from './config.js';
 import { listMemoryFiles, searchMemory } from './memory.js';
+import { handleCommand, listCommands } from './commands.js';
 import { computeNextRun } from './task-store.js';
 
 const VERSION = JSON.parse(
@@ -123,10 +124,25 @@ export function startGateway(deps, config, options = {}) {
       case 'chat.send': {
         // openclaw clients address sessions; ours address agents — accept both
         const agentId = params.agentId || params.sessionKey;
-        const { message } = params;
+        let { message } = params;
         if (!agentId || !message) throw new Error('chat.send requires agentId (or sessionKey) and message');
         const sessionKey = params.sessionKey || agentId;
         const runId = params.runId || randomUUID().slice(0, 8);
+
+        // Slash commands are host-handled (webchat/TUI surface: each
+        // message is its own session today, so /reset is a no-op ack)
+        const command = await handleCommand(message, { config, agentId, version: VERSION }).catch(() => null);
+        if (command?.reply) {
+          const output = { status: 'success', result: command.reply };
+          conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
+          conn.sendFrame({ type: 'event', event: 'chat', payload: {
+            sessionKey, runId, state: 'final',
+            message: { role: 'assistant', content: [{ type: 'text', text: command.reply }] },
+          } });
+          return { runId, ...output };
+        }
+        if (command?.prompt) message = command.prompt;
+
         const result = await deps.runAgent(agentId, message, (output) => {
           conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
           // openclaw chat event shape (consumed by openclaw tui & friends)
@@ -170,7 +186,7 @@ export function startGateway(deps, config, options = {}) {
       case 'sessions.list':
         return { sessions: [] };
       case 'commands.list':
-        return { commands: [] };
+        return { commands: listCommands(config) };
 
       case 'tasks.list': {
         requireStore();
