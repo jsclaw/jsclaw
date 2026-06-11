@@ -10,17 +10,46 @@ import { existsSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
+import { runContainerAgent, reapOrphanContainers, resolveSandbox, _resetEngineChecks } from '../src/container-runner.js';
 import { tempConfig } from './helpers.js';
 
 const RUNNER = join(dirname(fileURLToPath(import.meta.url)), 'fixtures', 'local-mock-runner.js');
 
 function localConfig(overrides = {}) {
-  return tempConfig({ containerRuntime: 'local', localRunner: RUNNER, ...overrides });
+  return tempConfig({ sandboxMode: 'off', localRunner: RUNNER, ...overrides });
 }
 
 const AGENT = { name: 'main', folder: 'main' };
 const INPUT = { prompt: 'hello', agentId: 'main', chatJid: 'test', isMain: true };
+
+test('resolveSandbox honors mode, isMain, per-agent override, and auto fallback', async () => {
+  const cfg = (mode, extra = {}) => tempConfig({ sandboxMode: mode, ...extra });
+
+  assert.equal(await resolveSandbox(AGENT, INPUT, cfg('off')), false);
+  assert.equal(await resolveSandbox(AGENT, INPUT, cfg('all')), true);
+  assert.equal(await resolveSandbox(AGENT, { ...INPUT, isMain: true }, cfg('non-main')), false);
+  assert.equal(await resolveSandbox(AGENT, { ...INPUT, isMain: false }, cfg('non-main')), true);
+
+  // Per-agent override beats the global mode
+  assert.equal(await resolveSandbox({ ...AGENT, sandbox: true }, INPUT, cfg('off')), true);
+  assert.equal(await resolveSandbox({ ...AGENT, sandbox: false }, INPUT, cfg('all')), false);
+
+  // auto falls back to local when the engine is missing
+  _resetEngineChecks();
+  assert.equal(await resolveSandbox(AGENT, INPUT, cfg('auto', { containerRuntime: 'no-such-engine-xyz' })), false);
+  _resetEngineChecks();
+
+  // the pre-#42 'local' runtime value gets a migration error
+  await assert.rejects(
+    () => resolveSandbox(AGENT, INPUT, tempConfig({ containerRuntime: 'local' })),
+    /replaced by sandboxMode/
+  );
+
+  await assert.rejects(
+    () => resolveSandbox(AGENT, INPUT, cfg('sometimes')),
+    /Unknown sandboxMode/
+  );
+});
 
 test('local mode runs the agent as a child process with env wiring', async () => {
   const config = localConfig();

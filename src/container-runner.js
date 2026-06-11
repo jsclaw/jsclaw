@@ -18,6 +18,56 @@ const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
 /** Live local-mode child processes, keyed by container name. */
 const localProcs = new Map();
 
+/** Memoized container-engine availability checks, keyed by runtime name. */
+const engineChecks = new Map();
+
+/**
+ * Whether the configured container engine is present and responding.
+ * Memoized per runtime name for the process lifetime.
+ * @param {import('./types.js').JsclawConfig} config
+ * @returns {Promise<boolean>}
+ */
+export function engineAvailable(config) {
+  const runtime = config.containerRuntime;
+  if (!engineChecks.has(runtime)) {
+    engineChecks.set(runtime, execFileAsync(runtime, ['info'], { timeout: 5000 })
+      .then(() => true, () => false));
+  }
+  return engineChecks.get(runtime);
+}
+
+/** @internal Reset the engine-availability memo (tests only). */
+export function _resetEngineChecks() {
+  engineChecks.clear();
+}
+
+/**
+ * Decide whether this run is sandboxed (container) or local (plain
+ * process), openclaw-style. Per-agent `sandbox` wins; otherwise the
+ * global sandboxMode: 'off' | 'all' | 'non-main' | 'auto' (sandbox
+ * when the container engine is actually available).
+ * @param {import('./types.js').AgentConfig} agent
+ * @param {import('./types.js').ContainerInput} input
+ * @param {import('./types.js').JsclawConfig} config
+ * @returns {Promise<boolean>}
+ */
+export async function resolveSandbox(agent, input, config) {
+  if (config.containerRuntime === 'local') {
+    throw new Error(`containerRuntime 'local' was replaced by sandboxMode: 'off' (set containerRuntime back to your engine, e.g. 'docker')`);
+  }
+  if (typeof agent.sandbox === 'boolean') return agent.sandbox;
+
+  const mode = config.sandboxMode ?? 'auto';
+  switch (mode) {
+    case 'off': return false;
+    case 'all': return true;
+    case 'non-main': return !input.isMain;
+    case 'auto': return engineAvailable(config);
+    default:
+      throw new Error(`Unknown sandboxMode: '${mode}' (expected 'auto', 'off', 'all', or 'non-main')`);
+  }
+}
+
 /** Pidfile directory for local-mode orphan reaping across host restarts. */
 function localPidDir(config) {
   return join(config.dataDir, 'local-runners');
@@ -173,7 +223,7 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
     ...(model && { model }),
   };
 
-  const isLocal = config.containerRuntime === 'local';
+  const isLocal = !(await resolveSandbox(agent, input, config));
   const envVars = {
     JSCLAW_CHAT_JID: input.chatJid,
     JSCLAW_AGENT_ID: input.agentId,
@@ -183,7 +233,11 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
   let spawnCmd, spawnArgs, spawnOpts;
   if (isLocal) {
     if (!config.localRunner) {
-      return Promise.reject(new Error(`containerRuntime is 'local' but localRunner is not set`));
+      return Promise.reject(new Error(
+        `Agent '${agent.folder}' resolved to local (unsandboxed) mode but localRunner is not set. ` +
+        `Point localRunner at a runner entrypoint (e.g. agent-micro's runner.js), ` +
+        `or set sandboxMode: 'all' with a container engine installed.`
+      ));
     }
     if (!existsSync(config.localRunner)) {
       return Promise.reject(new Error(`localRunner not found: ${config.localRunner}`));
@@ -368,8 +422,13 @@ export async function reapOrphanContainers(config, opts = {}) {
   const { prefix = 'jsclaw-' } = opts;
   const runtime = config.containerRuntime;
 
-  if (runtime === 'local') {
-    return reapOrphanLocalRunners(config, prefix);
+  // Local runners can exist under any sandboxMode (per-agent overrides,
+  // 'non-main', 'auto' fallback) — always sweep the pidfiles.
+  const reapedLocal = await reapOrphanLocalRunners(config, prefix);
+
+  // Engine sweep only where containers can exist at all
+  if (config.sandboxMode === 'off' || !(await engineAvailable(config))) {
+    return reapedLocal;
   }
 
   let stdout;
@@ -377,11 +436,11 @@ export async function reapOrphanContainers(config, opts = {}) {
     ({ stdout } = await execFileAsync(runtime, ['ps', '--format', '{{.Names}}'], { timeout: 15000 }));
   } catch (err) {
     log.warn(`Orphan sweep skipped: ${runtime} ps failed`, { error: err.message });
-    return [];
+    return reapedLocal;
   }
 
   const orphans = stdout.split('\n').map((n) => n.trim()).filter((n) => n.startsWith(prefix));
-  const reaped = [];
+  const reaped = [...reapedLocal];
 
   for (const name of orphans) {
     try {

@@ -31,12 +31,16 @@
 /**
  * @typedef {Object} JsclawConfig
  * @property {string} containerImage - Docker image name (default: 'jsclaw-agent:latest')
- * @property {string} containerRuntime - 'docker' | 'podman' | 'container' | 'local' (default: 'docker').
- *   'local' runs the agent as a plain child process with NO isolation — the
- *   agent acts as the host user. Trusted workloads and development only.
- * @property {string} [localRunner] - Path to the runner entrypoint for
- *   containerRuntime 'local' (e.g. agent-micro's runner.js). Spawned with
- *   node; receives JSCLAW_WORKSPACE / JSCLAW_IPC_BASE instead of mounts.
+ * @property {string} containerRuntime - Container engine for sandboxed runs:
+ *   'docker' | 'podman' | 'container' (default: 'docker')
+ * @property {string} sandboxMode - openclaw-style sandbox policy (default: 'auto'):
+ *   'auto' (sandbox when the engine is available), 'all' (every agent in a
+ *   container), 'non-main' (main agent on the host, others sandboxed),
+ *   'off' (every agent as a plain process). Unsandboxed agents have NO
+ *   isolation — they act as the host user. Per-agent AgentConfig.sandbox wins.
+ * @property {string} [localRunner] - Runner entrypoint for unsandboxed runs
+ *   (e.g. agent-micro's runner.js). Spawned with node; receives
+ *   JSCLAW_WORKSPACE / JSCLAW_IPC_BASE instead of mounts.
  * @property {number} containerTimeout - Max container idle time in ms (default: 1800000)
  * @property {number} maxOutputSize - Max stdout buffer size in bytes (default: 10485760)
  * @property {number} maxConcurrentContainers - Concurrency limit (default: 5)
@@ -74,9 +78,11 @@
  * @property {string} folder - Folder name for workspace isolation
  * @property {string} [jid] - Chat identifier
  * @property {boolean} [isMain] - Whether this is the admin agent
+ * @property {boolean} [sandbox] - Per-agent sandbox override: true forces a
+ *   container, false forces a plain process. Unset = follow config.sandboxMode.
  * @property {VolumeMount[]} [additionalMounts] - Extra volume mounts
  * @property {Record<string, Object>} [mcpServers] - Per-agent MCP servers, merged over config.mcp.servers by name
- * @property {string} [model] - Model override for this agent's agents
+ * @property {string} [model] - Model override for this agent
  */
 
 /**

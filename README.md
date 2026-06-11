@@ -477,8 +477,9 @@ The agent has access to these tools via the jsclaw MCP server:
 | Env Var | Default | Description |
 |---------|---------|-------------|
 | `JSCLAW_CONTAINER_IMAGE` | `jsclaw-agent:latest` | Docker image |
-| `JSCLAW_CONTAINER_RUNTIME` | `docker` | `docker`, `podman`, `container`, or `local` (see below) |
-| `JSCLAW_LOCAL_RUNNER` | — | Runner entrypoint for `local` mode (e.g. agent-micro's `runner.js`) |
+| `JSCLAW_CONTAINER_RUNTIME` | `docker` | Engine for sandboxed runs: `docker`, `podman`, or `container` |
+| `JSCLAW_SANDBOX_MODE` | `auto` | `auto`, `all`, `non-main`, or `off` (see Sandboxing) |
+| `JSCLAW_LOCAL_RUNNER` | — | Runner entrypoint for unsandboxed agents (e.g. agent-micro's `runner.js`) |
 | `JSCLAW_CONTAINER_TIMEOUT` | `1800000` | Idle timeout (ms) |
 | `JSCLAW_MAX_CONCURRENT` | `5` | Max concurrent containers |
 | `JSCLAW_DATA_DIR` | `./data` | IPC data directory |
@@ -491,28 +492,41 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_LOG_LEVEL` | `info` | Log level |
 | `ANTHROPIC_API_KEY` | — | Required for Claude API |
 
-### Local mode — no container engine
+### Sandboxing — openclaw-style, per agent
 
 ```json
 {
-  "containerRuntime": "local",
+  "sandboxMode": "non-main",
   "localRunner": "/path/to/agent-micro/runner.js"
 }
 ```
 
-With `containerRuntime: "local"`, jsclaw spawns the agent runner directly as a
-node child process — no Docker, no Podman, nothing to install. Same stdin/stdout
-contract; the workspace and IPC mounts become `JSCLAW_WORKSPACE` and
-`JSCLAW_IPC_BASE` env vars ([agent-micro](https://github.com/jsclaw/agent-micro)
-reads these natively). Orphan reaping uses pidfiles under `data/local-runners/`.
+`sandboxMode` decides whether agents run in containers or as plain node
+processes:
 
-**⚠ Local mode has NO isolation.** The agent's `bash` and file tools run as
-*you*, with access to everything your user can touch — not just the agent
-folder. Use it for development and trusted workloads. For autonomous agents
-(heartbeats, scheduled tasks, untrusted input), keep the container default:
-the agent folder is the security boundary only when there's a container
-around it. `additionalMounts` are ignored in local mode (everything is
-already reachable).
+| Mode | Behavior |
+|------|----------|
+| `auto` (default) | Sandbox when the container engine responds; plain processes otherwise |
+| `all` | Every agent in a container (nanoclaw posture — safest) |
+| `non-main` | The main agent on the host, every other agent in a container |
+| `off` | Every agent as a plain process (openclaw posture) |
+
+A per-agent `sandbox: true/false` on `AgentConfig` overrides the global mode.
+
+Unsandboxed agents are spawned from `localRunner` (e.g.
+[agent-micro](https://github.com/jsclaw/agent-micro)'s `runner.js`) — same
+stdin/stdout contract, with the workspace and IPC mounts delivered as
+`JSCLAW_WORKSPACE` / `JSCLAW_IPC_BASE` env vars. Orphan reaping covers both
+worlds: `docker ps` for containers, pidfiles under `data/local-runners/` for
+processes.
+
+**⚠ Unsandboxed agents have NO isolation.** Their `bash` and file tools run
+as *you*, with access to everything your user can touch — not just the agent
+folder. The folder is a security boundary only when there's a container
+around it. Keep autonomous agents (heartbeats, scheduled tasks, untrusted
+input) sandboxed; use `non-main` to mix a trusted host-side main agent with
+contained workers. `additionalMounts` are ignored for unsandboxed agents
+(everything is already reachable).
 
 ## Differences from nanoclaw
 

@@ -71,6 +71,11 @@ export function buildOnboardConfig(answers) {
   if (answers.model) config.model = answers.model;
   if (answers.heartbeatModel) config.heartbeatModel = answers.heartbeatModel;
   if (answers.gatewayToken) config.gatewayToken = answers.gatewayToken;
+  if (answers.sandboxMode) config.sandboxMode = answers.sandboxMode;
+  if (answers.localRunner) config.localRunner = answers.localRunner;
+  if (answers.sandboxMode && answers.sandboxMode !== 'all') {
+    notes.push('Unsandboxed agents run as your user with NO isolation — keep autonomous/untrusted agents sandboxed.');
+  }
 
   const baseUrl = answers.baseUrl || preset.baseUrl;
   if (baseUrl) config.providerBaseUrl = baseUrl;
@@ -175,12 +180,35 @@ export async function runOnboard(ctx) {
     const hasDocker = check(`container runtime: ${config.containerRuntime}`, () =>
       execSync(`${config.containerRuntime} --version`, { stdio: 'pipe' }).toString().trim().split('\n')[0]
     );
-    const hasImage = hasDocker && check(`agent image: ${config.containerImage}`, () => {
+    // 1b. Sandbox posture (openclaw-style)
+    console.log('\nAgent sandboxing:');
+    let sandboxMode = 'off';
+    let localRunner = '';
+    if (hasDocker) {
+      console.log('  all      — every agent in a container (safest)');
+      console.log('  non-main — main agent on the host, others sandboxed');
+      console.log('  off      — every agent as a plain process (NO isolation)');
+      sandboxMode = await ask('Sandbox mode (all/non-main/off)', 'all');
+      if (!['all', 'non-main', 'off'].includes(sandboxMode)) sandboxMode = 'all';
+    } else {
+      console.log('  No container engine found — agents will run as plain processes.');
+      console.log('  ⚠ NO isolation: agents act as your user. Trusted workloads only.');
+    }
+    if (sandboxMode !== 'all') {
+      localRunner = await ask('Runner for unsandboxed agents (path to agent-micro runner.js):');
+      if (!localRunner) {
+        console.log('  note: set localRunner in jsclaw.json before unsandboxed agents can run');
+        console.log('        (git clone https://github.com/jsclaw/agent-micro)');
+      }
+    }
+
+    const wantsImage = hasDocker && sandboxMode !== 'off';
+    const hasImage = wantsImage && check(`agent image: ${config.containerImage}`, () => {
       execSync(`${config.containerRuntime} image inspect ${config.containerImage}`, { stdio: 'pipe' });
       return 'built';
     });
 
-    if (hasDocker && !hasImage) {
+    if (wantsImage && !hasImage) {
       const build = await ask('\nBuild the agent image now? (y/n)', 'y');
       if (build.toLowerCase().startsWith('y')) {
         const containerDir = join(PKG_ROOT, 'container');
@@ -206,7 +234,7 @@ export async function runOnboard(ctx) {
     const preset = PROVIDERS[provider];
     if (preset.notes) console.log(`  note: ${preset.notes}`);
 
-    const answers = { provider };
+    const answers = { provider, sandboxMode, localRunner };
     if (provider === 'custom') {
       answers.baseUrl = await ask('Endpoint base URL (Anthropic-compatible):');
     }
