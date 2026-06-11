@@ -68,7 +68,7 @@ function matchesBlocked(hostPath, extraBlocked = []) {
 /**
  * Validate a single mount against the allowlist.
  * @param {import('./types.js').AdditionalMount} mount
- * @param {boolean} isMain - Whether this is the main/admin group
+ * @param {boolean} isMain - Whether this is the main/admin agent
  * @param {import('./types.js').MountAllowlist} allowlist
  * @returns {{ valid: boolean, reason?: string }}
  */
@@ -111,12 +111,12 @@ export function validateMount(mount, isMain, allowlist) {
 /**
  * Validate an array of additional mounts.
  * @param {import('./types.js').AdditionalMount[]} mounts
- * @param {string} groupName
+ * @param {string} agentName
  * @param {boolean} isMain
  * @param {string} [allowlistPath]
  * @returns {{ valid: boolean, errors: string[] }}
  */
-export function validateAdditionalMounts(mounts, groupName, isMain, allowlistPath) {
+export function validateAdditionalMounts(mounts, agentName, isMain, allowlistPath) {
   if (!mounts || mounts.length === 0) {
     return { valid: true, errors: [] };
   }

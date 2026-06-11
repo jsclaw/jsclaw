@@ -1,7 +1,7 @@
 /**
- * Per-group concurrency queue with global container limit.
- * Ensures only one container runs per group, with exponential backoff retry.
- * @module group-queue
+ * Per-agent concurrency queue with global container limit.
+ * Ensures only one container runs per agent, with exponential backoff retry.
+ * @module agent-queue
  */
 
 import { mkdirSync } from 'node:fs';
@@ -20,7 +20,7 @@ const DEFAULT_RETRY_BASE_DELAY = 5000;
  * @property {string} [taskId] - Task identifier
  */
 
-export class GroupQueue {
+export class AgentQueue {
   /** @param {import('./types.js').JsclawConfig} [config] */
   constructor(config) {
     this._config = config || createConfig();
@@ -28,97 +28,97 @@ export class GroupQueue {
     this._maxRetries = this._config.queueMaxRetries ?? DEFAULT_MAX_RETRIES;
     this._retryBaseDelay = this._config.queueRetryBaseDelayMs ?? DEFAULT_RETRY_BASE_DELAY;
 
-    /** @type {Map<string, import('./types.js').GroupState>} */
-    this._groups = new Map();
+    /** @type {Map<string, import('./types.js').AgentState>} */
+    this._agents = new Map();
 
     /** @type {number} */
     this._activeCount = 0;
 
-    /** @type {((groupJid: string) => Promise<boolean>)|null} */
+    /** @type {((agentJid: string) => Promise<boolean>)|null} */
     this._processMessagesFn = null;
   }
 
   /**
-   * Set the function that processes messages for a group.
-   * @param {(groupJid: string) => Promise<boolean>} fn
+   * Set the function that processes messages for an agent.
+   * @param {(agentJid: string) => Promise<boolean>} fn
    */
   setProcessMessagesFn(fn) {
     this._processMessagesFn = fn;
   }
 
   /**
-   * Get or create state for a group.
+   * Get or create state for an agent.
    * @param {string} jid
-   * @returns {import('./types.js').GroupState}
+   * @returns {import('./types.js').AgentState}
    */
-  _getGroup(jid) {
-    if (!this._groups.has(jid)) {
-      this._groups.set(jid, {
+  _getAgent(jid) {
+    if (!this._agents.has(jid)) {
+      this._agents.set(jid, {
         jid,
         process: null,
         containerName: null,
-        groupFolder: null,
+        agentId: null,
         processing: false,
         queue: [],
       });
     }
-    return this._groups.get(jid);
+    return this._agents.get(jid);
   }
 
   /**
-   * Enqueue a message check for a group.
-   * @param {string} groupJid
+   * Enqueue a message check for an agent.
+   * @param {string} agentJid
    * @returns {Promise<boolean>}
    */
-  enqueueMessageCheck(groupJid) {
+  enqueueMessageCheck(agentJid) {
     return new Promise((resolve, reject) => {
-      const group = this._getGroup(groupJid);
-      group.queue.push({ resolve, reject });
+      const agent = this._getAgent(agentJid);
+      agent.queue.push({ resolve, reject });
       this._drain();
     });
   }
 
   /**
    * Enqueue a task with a custom processing function.
-   * @param {string} groupJid
+   * @param {string} agentJid
    * @param {string} taskId
    * @param {() => Promise<boolean>} fn
    * @returns {Promise<boolean>}
    */
-  enqueueTask(groupJid, taskId, fn) {
+  enqueueTask(agentJid, taskId, fn) {
     return new Promise((resolve, reject) => {
-      const group = this._getGroup(groupJid);
+      const agent = this._getAgent(agentJid);
       // Tasks go to the front of the queue (priority)
-      group.queue.unshift({ resolve, reject, fn, taskId });
+      agent.queue.unshift({ resolve, reject, fn, taskId });
       this._drain();
     });
   }
 
   /**
-   * Register an active container process for a group.
-   * @param {string} groupJid
+   * Register an active container process for an agent.
+   * @param {string} agentJid
    * @param {import('node:child_process').ChildProcess} proc
    * @param {string} containerName
-   * @param {string} groupFolder
+   * @param {string} agentId
    */
-  registerProcess(groupJid, proc, containerName, groupFolder) {
-    const group = this._getGroup(groupJid);
-    group.process = proc;
-    group.containerName = containerName;
-    group.groupFolder = groupFolder;
+  registerProcess(agentJid, proc, containerName, agentId) {
+    const agent = this._getAgent(agentJid);
+    agent.process = proc;
+    agent.containerName = containerName;
+    agent.agentId = agentId;
   }
 
   /**
    * Send a message to an active container via IPC.
-   * @param {string} groupJid
+   * @param {string} agentJid
    * @param {string} text
    * @returns {boolean} Whether the message was delivered
    */
-  sendMessage(groupJid, text) {
-    const group = this._getGroup(groupJid);
-    if (!group.process || !group.groupFolder) return false;
+  sendMessage(agentJid, text) {
+    const agent = this._getAgent(agentJid);
+    if (!agent.process || !agent.agentId) return false;
 
-    const inputDir = join(this._config.dataDir, 'ipc', group.groupFolder, 'input');
+    const inputDir = join(this._config.dataDir, 'ipc', agent.agentId, 'input');
     mkdirSync(inputDir, { recursive: true });
     writeIpcFile(inputDir, { text, timestamp: new Date().toISOString() });
     return true;
@@ -126,43 +126,43 @@ export class GroupQueue {
 
   /**
    * Write close sentinel to signal a container to exit.
-   * @param {string} groupJid
+   * @param {string} agentJid
    */
-  closeContainer(groupJid) {
-    const group = this._getGroup(groupJid);
-    if (!group.groupFolder) return;
+  closeContainer(agentJid) {
+    const agent = this._getAgent(agentJid);
+    if (!agent.agentId) return;
 
-    const inputDir = join(this._config.dataDir, 'ipc', group.groupFolder, 'input');
+    const inputDir = join(this._config.dataDir, 'ipc', agent.agentId, 'input');
     writeCloseSentinel(inputDir);
   }
 
   /**
-   * Try to process the next item in any group's queue.
+   * Try to process the next item in any agent's queue.
    * @private
    */
   _drain() {
-    // Fill every free slot; one pass may start several groups.
-    for (const [, group] of this._groups) {
+    // Fill every free slot; one pass may start several agents.
+    for (const [, agent] of this._agents) {
       if (this._activeCount >= this._config.maxConcurrentContainers) return;
-      if (group.processing || group.queue.length === 0) continue;
+      if (agent.processing || agent.queue.length === 0) continue;
 
-      group.processing = true;
+      agent.processing = true;
       this._activeCount++;
 
-      const item = group.queue.shift();
-      this._processItem(group, item);
+      const item = agent.queue.shift();
+      this._processItem(agent, item);
     }
   }
 
   /**
    * Process a single queue item, retrying with exponential backoff.
    * The slot is held for the item's entire lifetime — including retries,
-   * preserving per-group serialization — and released exactly once.
-   * @param {import('./types.js').GroupState} group
+   * preserving per-agent serialization — and released exactly once.
+   * @param {import('./types.js').AgentState} agent
    * @param {QueueItem} item
    * @private
    */
-  async _processItem(group, item) {
+  async _processItem(agent, item) {
     try {
       for (let attempt = 0; ; attempt++) {
         try {
@@ -170,7 +170,7 @@ export class GroupQueue {
           if (item.fn) {
             result = await item.fn();
           } else if (this._processMessagesFn) {
-            result = await this._processMessagesFn(group.jid);
+            result = await this._processMessagesFn(agent.jid);
           } else {
             throw new Error('No processing function configured');
           }
@@ -178,36 +178,36 @@ export class GroupQueue {
           return;
         } catch (err) {
           if (attempt >= this._maxRetries) {
-            this._log.error(`Failed after ${this._maxRetries} retries for group ${group.jid}`, {
+            this._log.error(`Failed after ${this._maxRetries} retries for agent ${agent.jid}`, {
               error: err.message,
             });
             item.reject(err);
             return;
           }
           const delay = this._retryBaseDelay * Math.pow(2, attempt);
-          this._log.warn(`Retrying group ${group.jid} in ${delay}ms (attempt ${attempt + 1})`, {
+          this._log.warn(`Retrying agent ${agent.jid} in ${delay}ms (attempt ${attempt + 1})`, {
             error: err.message,
           });
           await new Promise((r) => setTimeout(r, delay));
         }
       }
     } finally {
-      group.processing = false;
-      group.process = null;
-      group.containerName = null;
+      agent.processing = false;
+      agent.process = null;
+      agent.containerName = null;
       this._activeCount--;
       this._drain();
     }
   }
 
   /**
-   * Check if a group has an active container.
-   * @param {string} groupJid
+   * Check if an agent has an active container.
+   * @param {string} agentJid
    * @returns {boolean}
    */
-  hasActiveContainer(groupJid) {
-    const group = this._groups.get(groupJid);
-    return !!(group?.process);
+  hasActiveContainer(agentJid) {
+    const agent = this._agents.get(agentJid);
+    return !!(agent?.process);
   }
 
   /**
@@ -218,9 +218,9 @@ export class GroupQueue {
     this._log.info(`Shutting down queue, ${this._activeCount} active containers`);
 
     // Signal all containers to close
-    for (const [, group] of this._groups) {
-      if (group.process && group.groupFolder) {
-        this.closeContainer(group.jid);
+    for (const [, agent] of this._agents) {
+      if (agent.process && agent.agentId) {
+        this.closeContainer(agent.jid);
       }
     }
 
@@ -228,10 +228,10 @@ export class GroupQueue {
     await new Promise((resolve) => setTimeout(resolve, gracePeriodMs));
 
     // Force kill remaining
-    for (const [, group] of this._groups) {
-      if (group.process) {
+    for (const [, agent] of this._agents) {
+      if (agent.process) {
         try {
-          group.process.kill('SIGKILL');
+          agent.process.kill('SIGKILL');
         } catch {
           // already dead
         }

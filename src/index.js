@@ -22,7 +22,7 @@ export { startIpcWatcher } from './ipc.js';
 export { writeIpcFile, readIpcFile, drainIpcDir, writeCloseSentinel } from './ipc-utils.js';
 
 // Queue
-export { GroupQueue } from './group-queue.js';
+export { AgentQueue } from './agent-queue.js';
 
 // Scheduling
 export { parseCron, isValidCron, nextCron } from './cron.js';

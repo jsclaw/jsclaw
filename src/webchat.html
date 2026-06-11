@@ -24,7 +24,7 @@
   }
   header .mark { font-family: var(--mono); color: var(--terra); font-weight: 700; }
   header .name { font-weight: 650; }
-  header .group {
+  header .agent {
     margin-left: auto; display: flex; align-items: center; gap: 8px;
     font-size: .82rem; color: var(--muted);
   }
@@ -78,14 +78,14 @@
 <body>
 <header>
   <span class="mark">&gt;_</span><span class="name">jsclaw</span>
-  <div class="group">
+  <div class="agent">
     <span class="dot" id="dot"></span>
     <span class="model" id="model" hidden></span>
-    group <input id="group" value="main" spellcheck="false">
+    agent <input id="agent" value="main" spellcheck="false">
   </div>
 </header>
 <main><div class="feed" id="feed">
-  <div class="msg sys">Messages run a containerized Claude agent for the chosen group.</div>
+  <div class="msg sys">Messages run a containerized Claude agent for the chosen agent.</div>
 </div></main>
 <footer><div class="bar">
   <textarea id="input" placeholder="Message your agent…" rows="1"></textarea>
@@ -98,7 +98,7 @@
   const sendBtn = document.getElementById('send');
   const dot = document.getElementById('dot');
   const modelEl = document.getElementById('model');
-  const groupEl = document.getElementById('group');
+  const agentEl = document.getElementById('agent');
 
   const token = new URLSearchParams(location.search).get('token') || '';
   const wsUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://')
@@ -220,7 +220,7 @@
     ws.send(JSON.stringify({
       type: 'req', id,
       method: 'chat.send',
-      params: { groupFolder: groupEl.value.trim() || 'main', message: text },
+      params: { agentId: agentEl.value.trim() || 'main', message: text },
     }));
   }
 

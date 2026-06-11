@@ -41,7 +41,7 @@ function connect(port, token) {
 }
 
 function fakeRunAgent(outputs = [{ status: 'success', result: 'final answer' }]) {
-  return async (groupFolder, message, onOutput) => {
+  return async (agentId, message, onOutput) => {
     for (const output of outputs) {
       if (onOutput) onOutput(output);
       await sleep(5);
@@ -101,7 +101,7 @@ test('chat.send streams agent.output events then resolves', async () => {
   });
   const client = await connect(gateway.port);
   try {
-    const res = await client.req('chat.send', { groupFolder: 'main', message: 'hi' });
+    const res = await client.req('chat.send', { agentId: 'main', message: 'hi' });
     assert.equal(res.ok, true);
     assert.equal(res.payload.result, 'final answer');
     assert.ok(res.payload.runId);
@@ -110,7 +110,7 @@ test('chat.send streams agent.output events then resolves', async () => {
     assert.equal(outputs.length, 2);
     assert.equal(outputs[0].payload.result, 'thinking out loud');
     assert.equal(outputs[0].payload.runId, res.payload.runId);
-    assert.equal(outputs[0].payload.groupFolder, 'main');
+    assert.equal(outputs[0].payload.agentId, 'main');
   } finally {
     client.close();
     await gateway.stop();
@@ -121,7 +121,7 @@ test('chat.send validates params', async () => {
   const { gateway } = await startTestGateway();
   const client = await connect(gateway.port);
   try {
-    const res = await client.req('chat.send', { groupFolder: 'main' });
+    const res = await client.req('chat.send', { agentId: 'main' });
     assert.equal(res.ok, false);
     assert.match(res.error.message, /requires/);
   } finally {
@@ -134,7 +134,7 @@ test('tasks methods drive a real TaskStore', async () => {
   const config = tempConfig();
   const store = new TaskStore(config);
   const task = store.createTask({
-    groupFolder: 'g', chatJid: 'c', prompt: 'p',
+    agentId: 'g', chatJid: 'c', prompt: 'p',
     scheduleType: 'interval', scheduleValue: '60000',
   });
 
@@ -203,7 +203,7 @@ test('large payloads exercise extended frame lengths both ways', async () => {
   });
   const client = await connect(gateway.port);
   try {
-    const res = await client.req('chat.send', { groupFolder: 'main', message: big });
+    const res = await client.req('chat.send', { agentId: 'main', message: big });
     assert.equal(res.ok, true);
     assert.equal(res.payload.result.length, big.length);
   } finally {
@@ -217,7 +217,7 @@ test('broadcast reaches every connected client', async () => {
   const a = await connect(gateway.port);
   const b = await connect(gateway.port);
   try {
-    gateway.broadcast('heartbeat.alert', { groupFolder: 'main', result: 'alert!' });
+    gateway.broadcast('heartbeat.alert', { agentId: 'main', result: 'alert!' });
     await sleep(20);
     for (const client of [a, b]) {
       const hit = client.events.find((e) => e.event === 'heartbeat.alert');
@@ -261,11 +261,11 @@ test('memory methods work end to end', async () => {
   const gateway = await startGateway({ runAgent: fakeRunAgent() }, config, { port: 0 });
   const client = await connect(gateway.port);
   try {
-    let res = await client.req('memory.list', { groupFolder: 'main' });
+    let res = await client.req('memory.list', { agentId: 'main' });
     assert.equal(res.payload.length, 1);
     assert.equal(res.payload[0].name, 'preferences.md');
 
-    res = await client.req('memory.search', { groupFolder: 'main', query: 'cream' });
+    res = await client.req('memory.search', { agentId: 'main', query: 'cream' });
     assert.equal(res.payload.length, 1);
     assert.match(res.payload[0].text, /cream backgrounds/);
   } finally {

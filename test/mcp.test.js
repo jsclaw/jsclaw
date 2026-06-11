@@ -7,7 +7,7 @@ import { resolveMcpServers } from '../src/container-runner.js';
 import { createConfig } from '../src/config.js';
 import { tempConfig, nullLogger } from './helpers.js';
 
-test('merges global and group servers; group wins by name', () => {
+test('merges global and agent servers; agent wins by name', () => {
   const config = tempConfig();
   config.mcp = {
     servers: {
@@ -15,14 +15,14 @@ test('merges global and group servers; group wins by name', () => {
       weather: { command: 'global-weather' },
     },
   };
-  const group = {
+  const agent = {
     name: 'g', folder: 'g',
-    mcpServers: { weather: { command: 'group-weather' } },
+    mcpServers: { weather: { command: 'agent-weather' } },
   };
 
-  const resolved = resolveMcpServers(group, config);
+  const resolved = resolveMcpServers(agent, config);
   assert.deepEqual(Object.keys(resolved).sort(), ['github', 'weather']);
-  assert.equal(resolved.weather.command, 'group-weather', 'group entry overrides global');
+  assert.equal(resolved.weather.command, 'agent-weather', 'agent entry overrides global');
 });
 
 test("reserved 'jsclaw' name is stripped with a warning", () => {

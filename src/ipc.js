@@ -26,24 +26,24 @@ export function startIpcWatcher(deps, config) {
   mkdirSync(ipcBase, { recursive: true });
 
   async function poll() {
-    let groupDirs;
+    let agentDirs;
     try {
-      groupDirs = readdirSync(ipcBase, { withFileTypes: true })
+      agentDirs = readdirSync(ipcBase, { withFileTypes: true })
         .filter((d) => d.isDirectory())
         .map((d) => d.name);
     } catch {
       return;
     }
 
-    const groups = deps.getRegisteredGroups();
+    const agents = deps.getRegisteredAgents();
 
-    for (const groupFolder of groupDirs) {
-      const isMain = Object.values(groups).some(
-        (g) => g.folder === groupFolder && g.folder === 'main'
+    for (const agentId of agentDirs) {
+      const isMain = Object.values(agents).some(
+        (g) => g.folder === agentId && g.folder === 'main'
       );
 
       // Process outbound messages (container -> host)
-      const messagesDir = join(ipcBase, groupFolder, 'messages');
+      const messagesDir = join(ipcBase, agentId, 'messages');
       const messages = drainIpcDir(messagesDir);
 
       for (const { data, filename } of messages) {
@@ -53,23 +53,23 @@ export function startIpcWatcher(deps, config) {
           const sender = data.sender;
 
           if (!text) {
-            log.warn(`IPC message missing text`, { filename, groupFolder });
+            log.warn(`IPC message missing text`, { filename, agentId });
             continue;
           }
 
-          // Authorization: non-main groups can only send to their own chat
+          // Authorization: non-main agents can only send to their own chat
           if (!isMain && targetJid) {
-            const group = Object.values(groups).find((g) => g.folder === groupFolder);
-            if (group && targetJid !== group.jid) {
-              log.warn(`Non-main group attempted cross-group message`, {
-                groupFolder,
+            const agent = Object.values(agents).find((g) => g.folder === agentId);
+            if (agent && targetJid !== agent.jid) {
+              log.warn(`Non-main agent attempted cross-agent message`, {
+                agentId,
                 targetJid,
               });
               continue;
             }
           }
 
-          const resolvedJid = targetJid || Object.values(groups).find((g) => g.folder === groupFolder)?.jid;
+          const resolvedJid = targetJid || Object.values(agents).find((g) => g.folder === agentId)?.jid;
           if (resolvedJid) {
             await deps.sendMessage(resolvedJid, text, sender);
           }
@@ -77,30 +77,30 @@ export function startIpcWatcher(deps, config) {
           log.error(`Failed to process IPC message`, {
             error: err.message,
             filename,
-            groupFolder,
+            agentId,
           });
           moveToErrors(messagesDir, filename, data, config);
         }
       }
 
       // Process task operations (container -> host)
-      const tasksDir = join(ipcBase, groupFolder, 'tasks');
+      const tasksDir = join(ipcBase, agentId, 'tasks');
       const tasks = drainIpcDir(tasksDir);
 
       for (const { data, filename } of tasks) {
         try {
           const type = data.type;
           if (!type) {
-            log.warn(`IPC task missing type`, { filename, groupFolder });
+            log.warn(`IPC task missing type`, { filename, agentId });
             continue;
           }
 
-          await deps.onTask(type, data.data || data, groupFolder, isMain);
+          await deps.onTask(type, data.data || data, agentId, isMain);
         } catch (err) {
           log.error(`Failed to process IPC task`, {
             error: err.message,
             filename,
-            groupFolder,
+            agentId,
           });
           moveToErrors(tasksDir, filename, data, config);
         }

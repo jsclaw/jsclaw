@@ -14,7 +14,7 @@ import { createConfig } from './config.js';
  * @typedef {Object} WebhookEndpoint
  * @property {string} path - URL path under /webhook/ (e.g. '/deploy-alert')
  * @property {string} message - Message template; {{body}} and {{body.x.y}} are substituted
- * @property {string} [groupFolder] - Group whose agent should handle the message
+ * @property {string} [agentId] - Agent whose agent should handle the message
  * @property {string} [chatJid] - Chat to attribute the message to
  */
 
@@ -165,7 +165,7 @@ export function startWebhookIngress(options, config) {
  * @property {string} event - Event name to deliver, or '*' for all
  * @property {string} url - Destination URL
  * @property {Record<string, string>} [headers] - Extra headers; ${ENV_VAR} is expanded
- * @property {{ channel?: string, groupFolder?: string }} [filter] - Only deliver when payload fields match
+ * @property {{ channel?: string, agentId?: string }} [filter] - Only deliver when payload fields match
  */
 
 /**

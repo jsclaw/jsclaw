@@ -21,7 +21,7 @@
 import { Bot } from 'grammy';
 import {
   runContainerAgent,
-  GroupQueue,
+  AgentQueue,
   startIpcWatcher,
   startTaskScheduler,
   createConfig,
@@ -38,7 +38,7 @@ if (!TOKEN) {
 
 const config = createConfig();
 const bot = new Bot(TOKEN);
-const queue = new GroupQueue(config);
+const queue = new AgentQueue(config);
 const store = new TaskStore(config);
 
 // --- Channel: adapt Telegram to the jsclaw Channel interface ---
@@ -90,7 +90,7 @@ async function processMessage(chatId, text, reply) {
     { name: folder, folder },
     {
       prompt: text,
-      groupFolder: folder,
+      agentId: folder,
       chatJid: String(chatId),
       isMain: true,
       sessionId,
@@ -141,7 +141,7 @@ function splitMessage(text, maxLen) {
 startIpcWatcher({
   sendMessage: channels.sendMessage,
   onTask: createTaskIpcHandler(store, { logger: config.logger }),
-  getRegisteredGroups: () => ({}),
+  getRegisteredAgents: () => ({}),
 }, config);
 
 // --- Scheduler: execute tasks the agent scheduled for itself ---

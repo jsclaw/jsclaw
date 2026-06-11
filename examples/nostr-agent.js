@@ -16,11 +16,11 @@
 
 import {
   createNostrChannel, generatePrivateKey, bech32Encode,
-  runContainerAgent, GroupQueue, createConfig,
+  runContainerAgent, AgentQueue, createConfig,
 } from 'jsclaw';
 
 const config = createConfig();
-const queue = new GroupQueue(config);
+const queue = new AgentQueue(config);
 const sessions = new Map();
 
 const privateKey = process.env.NOSTR_PRIVATE_KEY || generatePrivateKey();
@@ -49,7 +49,7 @@ const channel = createNostrChannel({
         { name: folder, folder },
         {
           prompt: text,
-          groupFolder: folder,
+          agentId: folder,
           chatJid: jid,
           isMain: true,
           sessionId: sessions.get(jid),

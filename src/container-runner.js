@@ -16,31 +16,31 @@ const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
 
 /**
  * Build the volume mount arguments for the container runtime.
- * @param {import('./types.js').GroupConfig} group
+ * @param {import('./types.js').AgentConfig} agent
  * @param {import('./types.js').JsclawConfig} config
  * @returns {string[]} CLI arguments for volume mounts
  */
-export function buildVolumeMounts(group, config) {
+export function buildVolumeMounts(agent, config) {
   const args = [];
-  const groupDir = join(config.groupsDir, group.folder);
-  const ipcDir = join(config.dataDir, 'ipc', group.folder);
+  const agentDir = join(config.agentsDir, agent.folder);
+  const ipcDir = join(config.dataDir, 'ipc', agent.folder);
 
   // Ensure directories exist
-  for (const dir of [groupDir, join(ipcDir, 'messages'), join(ipcDir, 'tasks'), join(ipcDir, 'input')]) {
+  for (const dir of [agentDir, join(ipcDir, 'messages'), join(ipcDir, 'tasks'), join(ipcDir, 'input')]) {
     mkdirSync(dir, { recursive: true });
   }
 
-  // Group workspace (read-write)
-  args.push('-v', `${groupDir}:/workspace/group`);
+  // Agent workspace (read-write)
+  args.push('-v', `${agentDir}:/workspace/agent`);
 
   // IPC directories
   args.push('-v', `${ipcDir}/messages:/workspace/ipc/messages`);
   args.push('-v', `${ipcDir}/tasks:/workspace/ipc/tasks`);
   args.push('-v', `${ipcDir}/input:/workspace/ipc/input`);
 
-  // Additional mounts from group config
-  if (group.additionalMounts) {
-    for (const mount of group.additionalMounts) {
+  // Additional mounts from agent config
+  if (agent.additionalMounts) {
+    for (const mount of agent.additionalMounts) {
       if (mount.readOnly) {
         args.push('--mount', `type=bind,source=${mount.hostPath},target=${mount.containerPath},readonly`);
       } else {
@@ -80,18 +80,18 @@ export function buildContainerArgs(mountArgs, containerName, config, envVars = {
 
 /**
  * Resolve the MCP servers to hand to a container: global config.mcp.servers
- * merged with the group's mcpServers (group wins by name). The 'jsclaw'
+ * merged with the agent's mcpServers (agent wins by name). The 'jsclaw'
  * name is reserved for the built-in IPC server and is stripped.
  *
  * Passed to the container via stdin (ContainerInput), never argv or env —
  * MCP entries carry credentials and argv leaks into `ps`.
  *
- * @param {import('./types.js').GroupConfig} group
+ * @param {import('./types.js').AgentConfig} agent
  * @param {import('./types.js').JsclawConfig} config
  * @returns {Record<string, Object>|undefined} undefined when nothing is configured
  */
-export function resolveMcpServers(group, config) {
-  const merged = { ...(config.mcp?.servers || {}), ...(group.mcpServers || {}) };
+export function resolveMcpServers(agent, config) {
+  const merged = { ...(config.mcp?.servers || {}), ...(agent.mcpServers || {}) };
   if ('jsclaw' in merged) {
     config.logger.warn(`MCP server name 'jsclaw' is reserved for the built-in server — ignoring`);
     delete merged.jsclaw;
@@ -132,22 +132,22 @@ export function parseContainerOutput(buffer) {
 /**
  * Run a Claude agent inside a container.
  *
- * @param {import('./types.js').GroupConfig} group - Group configuration
+ * @param {import('./types.js').AgentConfig} agent - Agent configuration
  * @param {import('./types.js').ContainerInput} input - Agent input
  * @param {(proc: import('node:child_process').ChildProcess, containerName: string) => void} [onProcess] - Called when container starts
  * @param {(output: import('./types.js').ContainerOutput) => Promise<void>} [onOutput] - Called for each streaming output
  * @param {import('./types.js').JsclawConfig} [config] - Configuration
  * @returns {Promise<import('./types.js').ContainerOutput>}
  */
-export async function runContainerAgent(group, input, onProcess, onOutput, config) {
+export async function runContainerAgent(agent, input, onProcess, onOutput, config) {
   config = config || createConfig();
   const log = config.logger;
-  const containerName = `jsclaw-${group.folder}-${Date.now()}`;
+  const containerName = `jsclaw-${agent.folder}-${Date.now()}`;
 
-  const mcpServers = resolveMcpServers(group, config);
+  const mcpServers = resolveMcpServers(agent, config);
   const providerEnv = resolveProviderEnv(config);
-  // Model precedence: explicit input > group > config default
-  const model = input.model ?? group.model ?? config.model;
+  // Model precedence: explicit input > agent > config default
+  const model = input.model ?? agent.model ?? config.model;
   input = {
     ...input,
     ...(mcpServers && { mcpServers }),
@@ -155,15 +155,15 @@ export async function runContainerAgent(group, input, onProcess, onOutput, confi
     ...(model && { model }),
   };
 
-  const mountArgs = buildVolumeMounts(group, config);
+  const mountArgs = buildVolumeMounts(agent, config);
   const envVars = {
     JSCLAW_CHAT_JID: input.chatJid,
-    JSCLAW_GROUP_FOLDER: input.groupFolder,
+    JSCLAW_AGENT_ID: input.agentId,
     JSCLAW_IS_MAIN: String(input.isMain),
   };
   const args = buildContainerArgs(mountArgs, containerName, config, envVars);
 
-  log.info(`Spawning container: ${containerName}`, { group: group.folder });
+  log.info(`Spawning container: ${containerName}`, { agent: agent.folder });
 
   return new Promise((resolve, reject) => {
     const proc = spawn(config.containerRuntime, args, {
@@ -288,7 +288,7 @@ const execFileAsync = promisify(execFile);
  * Call this at startup, before spawning any agents: if the previous
  * host process died uncleanly, its containers keep running unsupervised
  * — burning tokens — and the restarted host would otherwise spawn a
- * duplicate agent over the same group folder and IPC directory.
+ * duplicate agent over the same agent folder and IPC directory.
  *
  * @param {import('./types.js').JsclawConfig} [config]
  * @param {{ prefix?: string }} [opts] - Container-name prefix to sweep (default 'jsclaw-')
@@ -327,12 +327,12 @@ export async function reapOrphanContainers(config, opts = {}) {
 
 /**
  * Write a tasks snapshot file for the agent to read.
- * @param {string} groupFolder
+ * @param {string} agentId
  * @param {Object[]} tasks
  * @param {import('./types.js').JsclawConfig} config
  */
-export function writeTasksSnapshot(groupFolder, tasks, config) {
-  const dir = join(config.groupsDir, groupFolder);
+export function writeTasksSnapshot(agentId, tasks, config) {
+  const dir = join(config.agentsDir, agentId);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'current_tasks.json'), JSON.stringify(tasks, null, 2));
 }

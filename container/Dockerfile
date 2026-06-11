@@ -15,7 +15,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN npm install -g @anthropic-ai/claude-code
 
 # Create workspace structure
-RUN mkdir -p /workspace/group /workspace/ipc/messages /workspace/ipc/tasks /workspace/ipc/input /app
+RUN mkdir -p /workspace/agent /workspace/ipc/messages /workspace/ipc/tasks /workspace/ipc/input /app
 
 # Copy agent runner and MCP server
 COPY agent-runner.js /app/agent-runner.js
@@ -36,6 +36,6 @@ RUN cat > package.json <<'PKG' && npm install --production
 }
 PKG
 
-WORKDIR /workspace/group
+WORKDIR /workspace/agent
 
 ENTRYPOINT ["node", "/app/agent-runner.js"]

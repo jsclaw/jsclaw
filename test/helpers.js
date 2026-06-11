@@ -16,7 +16,7 @@ export function tempConfig(overrides = {}) {
   const root = mkdtempSync(join(tmpdir(), 'jsclaw-test-'));
   return createConfig({
     dataDir: join(root, 'data'),
-    groupsDir: join(root, 'groups'),
+    agentsDir: join(root, 'agents'),
     skillsDir: join(root, 'skills'),
     configPath: join(root, 'jsclaw.json'), // avoid picking up a real ./jsclaw.json
     logger: nullLogger,
