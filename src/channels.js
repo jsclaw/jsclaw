@@ -24,6 +24,40 @@ import { createNostrChannel } from './nostr.js';
  * { connect?(), disconnect?(), sendMessage(jid, text) }.
  */
 export const CHANNEL_FACTORIES = {
+  telegram: async (block, ctx) => {
+    if (!block.botToken) throw new Error('channels.telegram: botToken is required (use a ${ENV_VAR} reference)');
+    let Bot;
+    try {
+      ({ Bot } = await import('grammy'));
+    } catch {
+      throw new Error('channels.telegram requires grammy — npm install grammy');
+    }
+    const bot = new Bot(block.botToken, block.botInfo ? { botInfo: block.botInfo } : undefined);
+    const allow = new Set(ctx.allowFrom.map(String));
+    bot.on('message:text', (tg) => {
+      const chatId = String(tg.chat.id);
+      const username = tg.from?.username ? `@${tg.from.username}` : null;
+      if (!ctx.open && !allow.has(chatId) && !(username && allow.has(username))) {
+        ctx.logger?.info?.(`telegram: ignored message from ${username || chatId} (not in allowFrom)`);
+        return;
+      }
+      ctx.onMessage(chatId, tg.message.text);
+    });
+    let username = null;
+    return {
+      name: 'telegram',
+      _bot: bot,
+      get username() { return username; },
+      async connect() {
+        const me = await bot.api.getMe();
+        username = `@${me.username}`;
+        bot.start(); // long-polls until stop(); intentionally not awaited
+      },
+      async disconnect() { await bot.stop(); },
+      async sendMessage(jid, text) { await bot.api.sendMessage(jid, text); },
+    };
+  },
+
   nostr: (block, ctx) => {
     if (!block.privateKey) throw new Error('channels.nostr: privateKey is required (use a ${ENV_VAR} reference)');
     if (block.allowed) throw new Error(`channels.nostr: 'allowed' was renamed to 'allowFrom' (openclaw alignment)`);

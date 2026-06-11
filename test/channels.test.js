@@ -139,3 +139,31 @@ test('nostr factory maps registry ctx onto createNostrChannel and rejects legacy
   assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, allowed: ['x'] }, {}), /renamed to 'allowFrom'/);
   assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, agentId: 'main' }, {}), /route with bindings/);
 });
+
+test('telegram factory filters by allowFrom and maps messages', async () => {
+  const { CHANNEL_FACTORIES } = await import('../src/channels.js');
+  const received = [];
+  // botInfo provided so grammy can handle updates offline (no getMe call)
+  const botInfo = { id: 1, is_bot: true, first_name: 'T', username: 'test_bot', can_join_groups: true, can_read_all_group_messages: false, supports_inline_queries: false, can_connect_to_business: false, has_main_web_app: false };
+  const ch = await CHANNEL_FACTORIES.telegram(
+    { botToken: '1:test', botInfo },
+    { allowFrom: ['42', '@melvin'], open: false, logger: nullLogger, onMessage: (peer, text) => received.push({ peer, text }) },
+  );
+  assert.equal(ch.name, 'telegram');
+
+  const update = (id, chatId, text, username) => ({
+    update_id: id,
+    message: { message_id: id, date: 1, chat: { id: chatId, type: 'private' }, from: { id: chatId, is_bot: false, first_name: 'x', ...(username ? { username } : {}) }, text },
+  });
+
+  await ch._bot.handleUpdate(update(1, 42, 'allowed by chat id'));
+  await ch._bot.handleUpdate(update(2, 99, 'allowed by username', 'melvin'));
+  await ch._bot.handleUpdate(update(3, 77, 'not allowed'));
+
+  assert.deepEqual(received, [
+    { peer: '42', text: 'allowed by chat id' },
+    { peer: '99', text: 'allowed by username' },
+  ]);
+
+  await assert.rejects(() => CHANNEL_FACTORIES.telegram({}, {}), /botToken is required/);
+});
