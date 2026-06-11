@@ -298,7 +298,10 @@ async function main() {
     fullPrompt += '\n\n[Pending messages]\n' + pendingMessages.join('\n');
   }
 
-  const systemPrompt = buildSystemPrompt();
+  let systemPrompt = buildSystemPrompt();
+  if (input.skillsIndex) {
+    systemPrompt = systemPrompt ? `${systemPrompt}\n\n${input.skillsIndex}` : input.skillsIndex;
+  }
   const allowedTools = process.env.JSCLAW_ALLOWED_TOOLS
     ? JSON.parse(process.env.JSCLAW_ALLOWED_TOOLS)
     : undefined;

@@ -113,3 +113,39 @@ test('orphan reaping kills stale local runners and cleans pidfiles', async () =>
   assert.throws(() => process.kill(orphan.pid, 0), /ESRCH/); // process is gone
   assert.deepEqual(readdirSync(pidDir).sort(), ['other-3.pid']);
 });
+
+test('skills reach the run: triggered bodies in the prompt, index in the input', async () => {
+  const config = localConfig();
+  mkdirSync(join(config.skillsDir, 'deploy-helper'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'deploy-helper', 'SKILL.md'),
+    '---\nname: deploy-helper\ndescription: helps with deploys\ntrigger: "deploy"\n---\nALWAYS RUN THE SMOKE TEST');
+  mkdirSync(join(config.skillsDir, 'gh-issues'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'gh-issues', 'SKILL.md'),
+    '---\nname: gh-issues\ndescription: fetch github issues\n---\nLONG BODY NOT FOR THE INDEX');
+
+  const output = await runContainerAgent(AGENT, { ...INPUT, prompt: 'please deploy the app' }, null, null, config);
+  const echo = JSON.parse(output.result);
+
+  // Triggered skill body prepended to the prompt
+  assert.match(echo.prompt, /ALWAYS RUN THE SMOKE TEST/);
+  assert.match(echo.prompt, /please deploy the app/);
+  // Description-driven skill in the index with a readable (host) path, body excluded
+  assert.match(echo.skillsIndex, /gh-issues.*fetch github issues/);
+  assert.match(echo.skillsIndex, new RegExp(config.skillsDir.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.ok(!echo.skillsIndex.includes('LONG BODY'), 'index has no bodies');
+});
+
+test('sandboxed runs mount the skills dir read-only with rewritten index paths', async () => {
+  const { buildVolumeMounts } = await import('../src/container-runner.js');
+  const { resolveSkillsForRun } = await import('../src/container-runner.js');
+  const config = localConfig();
+  mkdirSync(join(config.skillsDir, 'gh-issues'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'gh-issues', 'SKILL.md'),
+    '---\nname: gh-issues\ndescription: fetch github issues\n---\nBODY');
+
+  const mounts = buildVolumeMounts(AGENT, config);
+  assert.ok(mounts.includes(`${config.skillsDir}:/workspace/skills:ro`), 'read-only skills mount present');
+
+  const { skillsIndex } = resolveSkillsForRun(config, 'hello', false /* sandboxed */);
+  assert.match(skillsIndex, /\/workspace\/skills\/gh-issues\/SKILL\.md/);
+});

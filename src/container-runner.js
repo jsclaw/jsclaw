@@ -11,6 +11,35 @@ import { mkdirSync, writeFileSync, readdirSync, readFileSync, rmSync, existsSync
 import { join } from 'node:path';
 import { createConfig } from './config.js';
 import { resolveProviderEnv } from './providers.js';
+import { loadSkills, matchSkills, buildSkillContext, buildSkillsIndex } from './skills.js';
+import { relative } from 'node:path';
+
+/** Container-side mount point for the read-only skills volume. */
+const SKILLS_MOUNT = '/workspace/skills';
+
+/**
+ * Resolve the skills payload for one agent run: triggered skill bodies
+ * to prepend to the prompt, and the description-driven index for the
+ * system prompt — with paths the agent can actually read (host paths
+ * in local mode, the read-only mount inside containers).
+ * @param {import('./types.js').JsclawConfig} config
+ * @param {string} prompt
+ * @param {boolean} isLocal
+ * @returns {{ promptPrefix: string, skillsIndex: string }}
+ */
+export function resolveSkillsForRun(config, prompt, isLocal) {
+  const skills = loadSkills(config);
+  if (skills.length === 0) return { promptPrefix: '', skillsIndex: '' };
+
+  const triggered = matchSkills(skills, { text: prompt || '' });
+  const promptPrefix = buildSkillContext(triggered);
+
+  const visible = isLocal ? skills : skills.map((s) => ({
+    ...s,
+    path: s.path ? `${SKILLS_MOUNT}/${relative(config.skillsDir, s.path)}` : s.path,
+  }));
+  return { promptPrefix, skillsIndex: buildSkillsIndex(visible) };
+}
 
 const OUTPUT_START_MARKER = '---JSCLAW_OUTPUT_START---';
 const OUTPUT_END_MARKER = '---JSCLAW_OUTPUT_END---';
@@ -100,6 +129,11 @@ export function buildVolumeMounts(agent, config) {
 
   // Agent workspace (read-write)
   args.push('-v', `${agentDir}:/workspace/agent`);
+
+  // Skills (read-only) — agents read SKILL.md bodies on demand
+  if (existsSync(config.skillsDir)) {
+    args.push('-v', `${config.skillsDir}:${SKILLS_MOUNT}:ro`);
+  }
 
   // IPC directories
   args.push('-v', `${ipcDir}/messages:/workspace/ipc/messages`);
@@ -224,6 +258,17 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
   };
 
   const isLocal = !(await resolveSandbox(agent, input, config));
+
+  // Skills: triggered bodies ride the prompt, the index rides the input
+  const { promptPrefix, skillsIndex } = resolveSkillsForRun(config, input.prompt, isLocal);
+  if (promptPrefix || skillsIndex) {
+    input = {
+      ...input,
+      ...(promptPrefix && { prompt: `${promptPrefix}\n\n${input.prompt}` }),
+      ...(skillsIndex && { skillsIndex }),
+    };
+  }
+
   const envVars = {
     JSCLAW_CHAT_JID: input.chatJid,
     JSCLAW_AGENT_ID: input.agentId,

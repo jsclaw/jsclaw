@@ -17,6 +17,7 @@ process.stdin.on('end', () => {
       ipcBase: process.env.JSCLAW_IPC_BASE || null,
       agentId: process.env.JSCLAW_AGENT_ID || null,
       isMain: process.env.JSCLAW_IS_MAIN || null,
+      skillsIndex: input.skillsIndex || null,
       hasProviderEnv: Boolean(input.providerEnv),
     }),
     newSessionId: 'mock-session',

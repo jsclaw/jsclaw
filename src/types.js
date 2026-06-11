@@ -14,6 +14,9 @@
  * @property {boolean} [isScheduledTask] - Whether this is a scheduled task invocation
  * @property {Record<string, Object>} [mcpServers] - MCP servers injected by the host (set automatically by runContainerAgent)
  * @property {string} [model] - Model for this run (input > agent > config precedence)
+ * @property {string} [skillsIndex] - Description-driven skills index the
+ *   runner appends to the system prompt (paths readable from inside the
+ *   run: host paths in local mode, the read-only mount in containers)
  * @property {Record<string, string>} [providerEnv] - Provider credentials/endpoint injected by the host via stdin
  */
 
