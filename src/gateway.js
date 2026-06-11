@@ -86,8 +86,10 @@ export function startGateway(deps, config, options = {}) {
     // pre-auth state and must authenticate with a connect frame
     // (auth.password or auth.token) before any other method.
     if (method === 'connect') {
-      const provided = params?.auth?.token ?? params?.auth?.password;
-      if (token && !tokenMatches(provided, token)) {
+      // openclaw clients send every credential they hold (stale stored
+      // token alongside the typed password) — accept if ANY matches.
+      const creds = Object.values(params?.auth || {}).filter((v) => typeof v === 'string');
+      if (token && !creds.some((c) => tokenMatches(c, token))) {
         log.warn('Gateway connect rejected: bad credentials');
         setTimeout(() => conn.close?.(), 50);
         throw new Error('unauthorized');
