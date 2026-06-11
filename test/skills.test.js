@@ -4,7 +4,7 @@ import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   parseFrontmatter, parseSkill, loadSkills, installSkill, removeSkill,
-  skillMatches, matchSkills, buildSkillContext,
+  skillMatches, matchSkills, buildSkillContext, buildSkillsIndex,
 } from '../src/skills.js';
 import { tempConfig } from './helpers.js';
 
@@ -91,9 +91,29 @@ test('attachment and always-on triggers', () => {
   const always = parseSkill('---\nname: a\ndescription: d\ntrigger: "*"\n---\nb');
   assert.ok(skillMatches(always, { text: 'anything' }));
 
-  // trigger defaults to always-on
+  // No trigger = description-driven (openclaw/Anthropic model): never
+  // auto-injected, surfaced via the skills index instead
   const noTrigger = parseSkill('---\nname: n\ndescription: d\n---\nb');
-  assert.equal(noTrigger.trigger, '*');
+  assert.equal(noTrigger.trigger, undefined);
+  assert.ok(!skillMatches(noTrigger, { text: 'anything' }));
+});
+
+test('buildSkillsIndex lists description-driven skills without their bodies', () => {
+  const dd1 = parseSkill('---\nname: gh-issues\ndescription: Fetch GitHub issues\n---\n' + 'SECRET-BODY '.repeat(500), '/skills/gh-issues/SKILL.md');
+  const dd2 = parseSkill('---\nname: canvas\ndescription: Draw things\n---\nBODY2');
+  const triggered = parseSkill('---\nname: t\ndescription: d\ntrigger: "deploy"\n---\nTBODY');
+
+  const index = buildSkillsIndex([dd1, dd2, triggered]);
+  assert.match(index, /gh-issues.*Fetch GitHub issues/);
+  assert.match(index, /read \/skills\/gh-issues\/SKILL\.md/);
+  assert.match(index, /canvas/);
+  assert.ok(!index.includes('SECRET-BODY'), 'bodies stay out of the index');
+  assert.ok(!index.includes('name: t\n'.trim()) || !index.includes('TBODY'), 'triggered skills are not in the index');
+  // The token-bomb regression: many skills cost lines, not bodies
+  const many = Array.from({ length: 58 }, (_, i) => parseSkill(`---\nname: s${i}\ndescription: d${i}\n---\n` + 'X'.repeat(5000)));
+  assert.ok(buildSkillsIndex(many).length < 5000, 'index of 58 skills stays compact');
+
+  assert.equal(buildSkillsIndex([triggered]), '');
 });
 
 test('load/install/remove lifecycle', () => {

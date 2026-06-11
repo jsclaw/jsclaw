@@ -153,7 +153,10 @@ export function parseSkill(content, path) {
     name: String(data.name),
     description: String(data.description),
     version: data.version != null ? String(data.version) : undefined,
-    trigger: data.trigger != null ? String(data.trigger) : '*',
+    // No trigger = description-driven (openclaw/Anthropic model): the
+    // skill is surfaced by name+description in an index, body on demand.
+    // An explicit trigger keeps jsclaw's host-side matching as an extension.
+    trigger: data.trigger != null ? String(data.trigger) : undefined,
     tools: Array.isArray(data.tools) ? data.tools.map(String) : undefined,
     config: typeof data.config === 'object' && data.config ? data.config : undefined,
     body,
@@ -263,6 +266,7 @@ export function removeSkill(name, config) {
  */
 export function skillMatches(skill, message) {
   const trigger = skill.trigger;
+  if (trigger == null) return false; // description-driven: index, not injection
   if (trigger === '*') return true;
 
   // attachment:<type>
@@ -303,7 +307,7 @@ export function matchSkills(skills, message) {
 }
 
 /**
- * Build the prompt section for triggered skills.
+ * Build the prompt section for triggered skills (full bodies).
  * @param {Skill[]} skills
  * @returns {string} Prompt section, or '' if none
  */
@@ -311,4 +315,20 @@ export function buildSkillContext(skills) {
   if (skills.length === 0) return '';
   const sections = skills.map((s) => `## Skill: ${s.name}\n${s.body}`);
   return `# Active Skills\n\nThe following skill instructions apply to this message:\n\n${sections.join('\n\n')}`;
+}
+
+/**
+ * Build the compact skills index for description-driven skills —
+ * name + description only, bodies stay on disk until the agent reads
+ * them. This is how openclaw/Anthropic-format skills surface (they
+ * have no trigger field); 58 such skills cost ~description-lines of
+ * context, not 58 bodies.
+ * @param {Skill[]} skills
+ * @returns {string} Prompt section, or '' if none
+ */
+export function buildSkillsIndex(skills) {
+  const indexed = skills.filter((s) => s.trigger == null);
+  if (indexed.length === 0) return '';
+  const lines = indexed.map((s) => `- **${s.name}**: ${s.description}${s.path ? ` (read ${s.path} for instructions)` : ''}`);
+  return `# Skills\n\nThe following skills are available. When one matches the task, read its SKILL.md for instructions before proceeding:\n\n${lines.join('\n')}`;
 }
