@@ -22,6 +22,8 @@ import { acceptKey, attachWebSocket } from './ws.js';
 import { createConfig } from './config.js';
 import { listMemoryFiles, searchMemory } from './memory.js';
 import { handleCommand, listCommands } from './commands.js';
+import { loadSkills } from './skills.js';
+import { createMcpHandler, toolJson, toolText, toolError, rpcError, RPC_ERRORS } from './mcp.js';
 import { computeNextRun } from './task-store.js';
 
 const VERSION = JSON.parse(
@@ -250,10 +252,110 @@ export function startGateway(deps, config, options = {}) {
     }
   }
 
+  // --- MCP server (#73): openclaw's bridge vocabulary over JSS's
+  // stateless Streamable HTTP transport. Pure delegation to dispatch.
+  const mcpConn = { authed: true, sendFrame: () => {}, close: () => {} };
+  const mcpHandler = createMcpHandler({
+    serverInfo: { name: 'jsclaw', version: VERSION },
+    tools: {
+      conversations_list: {
+        description: 'List conversations (sessions). Each row has key, agentId, sessionId, label, model, updatedAt.',
+        inputSchema: { type: 'object', properties: { agent_id: { type: 'string' } } },
+        handler: async (args) => toolJson(await dispatch('sessions.list', { agentId: args.agent_id }, mcpConn)),
+      },
+      messages_send: {
+        description: 'Send a message into a conversation and return the agent reply. session_key names the conversation; agent_id (default main) is used for new conversations.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            session_key: { type: 'string' },
+            message: { type: 'string' },
+            agent_id: { type: 'string' },
+          },
+          required: ['session_key', 'message'],
+        },
+        handler: async (args) => {
+          const result = await dispatch('chat.send', {
+            sessionKey: args.session_key,
+            ...(args.agent_id && { agentId: args.agent_id }),
+            message: args.message,
+          }, mcpConn);
+          if (result.status === 'error') return toolError(result.error || 'agent error');
+          return toolText(result.result ?? '');
+        },
+      },
+      messages_read: {
+        description: 'Read recent messages from a conversation (most recent transcript).',
+        inputSchema: {
+          type: 'object',
+          properties: { session_key: { type: 'string' }, limit: { type: 'number' } },
+          required: ['session_key'],
+        },
+        handler: async (args) => toolJson(await dispatch('chat.history', { sessionKey: args.session_key, limit: args.limit }, mcpConn)),
+      },
+      agents_list: {
+        description: 'List agents on this gateway.',
+        inputSchema: { type: 'object', properties: {} },
+        handler: async () => toolJson(await dispatch('agents.list', {}, mcpConn)),
+      },
+      skills_list: {
+        description: 'List installed skills (name, description, how they surface).',
+        inputSchema: { type: 'object', properties: {} },
+        handler: async () => toolJson(loadSkills(config).map(({ name, description, trigger, userInvocable }) => ({
+          name, description, surfacing: trigger ? `trigger:${trigger}` : 'description-driven', userInvocable: Boolean(userInvocable),
+        }))),
+      },
+    },
+  });
+
+  function mcpAuthorized(req, url) {
+    if (!token) return true;
+    const header = req.headers.authorization || '';
+    const bearer = header.startsWith('Bearer ') ? header.slice(7) : null;
+    return tokenMatches(bearer, token) || tokenMatches(url.searchParams.get('token'), token);
+  }
+
   // --- HTTP server (webchat + upgrade) ---
 
   const server = createServer((req, res) => {
     const path = req.url?.split('?')[0];
+    if (path === '/mcp' && req.method === 'POST') {
+      const url = new URL(req.url, 'http://localhost');
+      if (!mcpAuthorized(req, url)) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(rpcError(null, RPC_ERRORS.INVALID_REQUEST, 'unauthorized: Bearer token required')));
+        return;
+      }
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk;
+        if (body.length > 1024 * 1024) req.destroy();
+      });
+      req.on('end', async () => {
+        let msg;
+        try {
+          msg = JSON.parse(body);
+        } catch {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(rpcError(null, RPC_ERRORS.PARSE_ERROR, 'invalid JSON')));
+          return;
+        }
+        try {
+          const response = await mcpHandler(msg);
+          if (response === null) {
+            res.writeHead(202);
+            res.end();
+            return;
+          }
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(response));
+        } catch (err) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(rpcError(msg?.id ?? null, RPC_ERRORS.INTERNAL_ERROR, err.message)));
+        }
+      });
+      return;
+    }
     if (path === '/' || path === '/chat') {
       if (existsSync(WEBCHAT_PATH)) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
