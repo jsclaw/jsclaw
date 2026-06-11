@@ -16,7 +16,8 @@ jobs:
         with:
           node-version: 22
 
-      # No `npm install` — jsclaw has zero dependencies, runtime and dev.
+      - name: Install (one dependency: grammy)
+        run: npm ci
 
       - name: Lint (syntax check every shipped file)
         run: npm run lint
