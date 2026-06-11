@@ -47,6 +47,7 @@ function tokenMatches(provided, expected) {
  * @property {() => Promise<void>} [triggerHeartbeat] - Enables heartbeat.trigger
  * @property {() => string[]} [getAgents] - Agent folders for status (defaults to agentsDir listing)
  * @property {import('./sessions.js').SessionStore} [sessions] - Enables session continuity + sessions.* methods
+ * @property {import('./plugins.js').PluginRegistrations} [plugins] - Plugin-contributed gateway methods and MCP tools
  */
 
 /**
@@ -247,8 +248,11 @@ export function startGateway(deps, config, options = {}) {
           config
         );
 
-      default:
+      default: {
+        const pluginMethod = deps.plugins?.gatewayMethods?.[method];
+        if (pluginMethod) return pluginMethod(params, { config });
         throw new Error(`unknown method: ${method}`);
+      }
     }
 
     function requireStore() {
@@ -263,9 +267,23 @@ export function startGateway(deps, config, options = {}) {
   // --- MCP server (#73): openclaw's bridge vocabulary over JSS's
   // stateless Streamable HTTP transport. Pure delegation to dispatch.
   const mcpConn = { authed: true, sendFrame: () => {}, close: () => {} };
+  // Plugin MCP tools: handlers may return strings (wrapped as text) or
+  // full MCP content objects.
+  const pluginMcpTools = Object.fromEntries(
+    Object.entries(deps.plugins?.mcpTools || {}).map(([name, t]) => [name, {
+      description: t.description || name,
+      inputSchema: t.inputSchema || { type: 'object', properties: {} },
+      handler: async (args) => {
+        const out = await t.handler(args, { config });
+        return typeof out === 'string' ? toolText(out) : out;
+      },
+    }])
+  );
+
   const mcpHandler = createMcpHandler({
     serverInfo: { name: 'jsclaw', version: VERSION },
     tools: {
+      ...pluginMcpTools,
       conversations_list: {
         description: 'List conversations (sessions). Each row has key, agentId, sessionId, label, model, updatedAt.',
         inputSchema: { type: 'object', properties: { agent_id: { type: 'string' } } },
