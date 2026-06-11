@@ -15,6 +15,7 @@
  */
 
 import { resolveBinding } from './bindings.js';
+import { createNostrChannel } from './nostr.js';
 
 /**
  * Built-in channel factories, keyed by config block name. A factory is
@@ -22,7 +23,21 @@ import { resolveBinding } from './bindings.js';
  * open, logger, config } and the returned Channel implements
  * { connect?(), disconnect?(), sendMessage(jid, text) }.
  */
-export const CHANNEL_FACTORIES = {};
+export const CHANNEL_FACTORIES = {
+  nostr: (block, ctx) => {
+    if (!block.privateKey) throw new Error('channels.nostr: privateKey is required (use a ${ENV_VAR} reference)');
+    if (block.allowed) throw new Error(`channels.nostr: 'allowed' was renamed to 'allowFrom' (openclaw alignment)`);
+    if (block.agentId) throw new Error(`channels.nostr: 'agentId' was removed — route with bindings: [{ match: { channel: 'nostr' }, agentId: '...' }]`);
+    return createNostrChannel({
+      privateKey: block.privateKey,
+      relays: block.relays || ['wss://relay.damus.io', 'wss://nos.lol'],
+      allowedPubkeys: ctx.allowFrom,
+      open: ctx.open,
+      logger: ctx.logger,
+      onMessage: ctx.onMessage,
+    });
+  },
+};
 
 /**
  * Validate the universal fields of a channel block.

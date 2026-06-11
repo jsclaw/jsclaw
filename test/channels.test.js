@@ -122,3 +122,20 @@ test('agent failures apologize instead of going silent', async () => {
   assert.equal(state.sent.length, 1);
   assert.match(state.sent[0].text, /went wrong/);
 });
+
+test('nostr factory maps registry ctx onto createNostrChannel and rejects legacy fields', async () => {
+  const { CHANNEL_FACTORIES } = await import('../src/channels.js');
+  const { generatePrivateKey } = await import('../src/nostr.js');
+  const key = generatePrivateKey();
+
+  const ch = CHANNEL_FACTORIES.nostr(
+    { privateKey: key, relays: ['wss://example.invalid'] },
+    { allowFrom: [], open: true, logger: nullLogger, onMessage: () => {} },
+  );
+  assert.equal(ch.name, 'nostr');
+  assert.match(ch.npub, /^npub1/);
+
+  assert.throws(() => CHANNEL_FACTORIES.nostr({}, {}), /privateKey is required/);
+  assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, allowed: ['x'] }, {}), /renamed to 'allowFrom'/);
+  assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, agentId: 'main' }, {}), /route with bindings/);
+});
