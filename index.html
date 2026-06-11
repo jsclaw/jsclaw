@@ -336,7 +336,7 @@
         <div class="feature-card">
           <div class="feature-icon">&#x2699;</div>
           <h3>Group Queue</h3>
-          <p>Per-group concurrency with configurable global limits. Exponential backoff retry. One container per group, up to N in parallel.</p>
+          <p>Per-agent concurrency with configurable global limits. Exponential backoff retry. One container per agent, up to N in parallel.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#x1F527;</div>
@@ -414,12 +414,12 @@ console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.sta
  │  ipc.js                 │◀──files── │  <span style="color:#059669">send_message,</span>          │
  │  <span style="color:#059669">Polls IPC directories</span>  │──files──▶ │  <span style="color:#059669">schedule_task, ...</span>      │
  │                         │           │                         │
- │  group-queue.js         │           │  /workspace/group/      │
+ │  agent-queue.js         │           │  /workspace/agent/      │
  │  <span style="color:#059669">Concurrency control</span>    │           │  <span style="color:#059669">Isolated filesystem</span>    │
  │                         │           │                         │
  └─────────────────────────┘           └─────────────────────────┘
          │                                       │
-    <span style="color:#2563eb">data/ipc/{group}/</span>                     <span style="color:#2563eb">/workspace/ipc/</span>
+    <span style="color:#2563eb">data/ipc/{agent}/</span>                     <span style="color:#2563eb">/workspace/ipc/</span>
     messages/ tasks/ input/              messages/ tasks/ input/
 </pre>
       </div>
@@ -445,12 +445,12 @@ console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.sta
               <td>Create configuration with defaults, env vars, and overrides</td>
             </tr>
             <tr>
-              <td><code>runContainerAgent(group, input, ...)</code></td>
+              <td><code>runContainerAgent(agent, input, ...)</code></td>
               <td>Spawn a container, run a Claude agent, stream results</td>
             </tr>
             <tr>
               <td><code>GroupQueue</code></td>
-              <td>Per-group concurrency queue with global container limit</td>
+              <td>Per-agent concurrency queue with global container limit</td>
             </tr>
             <tr>
               <td><code>startIpcWatcher(deps, config?)</code></td>
@@ -469,8 +469,8 @@ console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.sta
               <td>Validate volume mounts against a security allowlist</td>
             </tr>
             <tr>
-              <td><code>buildVolumeMounts(group, config)</code></td>
-              <td>Build Docker volume mount arguments for a group</td>
+              <td><code>buildVolumeMounts(agent, config)</code></td>
+              <td>Build Docker volume mount arguments for an agent</td>
             </tr>
             <tr>
               <td><code>parseContainerOutput(buffer)</code></td>
@@ -502,7 +502,7 @@ console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.sta
           <tbody>
             <tr>
               <td><code>send_message</code></td>
-              <td>Send a message to the user or group immediately</td>
+              <td>Send a message to the user or agent immediately</td>
             </tr>
             <tr>
               <td><code>schedule_task</code></td>
@@ -510,7 +510,7 @@ console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.sta
             </tr>
             <tr>
               <td><code>list_tasks</code></td>
-              <td>List all scheduled tasks for the current group</td>
+              <td>List all scheduled tasks for the current agent</td>
             </tr>
             <tr>
               <td><code>pause_task</code></td>
@@ -572,7 +572,7 @@ console.<span class="fn">log</span>(<span class="str">'Done:'</span>, result.sta
             </tr>
             <tr>
               <td><code>JSCLAW_GROUPS_DIR</code></td>
-              <td>./groups</td>
+              <td>./agents</td>
               <td>Group workspace directory</td>
             </tr>
             <tr>
