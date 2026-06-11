@@ -1,0 +1,6 @@
+{
+  "id": "ping",
+  "version": "0.0.1",
+  "entry": "index.js",
+  "description": "Demo plugin: /ping command, ping.echo gateway method, ping MCP tool"
+}

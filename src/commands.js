@@ -13,6 +13,19 @@ import { loadSkills, buildSkillContext } from './skills.js';
  * Built-in command specs — openclaw's shape: key, description,
  * textAliases (first alias is canonical), acceptsArgs, scope, category.
  */
+/** Plugin-contributed commands (loadPlugins registers them at boot). */
+const PLUGIN_COMMANDS = [];
+
+/** @param {Array} commands - specs with { key, textAliases, handler, ... } */
+export function registerPluginCommands(commands) {
+  PLUGIN_COMMANDS.push(...commands);
+}
+
+/** @internal Tests only. */
+export function _clearPluginCommands() {
+  PLUGIN_COMMANDS.length = 0;
+}
+
 export const BUILTIN_COMMANDS = [
   { key: 'reset', description: 'Clear this conversation and start fresh', textAliases: ['/reset', '/new'], acceptsArgs: false, scope: 'both', category: 'session' },
   { key: 'status', description: 'Show gateway, agent, and model status', textAliases: ['/status'], acceptsArgs: false, scope: 'both', category: 'info' },
@@ -47,6 +60,17 @@ export function listCommands(config) {
     scope: c.scope,
     acceptsArgs: c.acceptsArgs,
   }));
+  for (const c of PLUGIN_COMMANDS) {
+    entries.push({
+      name: c.textAliases?.[0] || `/${c.key}`,
+      textAliases: c.textAliases || [`/${c.key}`],
+      description: c.description || '',
+      category: c.category || 'tools',
+      source: c.source || 'plugin',
+      scope: c.scope || 'both',
+      acceptsArgs: Boolean(c.acceptsArgs),
+    });
+  }
   for (const skill of loadSkills(config)) {
     if (!skill.userInvocable) continue;
     entries.push({
@@ -108,6 +132,12 @@ export async function handleCommand(text, ctx) {
         return { reply: listCommands(ctx.config).map((c) => `${c.name} — ${c.description}`).join('\n') };
       }
     }
+  }
+
+  // Plugin commands run host-side like built-ins
+  const plugin = PLUGIN_COMMANDS.find((c) => (c.textAliases || [`/${c.key}`]).includes(alias));
+  if (plugin) {
+    return await plugin.handler(parsed.args, ctx);
   }
 
   // Skill bridge: /<name> force-invokes a user-invocable skill

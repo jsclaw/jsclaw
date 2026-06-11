@@ -31,6 +31,9 @@ import { runContainerAgent, reapOrphanContainers } from '../src/container-runner
 import { startHeartbeat, HEARTBEAT_OK } from '../src/heartbeat.js';
 import { startGateway } from '../src/gateway.js';
 import { SessionStore } from '../src/sessions.js';
+import { loadPlugins } from '../src/plugins.js';
+import { registerPluginCommands } from '../src/commands.js';
+import { CHANNEL_FACTORIES } from '../src/channels.js';
 import { startChannels } from '../src/channels.js';
 import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
@@ -394,6 +397,10 @@ async function cmdGateway(config, opts) {
   // 2. Core wiring: store, agent runner, queue-less direct runs
   const store = new TaskStore(config);
   const sessions = new SessionStore(config);
+
+  // 2b. Plugins (#64): register into the existing seams before anything boots
+  const { registrations: plugins, plugins: loadedPlugins } = await loadPlugins(config, { logger: config.logger });
+  registerPluginCommands(plugins.commands);
   const agents = () => listAgents(config);
 
   const runAgent = (agentId, prompt, onOutput, extra = {}) =>
@@ -410,6 +417,7 @@ async function cmdGateway(config, opts) {
     runAgent,
     store,
     sessions,
+    plugins,
     getAgents: agents,
     triggerHeartbeat: () => heartbeat.triggerNow(),
   }, config, { port, token });
@@ -435,7 +443,10 @@ async function cmdGateway(config, opts) {
   // 6. Channels from config (#44) — registry-built, bindings-routed
   let channels = { channels: [], stop: async () => {} };
   try {
-    channels = await startChannels({ config, runAgent, logger: config.logger, sessions });
+    channels = await startChannels({
+      config, runAgent, logger: config.logger, sessions,
+      registry: { ...CHANNEL_FACTORIES, ...plugins.channels },
+    });
   } catch (err) {
     fail(err.message, 2);
   }
@@ -461,6 +472,7 @@ async function cmdGateway(config, opts) {
   }
   console.log(`  token:   ${token}${config.gatewayToken ? ' (pinned)' : ' (generated; set JSCLAW_GATEWAY_TOKEN or gatewayToken in jsclaw.json to pin)'}`);
   if (config.model) console.log(`  model:   ${config.model}${config.heartbeatModel ? ` (heartbeat: ${config.heartbeatModel})` : ''}`);
+  if (loadedPlugins.length) console.log(`  plugins: ${loadedPlugins.map((p) => p.id).join(', ')}`);
   console.log('\nCtrl-C to stop.');
 
   await new Promise((resolve) => {
