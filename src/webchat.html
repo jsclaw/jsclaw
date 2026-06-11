@@ -35,6 +35,11 @@
   }
   header .dot { width: 8px; height: 8px; border-radius: 50%; background: #C9C5B8; }
   header .dot.on { background: var(--sage); }
+  header .model {
+    font-family: var(--mono); font-size: .78rem; color: var(--muted);
+    background: var(--cream-2); border: 1px solid var(--line); border-radius: 7px;
+    padding: 4px 9px;
+  }
   main { flex: 1; overflow-y: auto; padding: 24px 0; }
   .feed { max-width: 760px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 14px; }
   .msg { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: .93rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
@@ -75,6 +80,7 @@
   <span class="mark">&gt;_</span><span class="name">jsclaw</span>
   <div class="group">
     <span class="dot" id="dot"></span>
+    <span class="model" id="model" hidden></span>
     group <input id="group" value="main" spellcheck="false">
   </div>
 </header>
@@ -91,6 +97,7 @@
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('send');
   const dot = document.getElementById('dot');
+  const modelEl = document.getElementById('model');
   const groupEl = document.getElementById('group');
 
   const token = new URLSearchParams(location.search).get('token') || '';
@@ -169,7 +176,14 @@
 
   function connect() {
     ws = new WebSocket(wsUrl);
-    ws.onopen = () => { dot.classList.add('on'); sendBtn.disabled = false; };
+    ws.onopen = () => {
+      dot.classList.add('on'); sendBtn.disabled = false;
+      const id = nextId++;
+      pending.set(id, (payload) => {
+        if (payload?.model) { modelEl.textContent = payload.model; modelEl.hidden = false; }
+      });
+      ws.send(JSON.stringify({ type: 'req', id, method: 'status' }));
+    };
     ws.onclose = () => {
       dot.classList.remove('on'); sendBtn.disabled = true; setTyping(false);
       setTimeout(connect, 2000);
@@ -190,7 +204,7 @@
         pending.delete(frame.id);
         setTyping(false);
         if (!frame.ok) add('err', frame.error?.message || 'request failed');
-        done();
+        done(frame.payload);
       }
     };
   }
