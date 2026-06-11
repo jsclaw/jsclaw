@@ -153,6 +153,7 @@ export function parseSkill(content, path) {
     name: String(data.name),
     description: String(data.description),
     version: data.version != null ? String(data.version) : undefined,
+    userInvocable: data['user-invocable'] === true || data['user-invocable'] === 'true',
     // No trigger = description-driven (openclaw/Anthropic model): the
     // skill is surfaced by name+description in an index, body on demand.
     // An explicit trigger keeps jsclaw's host-side matching as an extension.

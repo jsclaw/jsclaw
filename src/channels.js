@@ -16,6 +16,7 @@
 
 import { resolveBinding } from './bindings.js';
 import { createNostrChannel } from './nostr.js';
+import { handleCommand } from './commands.js';
 
 /**
  * Built-in channel factories, keyed by config block name. A factory is
@@ -123,9 +124,22 @@ export async function startChannels({ config, runAgent, registry = CHANNEL_FACTO
       logger: log,
       open: dmPolicy === 'open',
       allowFrom: allowFrom.filter((v) => v !== '*'),
-      onMessage: (peer, text) => {
+      onMessage: async (peer, text) => {
         const agentId = resolveBinding(config.bindings, { channel: name, peer: String(peer) }, 'main');
         const key = `${name}:${peer}`;
+
+        // Slash commands are host-handled before the agent sees anything
+        const command = await handleCommand(text, {
+          config,
+          agentId,
+          reset: () => { sessions.delete(key); },
+        }).catch(() => null);
+        if (command?.reply) {
+          channel.sendMessage(peer, command.reply).catch(() => {});
+          return;
+        }
+        if (command?.prompt) text = command.prompt;
+
         runAgent(agentId, text, async (output) => {
           if (output.result) await channel.sendMessage(peer, output.result);
           if (output.newSessionId) sessions.set(key, output.newSessionId);
