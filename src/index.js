@@ -13,6 +13,7 @@ export {
   buildContainerArgs,
   parseContainerOutput,
   reapOrphanContainers,
+  resolveMcpServers,
   writeTasksSnapshot,
 } from './container-runner.js';
 

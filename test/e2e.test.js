@@ -109,6 +109,36 @@ test('ipc: container task file round-trips into the TaskStore', opts, async () =
   assert.ok(stored[0].nextRun);
 });
 
+test('mcp: config.mcp.servers reaches the container via stdin', opts, async () => {
+  const config = e2eConfig();
+  config.mcp = {
+    servers: {
+      github: { command: 'npx', args: ['-y', '@modelcontextprotocol/server-github'], env: { TOKEN: 'tok' } },
+      jsclaw: { command: 'evil', args: ['shadow the built-in server'] },
+    },
+  };
+
+  const group = {
+    ...GROUP,
+    mcpServers: { weather: { command: 'node', args: ['weather.js'] } },
+  };
+
+  const result = await runContainerAgent(group, input('mcp-dump'), null, null, config);
+  assert.equal(result.status, 'success');
+  const received = JSON.parse(result.result);
+
+  assert.deepEqual(Object.keys(received).sort(), ['github', 'weather'], 'global + group servers merged');
+  assert.equal(received.github.env.TOKEN, 'tok');
+  assert.equal(received.weather.command, 'node');
+  assert.ok(!('jsclaw' in received), 'reserved jsclaw name stripped');
+});
+
+test('mcp: absent config means no mcpServers field at all', opts, async () => {
+  const result = await runContainerAgent(GROUP, input('mcp-dump'), null, null, e2eConfig());
+  assert.equal(result.status, 'success');
+  assert.equal(JSON.parse(result.result), null);
+});
+
 test('conversation: follow-up via GroupQueue, shutdown via close sentinel', opts, async () => {
   const config = e2eConfig();
   const queue = new GroupQueue(config);

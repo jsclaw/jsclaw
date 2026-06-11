@@ -18,6 +18,7 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Identity Files** — `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` loaded into the system prompt, openclaw-style
 - **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
 - **Nostr** — Built-in decentralized channel: encrypted DMs (NIP-04) with zero-dep BIP340 Schnorr, verified against the official Bitcoin test vectors
+- **MCP Passthrough** — Wire any of the 32,000+ MCP servers into your agents via openclaw's `mcp.servers` config shape
 - **Memory** — Per-group markdown memory (`memory/preferences.md`, ...) loaded into context; agents read/write it with plain fs tools
 - **Skills** — openclaw's SKILL.md format: YAML frontmatter, keyword/regex/attachment triggers, prompt injection
 - **Multi-Agent Bindings** — Route messages to agents by channel/peer/account, most-specific-wins
@@ -330,6 +331,26 @@ const emit = createWebhookEmitter([
 
 await emit('agent.task.completed', { taskId: 't1', groupFolder: 'main' });
 ```
+
+### 11½. MCP servers (plug into the MCP ecosystem)
+
+Declare MCP servers in `jsclaw.json` — openclaw's `mcp.servers` shape — and every agent container gets their tools:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "github": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github"],
+        "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
+      }
+    }
+  }
+}
+```
+
+`${ENV_VAR}` references expand at load time, so secrets never live in the file. Per-group overrides via `group.mcpServers` (merged by name, group wins). The configs travel to the container over **stdin** — never argv or env flags, which leak into `ps`. The `jsclaw` server name is reserved for the built-in IPC tools and can't be shadowed.
 
 ### 12. Config file
 

@@ -198,20 +198,28 @@ async function runQuery(prompt, options = {}) {
     sessionId,
     systemPrompt,
     allowedTools,
+    extraMcpServers,
   } = options;
 
   let resultText = null;
   let newSessionId = null;
 
+  // Each passthrough server is allowed at the server level (all its tools),
+  // unless the host pinned an explicit allowlist via JSCLAW_ALLOWED_TOOLS.
+  const effectiveTools = allowedTools
+    || [...DEFAULT_ALLOWED_TOOLS, ...Object.keys(extraMcpServers || {}).map((name) => `mcp__${name}`)];
+
   const queryOptions = {
     prompt,
     options: {
       cwd: WORKSPACE_DIR,
-      allowedTools: allowedTools || DEFAULT_ALLOWED_TOOLS,
+      allowedTools: effectiveTools,
       permissionMode: 'bypassPermissions',
       ...(sessionId && { sessionId }),
       ...(systemPrompt && { systemPrompt }),
       mcpServers: {
+        ...(extraMcpServers || {}),
+        // Built-in server last: the reserved name can never be shadowed
         jsclaw: {
           command: 'node',
           args: [join(import.meta.dirname || '/app', 'mcp-server.js')],
@@ -254,6 +262,7 @@ async function main() {
     groupFolder,
     isMain,
     isScheduledTask,
+    mcpServers: extraMcpServers,
   } = input;
 
   // Build initial prompt
@@ -282,6 +291,7 @@ async function main() {
         sessionId: currentSessionId,
         systemPrompt,
         allowedTools,
+        extraMcpServers,
       });
 
       if (newSessionId) currentSessionId = newSessionId;

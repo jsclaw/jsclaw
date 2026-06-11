@@ -9,6 +9,7 @@
  *   read:<file>        → output the contents of /workspace/group/<file>
  *   ipc-message:<text> → write a message IPC file, then output ok
  *   ipc-task           → write a schedule_task IPC file, then output ok
+ *   mcp-dump           → output input.mcpServers as JSON (passthrough check)
  *   converse           → output "ready", then echo each follow-up from
  *                        /workspace/ipc/input as its own output until _close
  *   fail               → exit 1 without emitting any output
@@ -81,6 +82,11 @@ async function main() {
 
   if (prompt.startsWith('echo:')) {
     writeOutput({ status: 'success', result: prompt.slice(5), newSessionId: 'mock-session-1' });
+    return;
+  }
+
+  if (prompt === 'mcp-dump') {
+    writeOutput({ status: 'success', result: JSON.stringify(input.mcpServers ?? null) });
     return;
   }
 

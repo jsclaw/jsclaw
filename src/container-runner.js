@@ -82,6 +82,27 @@ export function buildContainerArgs(mountArgs, containerName, config, envVars = {
 }
 
 /**
+ * Resolve the MCP servers to hand to a container: global config.mcp.servers
+ * merged with the group's mcpServers (group wins by name). The 'jsclaw'
+ * name is reserved for the built-in IPC server and is stripped.
+ *
+ * Passed to the container via stdin (ContainerInput), never argv or env —
+ * MCP entries carry credentials and argv leaks into `ps`.
+ *
+ * @param {import('./types.js').GroupConfig} group
+ * @param {import('./types.js').JsclawConfig} config
+ * @returns {Record<string, Object>|undefined} undefined when nothing is configured
+ */
+export function resolveMcpServers(group, config) {
+  const merged = { ...(config.mcp?.servers || {}), ...(group.mcpServers || {}) };
+  if ('jsclaw' in merged) {
+    config.logger.warn(`MCP server name 'jsclaw' is reserved for the built-in server — ignoring`);
+    delete merged.jsclaw;
+  }
+  return Object.keys(merged).length > 0 ? merged : undefined;
+}
+
+/**
  * Parse sentinel-delimited output from container stdout.
  * @param {string} buffer - Accumulated stdout text
  * @returns {{ outputs: import('./types.js').ContainerOutput[], remaining: string }}
@@ -125,6 +146,11 @@ export async function runContainerAgent(group, input, onProcess, onOutput, confi
   config = config || createConfig();
   const log = config.logger;
   const containerName = `jsclaw-${group.folder}-${Date.now()}`;
+
+  const mcpServers = resolveMcpServers(group, config);
+  if (mcpServers) {
+    input = { ...input, mcpServers };
+  }
 
   const mountArgs = buildVolumeMounts(group, config);
   const envVars = {
