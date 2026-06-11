@@ -420,3 +420,60 @@ test('chat.send threads session continuity and honors per-session model', async 
   client.close();
   await gateway.stop();
 });
+
+// --- MCP server (#73) ---
+
+test('POST /mcp serves the openclaw-vocabulary bridge over streamable HTTP', async () => {
+  const { SessionStore } = await import('../src/sessions.js');
+  const config = tempConfig();
+  const gateway = await startGateway({
+    runAgent: fakeRunAgent(),
+    sessions: new SessionStore(config),
+  }, config, { port: 0, token: 'secret' });
+  const base = `http://127.0.0.1:${gateway.port}/mcp`;
+  const rpc = (body, auth = 'Bearer secret') => fetch(base, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...(auth && { authorization: auth }) },
+    body: JSON.stringify(body),
+  });
+
+  // auth required
+  const denied = await rpc({ jsonrpc: '2.0', id: 1, method: 'ping' }, null);
+  assert.equal(denied.status, 401);
+
+  // initialize
+  const init = await (await rpc({ jsonrpc: '2.0', id: 1, method: 'initialize', params: {} })).json();
+  assert.equal(init.result.protocolVersion, '2025-03-26');
+  assert.equal(init.result.serverInfo.name, 'jsclaw');
+
+  // notifications get 202 no body
+  const note = await rpc({ jsonrpc: '2.0', method: 'notifications/initialized' });
+  assert.equal(note.status, 202);
+
+  // tools/list has the bridge vocabulary
+  const list = await (await rpc({ jsonrpc: '2.0', id: 2, method: 'tools/list' })).json();
+  const names = list.result.tools.map((t) => t.name);
+  for (const expected of ['conversations_list', 'messages_send', 'messages_read', 'agents_list', 'skills_list']) {
+    assert.ok(names.includes(expected), `${expected} present`);
+  }
+
+  // messages_send round-trips through chat.send and threads the session
+  const send = await (await rpc({ jsonrpc: '2.0', id: 3, method: 'tools/call', params: {
+    name: 'messages_send', arguments: { session_key: 'mcp-test', message: 'hello' },
+  } })).json();
+  assert.equal(send.result.isError, false);
+  assert.equal(send.result.content[0].text, 'final answer');
+
+  const convos = await (await rpc({ jsonrpc: '2.0', id: 4, method: 'tools/call', params: {
+    name: 'conversations_list', arguments: {},
+  } })).json();
+  assert.match(convos.result.content[0].text, /mcp-test/);
+
+  // unknown tool and unknown method
+  const badTool = await (await rpc({ jsonrpc: '2.0', id: 5, method: 'tools/call', params: { name: 'nope' } })).json();
+  assert.equal(badTool.error.code, -32602);
+  const badMethod = await (await rpc({ jsonrpc: '2.0', id: 6, method: 'resources/list' })).json();
+  assert.equal(badMethod.error.code, -32601);
+
+  await gateway.stop();
+});
