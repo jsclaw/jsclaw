@@ -1,0 +1,9 @@
+.git/
+.github/
+data/
+groups/
+store/
+*.log
+.DS_Store
+.env
+.claude/

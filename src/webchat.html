@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jsclaw — chat</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --cream: #FAF9F5; --cream-2: #F0EEE6; --ink: #161614; --muted: #63615C;
+    --line: #E5E2D9; --terra: #C15F3C; --terra-soft: #F3E5DD;
+    --code-bg: #24231F; --code-text: #ECEAE2; --sage: #7D9B76;
+    --mono: 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  body {
+    font-family: var(--sans); background: var(--cream); color: var(--ink);
+    height: 100vh; display: flex; flex-direction: column;
+  }
+  header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px; border-bottom: 1px solid var(--line);
+    background: rgba(250,249,245,.9);
+  }
+  header .mark { font-family: var(--mono); color: var(--terra); font-weight: 700; }
+  header .name { font-weight: 650; }
+  header .group {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+    font-size: .82rem; color: var(--muted);
+  }
+  header input {
+    font-family: var(--mono); font-size: .82rem; color: var(--ink);
+    background: var(--cream-2); border: 1px solid var(--line); border-radius: 7px;
+    padding: 5px 10px; width: 110px; outline: none;
+  }
+  header .dot { width: 8px; height: 8px; border-radius: 50%; background: #C9C5B8; }
+  header .dot.on { background: var(--sage); }
+  main { flex: 1; overflow-y: auto; padding: 24px 0; }
+  .feed { max-width: 760px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 14px; }
+  .msg { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: .93rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+  .msg.user { align-self: flex-end; background: var(--code-bg); color: var(--code-text); border-bottom-right-radius: 4px; }
+  .msg.agent { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .msg.sys { align-self: center; background: none; color: var(--muted); font-size: .78rem; }
+  .msg.err { align-self: flex-start; background: var(--terra-soft); color: #8a3b22; border-bottom-left-radius: 4px; }
+  .msg.md { white-space: normal; }
+  .msg.md p, .msg.md ul, .msg.md ol, .msg.md pre { margin: 0 0 8px; }
+  .msg.md > :last-child { margin-bottom: 0; }
+  .msg.md ul, .msg.md ol { padding-left: 20px; }
+  .msg.md h1, .msg.md h2, .msg.md h3, .msg.md h4 { font-size: 1rem; margin: 0 0 6px; }
+  .msg.md code { font-family: var(--mono); font-size: .85em; background: var(--cream-2); border-radius: 4px; padding: 1px 5px; }
+  .msg.md pre { background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 10px 12px; overflow-x: auto; }
+  .msg.md pre code { background: none; padding: 0; color: inherit; }
+  .msg.md a { color: var(--terra); }
+  .typing { align-self: flex-start; color: var(--muted); font-size: .82rem; padding: 0 4px; }
+  .typing .d { display: inline-block; animation: blink 1.2s infinite; }
+  .typing .d:nth-child(2) { animation-delay: .2s; } .typing .d:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100% { opacity: .25 } 40% { opacity: 1 } }
+  footer { border-top: 1px solid var(--line); padding: 14px 20px 18px; background: var(--cream); }
+  .bar { max-width: 760px; margin: 0 auto; display: flex; gap: 10px; }
+  .bar textarea {
+    flex: 1; resize: none; font-family: var(--sans); font-size: .93rem;
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+    background: #fff; color: var(--ink); outline: none; height: 48px; line-height: 1.4;
+  }
+  .bar textarea:focus { border-color: var(--terra); }
+  .bar button {
+    border: none; background: var(--terra); color: #fff; font-weight: 650;
+    font-size: .9rem; padding: 0 22px; border-radius: 12px; cursor: pointer;
+  }
+  .bar button:disabled { background: #D8D4C8; cursor: default; }
+</style>
+</head>
+<body>
+<header>
+  <span class="mark">&gt;_</span><span class="name">jsclaw</span>
+  <div class="group">
+    <span class="dot" id="dot"></span>
+    group <input id="group" value="main" spellcheck="false">
+  </div>
+</header>
+<main><div class="feed" id="feed">
+  <div class="msg sys">Messages run a containerized Claude agent for the chosen group.</div>
+</div></main>
+<footer><div class="bar">
+  <textarea id="input" placeholder="Message your agent…" rows="1"></textarea>
+  <button id="send" disabled>Send</button>
+</div></footer>
+
+<script>
+  const feed = document.getElementById('feed');
+  const input = document.getElementById('input');
+  const sendBtn = document.getElementById('send');
+  const dot = document.getElementById('dot');
+  const groupEl = document.getElementById('group');
+
+  const token = new URLSearchParams(location.search).get('token') || '';
+  const wsUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://')
+    + location.host + (token ? '?token=' + encodeURIComponent(token) : '');
+
+  let ws = null;
+  let nextId = 1;
+  const pending = new Map();
+  let typingEl = null;
+
+  function add(cls, text, md) {
+    const el = document.createElement('div');
+    el.className = 'msg ' + cls + (md ? ' md' : '');
+    if (md) el.innerHTML = renderMarkdown(text);
+    else el.textContent = text;
+    feed.appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return el;
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+
+  // Minimal markdown subset: fenced code, inline code, bold, italics,
+  // links, headings, lists, paragraphs. All text is HTML-escaped before
+  // any tags are introduced, so agent output can never inject markup.
+  function renderMarkdown(text) {
+    const fences = [];
+    text = text.replace(/```[^\n]*\n([\s\S]*?)```/g, (_, code) => {
+      fences.push('<pre><code>' + escapeHtml(code.replace(/\n$/, '')) + '</code></pre>');
+      return '\x00' + (fences.length - 1) + '\x00';
+    });
+
+    const s = escapeHtml(text)
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,!?:;]|$)/gm, '$1<em>$2</em>')
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+    const out = [];
+    let list = null;
+    let para = [];
+    const flushPara = () => { if (para.length) { out.push('<p>' + para.join('<br>') + '</p>'); para = []; } };
+    const closeList = () => { if (list) { out.push('</' + list + '>'); list = null; } };
+    for (const line of s.split('\n')) {
+      const fence = line.match(/^\x00(\d+)\x00$/);
+      const h = line.match(/^(#{1,4})\s+(.*)/);
+      const ul = line.match(/^\s*[-*]\s+(.*)/);
+      const ol = line.match(/^\s*\d+[.)]\s+(.*)/);
+      if (fence) { flushPara(); closeList(); out.push(fences[+fence[1]]); }
+      else if (h) { flushPara(); closeList(); out.push('<h' + h[1].length + '>' + h[2] + '</h' + h[1].length + '>'); }
+      else if (ul) { flushPara(); if (list !== 'ul') { closeList(); out.push('<ul>'); list = 'ul'; } out.push('<li>' + ul[1] + '</li>'); }
+      else if (ol) { flushPara(); if (list !== 'ol') { closeList(); out.push('<ol>'); list = 'ol'; } out.push('<li>' + ol[1] + '</li>'); }
+      else if (!line.trim()) { flushPara(); closeList(); }
+      else { para.push(line); }
+    }
+    flushPara(); closeList();
+    return out.join('').replace(/\x00(\d+)\x00/g, (_, i) => fences[+i]);
+  }
+
+  function setTyping(on) {
+    if (on && !typingEl) {
+      typingEl = document.createElement('div');
+      typingEl.className = 'typing';
+      typingEl.innerHTML = 'agent is working <span class="d">●</span><span class="d">●</span><span class="d">●</span>';
+      feed.appendChild(typingEl);
+      typingEl.scrollIntoView({ block: 'end' });
+    } else if (!on && typingEl) {
+      typingEl.remove();
+      typingEl = null;
+    }
+  }
+
+  function connect() {
+    ws = new WebSocket(wsUrl);
+    ws.onopen = () => { dot.classList.add('on'); sendBtn.disabled = false; };
+    ws.onclose = () => {
+      dot.classList.remove('on'); sendBtn.disabled = true; setTyping(false);
+      setTimeout(connect, 2000);
+    };
+    ws.onmessage = (e) => {
+      let frame;
+      try { frame = JSON.parse(e.data); } catch { return; }
+      if (frame.type === 'event' && frame.event === 'agent.output') {
+        // Each agent.output is a completed turn (status is always
+        // 'success' or 'error'); the chat.send res only arrives when
+        // the container exits, so the spinner must clear here, not there.
+        setTyping(false);
+        if (frame.payload.result) add('agent', frame.payload.result, true);
+        else if (frame.payload.status === 'error') add('err', frame.payload.error || 'agent error');
+      } else if (frame.type === 'res') {
+        const done = pending.get(frame.id);
+        if (!done) return;
+        pending.delete(frame.id);
+        setTyping(false);
+        if (!frame.ok) add('err', frame.error?.message || 'request failed');
+        done();
+      }
+    };
+  }
+
+  function send() {
+    const text = input.value.trim();
+    if (!text || !ws || ws.readyState !== 1) return;
+    add('user', text);
+    input.value = '';
+    setTyping(true);
+    const id = nextId++;
+    pending.set(id, () => {});
+    ws.send(JSON.stringify({
+      type: 'req', id,
+      method: 'chat.send',
+      params: { groupFolder: groupEl.value.trim() || 'main', message: text },
+    }));
+  }
+
+  sendBtn.addEventListener('click', send);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  });
+
+  connect();
+</script>
+</body>
+</html>
