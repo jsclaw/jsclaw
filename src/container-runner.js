@@ -13,7 +13,7 @@ import { createConfig } from './config.js';
 import { resolveProviderEnv } from './providers.js';
 import { loadSkills, matchSkills, buildSkillContext, buildSkillsIndex } from './skills.js';
 import { normalizeAgentId } from './agents.js';
-import { relative } from 'node:path';
+import { relative, sep } from 'node:path';
 
 /** Container-side mount point for the read-only skills volume. */
 const SKILLS_MOUNT = '/workspace/skills';
@@ -28,17 +28,27 @@ const SKILLS_MOUNT = '/workspace/skills';
  * @param {boolean} isLocal
  * @returns {{ promptPrefix: string, skillsIndex: string }}
  */
-export function resolveSkillsForRun(config, prompt, isLocal) {
-  const skills = loadSkills(config);
+export function resolveSkillsForRun(config, prompt, isLocal, agentId) {
+  const skills = loadSkills(config, agentId);
   if (skills.length === 0) return { promptPrefix: '', skillsIndex: '' };
 
   const triggered = matchSkills(skills, { text: prompt || '' });
   const promptPrefix = buildSkillContext(triggered);
 
-  const visible = isLocal ? skills : skills.map((s) => ({
-    ...s,
-    path: s.path ? `${SKILLS_MOUNT}/${relative(config.skillsDir, s.path)}` : s.path,
-  }));
+  // Container path rewrite: global skills are mounted read-only at
+  // SKILLS_MOUNT; per-agent skills ride the workspace mount under
+  // /workspace/agent/skills. Local runs read host paths directly.
+  const agentSkillsDir = agentId ? join(config.agentsDir, normalizeAgentId(agentId), 'skills') : null;
+  const visible = isLocal ? skills : skills.map((s) => {
+    if (!s.path) return s;
+    if (agentSkillsDir && s.path.startsWith(agentSkillsDir + sep)) {
+      return { ...s, path: `/workspace/agent/skills/${relative(agentSkillsDir, s.path)}` };
+    }
+    if (s.path.startsWith(config.skillsDir + sep)) {
+      return { ...s, path: `${SKILLS_MOUNT}/${relative(config.skillsDir, s.path)}` };
+    }
+    return s;
+  });
   return { promptPrefix, skillsIndex: buildSkillsIndex(visible) };
 }
 
@@ -264,7 +274,7 @@ export async function runContainerAgent(agent, input, onProcess, onOutput, confi
   const isLocal = !(await resolveSandbox(agent, input, config));
 
   // Skills: triggered bodies ride the prompt, the index rides the input
-  const { promptPrefix, skillsIndex } = resolveSkillsForRun(config, input.prompt, isLocal);
+  const { promptPrefix, skillsIndex } = resolveSkillsForRun(config, input.prompt, isLocal, agent.folder);
   if (promptPrefix || skillsIndex) {
     input = {
       ...input,

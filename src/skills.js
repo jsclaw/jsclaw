@@ -9,6 +9,7 @@
 import { readFileSync, readdirSync, writeFileSync, unlinkSync, mkdirSync, existsSync, statSync, cpSync, rmSync } from 'node:fs';
 import { join, basename, dirname } from 'node:path';
 import { createConfig } from './config.js';
+import { normalizeAgentId } from './agents.js';
 
 /**
  * @typedef {Object} Skill
@@ -171,35 +172,52 @@ export function parseSkill(content, path) {
  * @param {import('./types.js').JsclawConfig} [config]
  * @returns {Skill[]}
  */
-export function loadSkills(config) {
-  config = config || createConfig();
-  const log = config.logger;
+function loadSkillsFromDir(dir, log) {
   let entries;
   try {
-    entries = readdirSync(config.skillsDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+    entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
   } catch {
     return [];
   }
-
   const skills = [];
   for (const entry of entries) {
     // Flat <name>.md files, or folder skills (<name>/SKILL.md + resources)
     // — the openclaw/Anthropic layout; nearly all real skills are folders.
     let path = null;
     if (entry.isDirectory()) {
-      const candidate = join(config.skillsDir, entry.name, 'SKILL.md');
+      const candidate = join(dir, entry.name, 'SKILL.md');
       if (existsSync(candidate)) path = candidate;
     } else if (entry.name.endsWith('.md')) {
-      path = join(config.skillsDir, entry.name);
+      path = join(dir, entry.name);
     }
     if (!path) continue;
     try {
       skills.push(parseSkill(readFileSync(path, 'utf-8'), path));
     } catch (err) {
-      log.warn(`Skipping invalid skill: ${entry.name}`, { error: err.message });
+      log?.warn?.(`Skipping invalid skill: ${entry.name}`, { error: err.message });
     }
   }
   return skills;
+}
+
+/**
+ * Load skills: the global skillsDir, plus the agent's own
+ * agents/<id>/skills/ when agentId is given. Per-agent skills override
+ * global ones by name (workspace skills = highest precedence — jsclaw#79 1c).
+ * @param {import('./types.js').JsclawConfig} [config]
+ * @param {string} [agentId] - Layer the agent's own skills on top
+ * @returns {Skill[]}
+ */
+export function loadSkills(config, agentId) {
+  config = config || createConfig();
+  const log = config.logger;
+  const byName = new Map();
+  for (const s of loadSkillsFromDir(config.skillsDir, log)) byName.set(s.name, { ...s, scope: 'global' });
+  if (agentId) {
+    const dir = join(config.agentsDir, normalizeAgentId(agentId), 'skills');
+    for (const s of loadSkillsFromDir(dir, log)) byName.set(s.name, { ...s, scope: 'agent' });
+  }
+  return [...byName.values()];
 }
 
 /**

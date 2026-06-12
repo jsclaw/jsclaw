@@ -207,7 +207,7 @@ export function startGateway(deps, config, options = {}) {
         return { ok: true, session: deps.sessions.patch(requireParam(params, 'key'), params) };
       }
       case 'commands.list':
-        return { commands: listCommands(config) };
+        return { commands: listCommands(config, params.agentId ? normalizeAgentId(params.agentId) : undefined) };
 
       case 'tasks.list': {
         requireStore();
