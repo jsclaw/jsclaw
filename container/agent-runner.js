@@ -64,44 +64,42 @@ function writeOutput(output) {
 }
 
 /**
- * Load memory/*.md from the agent workspace, truncated to a character
- * budget (JSCLAW_MEMORY_MAX_CHARS, default 8000 ≈ 2k tokens).
+ * Two-layer memory (jsclaw#79 1b), matching agent-micro's loader:
+ *   MEMORY.md        — curated facts, loaded in full
+ *   memory/<name>.md — detailed/dated notes, surfaced as an on-demand
+ *                      index (filename + hint), read with file tools.
  * @returns {string} Memory section for the system prompt, or ''
  */
 function loadMemory() {
-  const maxChars = Number(process.env.JSCLAW_MEMORY_MAX_CHARS) || 8000;
-  const dir = join(WORKSPACE_DIR, 'memory');
-  let names;
-  try {
-    names = readdirSync(dir).filter((n) => n.endsWith('.md')).sort();
-  } catch {
-    return '';
-  }
+  const firstLine = (path) => {
+    try {
+      const line = readFileSync(path, 'utf-8')
+        .split('\n').map((l) => l.replace(/^#+\s*/, '').trim()).find(Boolean);
+      return line ? line.slice(0, 60) : '';
+    } catch {
+      return '';
+    }
+  };
 
   const parts = [];
-  let used = 0;
-  for (const name of names) {
-    let content;
-    try {
-      content = readFileSync(join(dir, name), 'utf-8').trim();
-    } catch {
-      continue;
-    }
-    if (!content || /^#[^\n]*$/.test(content)) continue; // empty or heading-only
+  try {
+    const curated = readFileSync(join(WORKSPACE_DIR, 'MEMORY.md'), 'utf-8').trim();
+    if (curated) parts.push(`Curated facts you always know (MEMORY.md):\n\n${curated}`);
+  } catch { /* no MEMORY.md */ }
 
-    const section = `## ${name}\n${content}`;
-    if (used + section.length > maxChars) {
-      const remaining = maxChars - used;
-      if (remaining > 100) parts.push(section.slice(0, remaining) + '\n[...memory truncated]');
-      break;
-    }
-    parts.push(section);
-    used += section.length + 2;
+  let names = [];
+  try {
+    names = readdirSync(join(WORKSPACE_DIR, 'memory')).filter((n) => n.endsWith('.md')).sort().reverse();
+  } catch { /* no memory/ */ }
+  if (names.length) {
+    const index = names.map((n) => {
+      const hint = firstLine(join(WORKSPACE_DIR, 'memory', n));
+      return `- memory/${n}${hint ? ` — ${hint}` : ''}`;
+    });
+    parts.push(`Detailed notes — read with your file tools when relevant:\n${index.join('\n')}`);
   }
 
-  return parts.length > 0
-    ? `# Memory\n\nYour persistent memory (read/write these files under memory/ to remember things):\n\n${parts.join('\n\n')}`
-    : '';
+  return parts.length ? `# Memory\n\n${parts.join('\n\n')}` : '';
 }
 
 /**
