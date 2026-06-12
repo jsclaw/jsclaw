@@ -15,6 +15,7 @@
  */
 
 import { resolveBinding } from './bindings.js';
+import { normalizeAgentId } from './agents.js';
 import { createNostrChannel } from './nostr.js';
 import { handleCommand } from './commands.js';
 import { SessionStore } from './sessions.js';
@@ -127,7 +128,7 @@ export async function startChannels({ config, runAgent, registry = CHANNEL_FACTO
       open: dmPolicy === 'open',
       allowFrom: allowFrom.filter((v) => v !== '*'),
       onMessage: async (peer, text) => {
-        const agentId = resolveBinding(config.bindings, { channel: name, peer: String(peer) }, 'main');
+        const agentId = normalizeAgentId(resolveBinding(config.bindings, { channel: name, peer: String(peer) }, 'main'));
         const key = `${name}:${peer}`;
 
         // Slash commands are host-handled before the agent sees anything

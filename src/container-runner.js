@@ -12,6 +12,7 @@ import { join } from 'node:path';
 import { createConfig } from './config.js';
 import { resolveProviderEnv } from './providers.js';
 import { loadSkills, matchSkills, buildSkillContext, buildSkillsIndex } from './skills.js';
+import { normalizeAgentId } from './agents.js';
 import { relative } from 'node:path';
 
 /** Container-side mount point for the read-only skills volume. */
@@ -244,6 +245,9 @@ export function parseContainerOutput(buffer) {
 export async function runContainerAgent(agent, input, onProcess, onOutput, config) {
   config = config || createConfig();
   const log = config.logger;
+  // Defensive net: agent.folder becomes a path and a container name —
+  // normalize regardless of caller (closes traversal even if a boundary missed it).
+  agent = { ...agent, folder: normalizeAgentId(agent.folder) };
   const containerName = `jsclaw-${agent.folder}-${Date.now()}`;
 
   const mcpServers = resolveMcpServers(agent, config);

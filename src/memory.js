@@ -15,6 +15,7 @@ import {
 } from 'node:fs';
 import { join, basename } from 'node:path';
 import { createConfig } from './config.js';
+import { normalizeAgentId } from './agents.js';
 
 /** openclaw's default memory categories. */
 export const MEMORY_CATEGORIES = ['preferences', 'contacts', 'projects', 'learnings'];
@@ -27,7 +28,7 @@ export const MEMORY_CATEGORIES = ['preferences', 'contacts', 'projects', 'learni
  */
 export function memoryDir(agentId, config) {
   config = config || createConfig();
-  return join(config.agentsDir, agentId, 'memory');
+  return join(config.agentsDir, normalizeAgentId(agentId), 'memory');
 }
 
 /**

@@ -25,6 +25,7 @@ import { handleCommand, listCommands } from './commands.js';
 import { loadSkills } from './skills.js';
 import { createMcpHandler, toolJson, toolText, toolError, rpcError, RPC_ERRORS } from './mcp.js';
 import { computeNextRun } from './task-store.js';
+import { normalizeAgentId } from './agents.js';
 
 const VERSION = JSON.parse(
   readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'package.json'), 'utf-8')
@@ -127,7 +128,7 @@ export function startGateway(deps, config, options = {}) {
 
       case 'chat.send': {
         // openclaw clients address sessions; ours address agents — accept both
-        const agentId = params.agentId || params.sessionKey;
+        const agentId = normalizeAgentId(params.agentId || params.sessionKey);
         let { message } = params;
         if (!agentId || !message) throw new Error('chat.send requires agentId (or sessionKey) and message');
         const sessionKey = params.sessionKey || agentId;
@@ -235,11 +236,11 @@ export function startGateway(deps, config, options = {}) {
       }
 
       case 'memory.list':
-        return listMemoryFiles(requireParam(params, 'agentId'), config)
+        return listMemoryFiles(normalizeAgentId(requireParam(params, 'agentId')), config)
           .map(({ name, size }) => ({ name, size }));
       case 'memory.search':
         return searchMemory(
-          requireParam(params, 'agentId'),
+          normalizeAgentId(requireParam(params, 'agentId')),
           requireParam(params, 'query'),
           config
         );
