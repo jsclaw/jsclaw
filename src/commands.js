@@ -48,9 +48,10 @@ export function parseCommand(text) {
  * Every available command in openclaw's commands.list entry shape:
  * built-ins plus user-invocable skills.
  * @param {import('./types.js').JsclawConfig} config
+ * @param {string} [agentId] - Include the agent's own user-invocable skills
  * @returns {Array<Object>}
  */
-export function listCommands(config) {
+export function listCommands(config, agentId) {
   const entries = BUILTIN_COMMANDS.map((c) => ({
     name: c.textAliases[0],
     textAliases: c.textAliases,
@@ -71,7 +72,7 @@ export function listCommands(config) {
       acceptsArgs: Boolean(c.acceptsArgs),
     });
   }
-  for (const skill of loadSkills(config)) {
+  for (const skill of loadSkills(config, agentId)) {
     if (!skill.userInvocable) continue;
     entries.push({
       name: `/${skill.name}`,
@@ -124,12 +125,12 @@ export async function handleCommand(text, ctx) {
         return { reply: parts.join(' · ') };
       }
       case 'skills': {
-        const skills = loadSkills(ctx.config);
+        const skills = loadSkills(ctx.config, ctx.agentId);
         if (skills.length === 0) return { reply: 'No skills installed.' };
         return { reply: skills.map((s) => `${s.name}${s.userInvocable ? ` (/${s.name})` : ''} — ${s.description}`).join('\n') };
       }
       case 'help': {
-        return { reply: listCommands(ctx.config).map((c) => `${c.name} — ${c.description}`).join('\n') };
+        return { reply: listCommands(ctx.config, ctx.agentId).map((c) => `${c.name} — ${c.description}`).join('\n') };
       }
     }
   }
@@ -141,7 +142,7 @@ export async function handleCommand(text, ctx) {
   }
 
   // Skill bridge: /<name> force-invokes a user-invocable skill
-  const skill = loadSkills(ctx.config).find((s) => s.userInvocable && s.name.toLowerCase() === parsed.name);
+  const skill = loadSkills(ctx.config, ctx.agentId).find((s) => s.userInvocable && s.name.toLowerCase() === parsed.name);
   if (skill) {
     const invocation = parsed.args || `The user invoked /${skill.name}.`;
     return { prompt: `${buildSkillContext([skill])}\n\n${invocation}` };

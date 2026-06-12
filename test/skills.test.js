@@ -201,3 +201,44 @@ test('a real openclaw bundled skill loads when the layout exists', (t) => {
   assert.equal(skills.length, 1);
   assert.equal(skills[0].name, 'gh-issues');
 });
+
+// --- per-agent skills (#79 1c) ---
+
+test('agents/<id>/skills overrides global skills by name', () => {
+  const config = tempConfig();
+  // global skill
+  mkdirSync(join(config.skillsDir, 'weather'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'weather', 'SKILL.md'), '---\nname: weather\ndescription: GLOBAL weather\n---\nglobal body');
+  mkdirSync(join(config.skillsDir, 'shared'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'shared', 'SKILL.md'), '---\nname: shared\ndescription: shared\n---\nb');
+  // per-agent: overrides weather, adds a private one
+  const agentSkills = join(config.agentsDir, 'main', 'skills');
+  mkdirSync(join(agentSkills, 'weather'), { recursive: true });
+  writeFileSync(join(agentSkills, 'weather', 'SKILL.md'), '---\nname: weather\ndescription: AGENT weather\n---\nagent body');
+  mkdirSync(join(agentSkills, 'private'), { recursive: true });
+  writeFileSync(join(agentSkills, 'private', 'SKILL.md'), '---\nname: private\ndescription: only this agent\n---\nb');
+
+  const globalOnly = loadSkills(config);
+  assert.deepEqual(globalOnly.map((s) => s.name).sort(), ['shared', 'weather']);
+  assert.equal(globalOnly.find((s) => s.name === 'weather').description, 'GLOBAL weather');
+
+  const withAgent = loadSkills(config, 'main');
+  assert.deepEqual(withAgent.map((s) => s.name).sort(), ['private', 'shared', 'weather']);
+  assert.equal(withAgent.find((s) => s.name === 'weather').description, 'AGENT weather', 'per-agent wins');
+  assert.equal(withAgent.find((s) => s.name === 'weather').scope, 'agent');
+  assert.equal(withAgent.find((s) => s.name === 'shared').scope, 'global');
+});
+
+test('resolveSkillsForRun rewrites per-agent vs global paths for the container', async () => {
+  const { resolveSkillsForRun } = await import('../src/container-runner.js');
+  const config = tempConfig();
+  mkdirSync(join(config.skillsDir, 'g'), { recursive: true });
+  writeFileSync(join(config.skillsDir, 'g', 'SKILL.md'), '---\nname: g\ndescription: global g\n---\nb');
+  const agentSkills = join(config.agentsDir, 'main', 'skills');
+  mkdirSync(join(agentSkills, 'a'), { recursive: true });
+  writeFileSync(join(agentSkills, 'a', 'SKILL.md'), '---\nname: a\ndescription: agent a\n---\nb');
+
+  const { skillsIndex } = resolveSkillsForRun(config, 'hi', false /* sandboxed */, 'main');
+  assert.match(skillsIndex, /\/workspace\/skills\/g\/SKILL\.md/, 'global → SKILLS_MOUNT');
+  assert.match(skillsIndex, /\/workspace\/agent\/skills\/a\/SKILL\.md/, 'per-agent → workspace mount');
+});
