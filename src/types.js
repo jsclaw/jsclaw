@@ -7,7 +7,10 @@
 /**
  * @typedef {Object} ContainerInput
  * @property {string} prompt - The prompt/messages to send to the agent
- * @property {string} [sessionId] - Resume an existing Claude session
+ * @property {string} [sessionId] - Resume an existing Claude (SDK) session
+ * @property {Array} [messages] - Prior transcript for host-owned-session
+ *   runners (e.g. agent-micro); the runner runs on these and returns the
+ *   updated array, persisting nothing itself (jsclaw#79)
  * @property {string} agentId - Folder name for this agent's workspace
  * @property {string} chatJid - Identifier for the chat/conversation
  * @property {boolean} isMain - Whether this is the main/admin agent
@@ -24,7 +27,10 @@
  * @typedef {Object} ContainerOutput
  * @property {'success'|'error'} status
  * @property {string|null} result - The agent's response text
- * @property {string} [newSessionId] - Session ID for conversation continuity
+ * @property {string} [newSessionId] - Session id for SDK-owned-session
+ *   runners (Claude Code) — continuity by opaque id
+ * @property {Array} [messages] - Updated transcript from host-owned-session
+ *   runners (agent-micro); the host persists it (jsclaw#79)
  * @property {string} [error] - Error message if status is 'error'
  * @property {{input_tokens: number, output_tokens: number}} [usage] - Tokens
  *   consumed this turn, summed across the runner's API calls; cache

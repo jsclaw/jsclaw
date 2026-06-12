@@ -15,7 +15,7 @@
 
 import { createServer } from 'node:http';
 import { timingSafeEqual, randomUUID } from 'node:crypto';
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { acceptKey, attachWebSocket } from './ws.js';
@@ -150,12 +150,15 @@ export function startGateway(deps, config, options = {}) {
         if (command?.prompt) message = command.prompt;
 
         const session = deps.sessions?.resolve(sessionKey, agentId);
+        const priorMessages = deps.sessions?.loadMessages(sessionKey) ?? [];
         // Resolve on the first terminal output: every ContainerOutput is a
         // completed turn, but the runner process lingers for follow-up IPC
         // (up to the idle timeout) and runAgent only settles when it exits.
         let settleFirst;
         const firstOutput = new Promise((r) => { settleFirst = r; });
         const run = deps.runAgent(agentId, message, (output) => {
+          // Host-owned transcripts (agent-micro) vs SDK-owned id (Claude Code)
+          if (output.messages) deps.sessions?.saveMessages(sessionKey, output.messages, agentId);
           if (output.newSessionId) deps.sessions?.advance(sessionKey, output.newSessionId);
           settleFirst(output);
           conn.sendFrame({ type: 'event', event: 'agent.output', payload: { runId, agentId, ...output } });
@@ -169,28 +172,21 @@ export function startGateway(deps, config, options = {}) {
               content: [{ type: 'text', text: output.result ?? output.error ?? '' }],
             },
           } });
-        }, session ? { ...(session.sessionId && { sessionId: session.sessionId }), ...(session.model && { model: session.model }) } : {});
+        }, {
+          ...(priorMessages.length && { messages: priorMessages }),
+          ...(session?.sessionId && { sessionId: session.sessionId }),
+          ...(session?.model && { model: session.model }),
+        });
         run.then((result) => settleFirst(result)).catch((err) => settleFirst({ status: 'error', result: null, error: err.message }));
         const result = await firstOutput;
         return { runId, ...result };
       }
 
       case 'chat.history': {
-        const agentId = params.agentId || params.sessionKey || 'main';
+        const key = params.sessionKey || params.agentId || 'main';
         const limit = Number(params.limit) > 0 ? Number(params.limit) : 50;
-        const sessionsDir = join(config.agentsDir, agentId, '.jsclaw-micro', 'sessions');
-        try {
-          const newest = readdirSync(sessionsDir)
-            .filter((f) => f.endsWith('.json'))
-            .map((f) => ({ f, m: statSync(join(sessionsDir, f)).mtimeMs }))
-            .sort((a, b) => b.m - a.m)[0];
-          if (!newest) return { items: [], messages: [], hasMore: false };
-          const messages = JSON.parse(readFileSync(join(sessionsDir, newest.f), 'utf-8')).slice(-limit);
-          return { items: messages, messages, hasMore: false };
-        } catch {
-          // No local sessions (e.g. containerized runner) — empty history
-          return { items: [], messages: [], hasMore: false };
-        }
+        const messages = (deps.sessions?.loadMessages(key) ?? []).slice(-limit);
+        return { items: messages, messages, hasMore: false };
       }
 
       case 'chat.abort':

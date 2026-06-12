@@ -480,3 +480,33 @@ test('POST /mcp serves the openclaw-vocabulary bridge over streamable HTTP', asy
 
   await gateway.stop();
 });
+
+test('chat.send round-trips host-owned transcripts (agent-micro path)', async () => {
+  const { SessionStore } = await import('../src/sessions.js');
+  const config = tempConfig();
+  const sessions = new SessionStore(config);
+  const seen = [];
+  // A runner that echoes the prior transcript it received, then returns
+  // an updated one (what agent-micro does under #79).
+  const runAgent = async (agentId, message, onOutput, extra = {}) => {
+    seen.push(extra.messages || []);
+    const messages = [...(extra.messages || []), { role: 'user', content: message }, { role: 'assistant', content: 'ok' }];
+    const output = { status: 'success', result: 'ok', messages };
+    if (onOutput) await onOutput(output);
+    return output;
+  };
+  const gateway = await startGateway({ runAgent, sessions }, config, { port: 0 });
+  const client = await connect(gateway.port);
+
+  await client.req('chat.send', { sessionKey: 'k', message: 'one' });
+  await client.req('chat.send', { sessionKey: 'k', message: 'two' });
+  assert.deepEqual(seen[0], [], 'first turn starts empty');
+  assert.equal(seen[1].length, 2, 'second turn receives the prior transcript');
+  assert.equal(seen[1][0].content, 'one');
+
+  const hist = await client.req('chat.history', { sessionKey: 'k' });
+  assert.equal(hist.payload.messages.length, 4, 'history reflects both turns');
+
+  client.close();
+  await gateway.stop();
+});

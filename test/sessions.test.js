@@ -64,3 +64,37 @@ test('sessions survive a store restart (gateway restart)', () => {
   assert.equal(row.sessionId, 's-99');
   assert.equal(row.model, 'glm-4.6');
 });
+
+// --- host-owned transcripts (#79 / B) ---
+
+test('saveMessages mints a sessionId, writes under data/sessions, loadMessages reads it back', () => {
+  const config = tempConfig();
+  const store = new SessionStore(config);
+
+  assert.deepEqual(store.loadMessages('telegram:42'), [], 'empty before any save');
+  store.saveMessages('telegram:42', [{ role: 'user', content: 'hi' }], 'main');
+  const row = store.resolve('telegram:42');
+  assert.ok(row.sessionId, 'sessionId minted by host on first save');
+  assert.match(store.transcriptPath(row), /data\/sessions\/main\/.*\.json$/);
+  assert.deepEqual(store.loadMessages('telegram:42'), [{ role: 'user', content: 'hi' }]);
+
+  // append a turn — same sessionId, updated transcript
+  const before = row.sessionId;
+  store.saveMessages('telegram:42', [{ role: 'user', content: 'hi' }, { role: 'assistant', content: 'hello' }]);
+  assert.equal(store.resolve('telegram:42').sessionId, before);
+  assert.equal(store.loadMessages('telegram:42').length, 2);
+});
+
+test('reset deletes the transcript so the next turn starts empty', () => {
+  const config = tempConfig();
+  const store = new SessionStore(config);
+  store.saveMessages('main', [{ role: 'user', content: 'remember X' }], 'main');
+  assert.equal(store.loadMessages('main').length, 1);
+
+  store.reset('main', 'new');
+  assert.deepEqual(store.loadMessages('main'), [], 'transcript gone after reset');
+  assert.equal(store.resolve('main').sessionId, undefined);
+
+  // survives a restart as empty
+  assert.deepEqual(new SessionStore(config).loadMessages('main'), []);
+});

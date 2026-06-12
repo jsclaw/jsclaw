@@ -143,11 +143,14 @@ export async function startChannels({ config, runAgent, registry = CHANNEL_FACTO
         if (command?.prompt) text = command.prompt;
 
         const session = store.resolve(key, agentId);
+        const priorMessages = store.loadMessages(key);
         runAgent(agentId, text, async (output) => {
           if (output.result) await channel.sendMessage(peer, output.result);
+          if (output.messages) store.saveMessages(key, output.messages, agentId);
           if (output.newSessionId) store.advance(key, output.newSessionId);
         }, {
           chatJid: String(peer),
+          ...(priorMessages.length && { messages: priorMessages }),
           ...(session.sessionId && { sessionId: session.sessionId }),
           ...(session.model && { model: session.model }),
         }).catch((err) => {
