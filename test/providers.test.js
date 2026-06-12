@@ -33,6 +33,12 @@ test('presets are well-formed; GLM and Kimi are first-class', () => {
   assert.ok(PROVIDERS.zai.baseUrl.includes('z.ai'));
   assert.equal(PROVIDERS.zai.keyStyle, 'authToken');
   assert.ok(PROVIDERS.moonshot.baseUrl.includes('moonshot'));
+  // Kimi Code subscription (coding plan) — verified Anthropic-native endpoint,
+  // distinct from the metered "moonshot" preset.
+  assert.equal(PROVIDERS.kimi.baseUrl, 'https://api.kimi.com/coding');
+  assert.equal(PROVIDERS.kimi.keyStyle, 'authToken');
+  assert.equal(PROVIDERS.kimi.keyEnv, 'KIMI_API_KEY');
+  assert.ok(PROVIDERS.kimi.models.includes('kimi-for-coding'));
   assert.ok(PROVIDERS.bedrock.env.CLAUDE_CODE_USE_BEDROCK);
 });
 
@@ -99,9 +105,14 @@ test('buildOnboardConfig: GLM writes baseUrl + ${ENV} reference, never a literal
 });
 
 test('buildOnboardConfig: Kimi, Bedrock, custom endpoint', () => {
-  const kimi = buildOnboardConfig({ provider: 'moonshot', model: 'kimi-k2-0905-preview' });
-  assert.equal(kimi.config.providerAuthToken, '${MOONSHOT_API_KEY}');
-  assert.ok(kimi.config.providerBaseUrl.includes('moonshot'));
+  const kimiPaygo = buildOnboardConfig({ provider: 'moonshot', model: 'kimi-k2-0905-preview' });
+  assert.equal(kimiPaygo.config.providerAuthToken, '${MOONSHOT_API_KEY}');
+  assert.ok(kimiPaygo.config.providerBaseUrl.includes('moonshot'));
+
+  const kimiPlan = buildOnboardConfig({ provider: 'kimi', model: 'kimi-for-coding' });
+  assert.equal(kimiPlan.config.providerBaseUrl, 'https://api.kimi.com/coding');
+  assert.equal(kimiPlan.config.providerAuthToken, '${KIMI_API_KEY}');
+  assert.ok(kimiPlan.envExports.some((l) => l.startsWith('export KIMI_API_KEY=')));
 
   const bedrock = buildOnboardConfig({ provider: 'bedrock' });
   assert.ok(!bedrock.config.providerBaseUrl);
