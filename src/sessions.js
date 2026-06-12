@@ -11,8 +11,9 @@
  * @module sessions
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { createConfig } from './config.js';
 
 /**
@@ -57,13 +58,59 @@ export class SessionStore {
   }
 
   /**
-   * Record the runner's transcript id after a run.
+   * Record the runner's transcript id after a run (SDK runners that own
+   * their own transcript, e.g. Claude Code — continuity by opaque id).
    * @param {string} key
    * @param {string|undefined} sessionId
    */
   advance(key, sessionId) {
     const row = this.resolve(key);
     if (sessionId) row.sessionId = sessionId;
+    row.updatedAt = Date.now();
+    this.save();
+  }
+
+  /**
+   * Transcript file for a row, under the state root (never the workspace)
+   * — openclaw's `agents/<id>/sessions/` mapped onto jsclaw's data dir.
+   * @param {SessionRow} row
+   * @returns {string}
+   */
+  transcriptPath(row) {
+    return join(this.config.dataDir, 'sessions', row.agentId, `${row.sessionId}.json`);
+  }
+
+  /**
+   * Load a host-owned transcript (messages array) for a key. Empty when
+   * the key has no transcript yet, or for SDK-owned sessions.
+   * @param {string} key
+   * @returns {Array}
+   */
+  loadMessages(key) {
+    const row = this.rows[key];
+    if (!row?.sessionId) return [];
+    try {
+      const msgs = JSON.parse(readFileSync(this.transcriptPath(row), 'utf-8'));
+      return Array.isArray(msgs) ? msgs : [];
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Persist a host-owned transcript. Mints the sessionId on first write
+   * (the host owns the id; the runner stays stateless — jsclaw#79).
+   * @param {string} key
+   * @param {Array} messages
+   * @param {string} [agentId]
+   */
+  saveMessages(key, messages, agentId) {
+    if (!Array.isArray(messages)) return;
+    const row = this.resolve(key, agentId);
+    if (!row.sessionId) row.sessionId = randomUUID();
+    const path = this.transcriptPath(row);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, JSON.stringify(messages));
     row.updatedAt = Date.now();
     this.save();
   }
@@ -76,6 +123,9 @@ export class SessionStore {
    */
   reset(key, reason = 'reset') {
     const row = this.resolve(key);
+    if (row.sessionId) {
+      try { rmSync(this.transcriptPath(row), { force: true }); } catch { /* best-effort */ }
+    }
     delete row.sessionId;
     row.updatedAt = Date.now();
     this.save();
