@@ -34,6 +34,7 @@ import { SessionStore } from '../src/sessions.js';
 import { loadPlugins } from '../src/plugins.js';
 import { registerPluginCommands } from '../src/commands.js';
 import { CHANNEL_FACTORIES } from '../src/channels.js';
+import { normalizeAgentId } from '../src/agents.js';
 import { startChannels } from '../src/channels.js';
 import { loadSkills, parseSkill, installSkill, removeSkill, matchSkills } from '../src/skills.js';
 
@@ -403,14 +404,16 @@ async function cmdGateway(config, opts) {
   registerPluginCommands(plugins.commands);
   const agents = () => listAgents(config);
 
-  const runAgent = (agentId, prompt, onOutput, extra = {}) =>
-    runContainerAgent(
+  const runAgent = (rawAgentId, prompt, onOutput, extra = {}) => {
+    const agentId = normalizeAgentId(rawAgentId);
+    return runContainerAgent(
       { name: agentId, folder: agentId },
       { prompt, agentId, chatJid: `gateway:${agentId}`, isMain: true, ...extra },
       null,
       onOutput ? async (output) => onOutput(output) : null,
       config,
     );
+  };
 
   // 3. Gateway first so subsystems can broadcast to clients
   const gateway = await startGateway({
