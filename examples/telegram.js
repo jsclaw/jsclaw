@@ -1,209 +1,52 @@
 /**
- * jsclaw + Telegram example
+ * jsclaw + Telegram example — a Telegram bot that runs a Claude agent.
  *
- * A Telegram bot that runs Claude agents in Docker containers.
- * Each chat gets its own isolated container and workspace.
+ * Zero dependencies: the channel talks to the Bot API over fetch with
+ * long polling, so no webhook and no public URL are needed.
  *
  * Setup:
- *   1. Create a bot via @BotFather on Telegram, get the token
- *   2. Build the container image:
- *      docker build -t jsclaw-agent:latest -f node_modules/jsclaw/container/Dockerfile node_modules/jsclaw/container/
- *   3. Set environment variables:
- *      export TELEGRAM_BOT_TOKEN=your_bot_token
- *      export ANTHROPIC_API_KEY=your_api_key
- *   4. Run:
- *      node examples/telegram.js
+ *   1. Create a bot via @BotFather on Telegram, copy the token
+ *   2. export TELEGRAM_BOT_TOKEN=...   ANTHROPIC_API_KEY=...
+ *   3. export TELEGRAM_ALLOW=@yourusername   (or your numeric chat id)
+ *   4. node examples/telegram.js, then message the bot
  *
- * Dependencies:
- *   npm install jsclaw grammy
+ * For the full host (scheduler, heartbeat, web chat) put the same block
+ * under "channels" in jsclaw.json and run `npx jsclaw gateway` instead.
  */
 
-import { Bot } from 'grammy';
-import {
-  runContainerAgent,
-  AgentQueue,
-  startIpcWatcher,
-  startTaskScheduler,
-  createConfig,
-  ChannelManager,
-  TaskStore,
-  createTaskIpcHandler,
-} from 'jsclaw';
+import { createTelegramChannel, runContainerAgent, AgentQueue, createConfig } from 'jsclaw';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 if (!TOKEN) {
-  console.error('Set TELEGRAM_BOT_TOKEN environment variable');
+  console.error('Set TELEGRAM_BOT_TOKEN');
+  process.exit(1);
+}
+const allowFrom = (process.env.TELEGRAM_ALLOW || '').split(',').filter(Boolean);
+if (allowFrom.length === 0) {
+  console.error('Set TELEGRAM_ALLOW to your @username or chat id so the bot only answers you.');
   process.exit(1);
 }
 
 const config = createConfig();
-const bot = new Bot(TOKEN);
 const queue = new AgentQueue(config);
-const store = new TaskStore(config);
-
-// --- Channel: adapt Telegram to the jsclaw Channel interface ---
-
-let connected = false;
-
-/** @type {import('jsclaw/channel').Channel} */
-const telegramChannel = {
-  name: 'telegram',
-  async connect() {
-    bot.start({
-      onStart: (info) => {
-        connected = true;
-        console.log(`Bot running as @${info.username}`);
-      },
-    });
-  },
-  async disconnect() {
-    connected = false;
-    await bot.stop();
-  },
-  isConnected: () => connected,
-  // This example treats every numeric JID as a Telegram chat id
-  ownsJid: (jid) => /^-?\d+$/.test(jid),
-  async sendMessage(jid, text) {
-    for (const chunk of splitMessage(text, 4000)) {
-      await bot.api.sendMessage(Number(jid), chunk);
-    }
-  },
-  async setTyping(jid) {
-    await bot.api.sendChatAction(Number(jid), 'typing');
-  },
-};
-
-const channels = new ChannelManager({ logger: config.logger });
-channels.register(telegramChannel);
-
-// Track sessions per chat for conversation continuity
 const sessions = new Map();
 
-/**
- * Process a message by running a container agent.
- */
-async function processMessage(chatId, text, reply) {
-  const folder = `tg-${chatId}`;
-  const sessionId = sessions.get(chatId);
-
-  const result = await runContainerAgent(
-    { name: folder, folder },
-    {
-      prompt: text,
-      agentId: folder,
-      chatJid: String(chatId),
-      isMain: true,
-      sessionId,
-    },
-    null,
-    async (output) => {
-      if (output.result) {
-        // Split long messages (Telegram limit is 4096 chars)
-        const chunks = splitMessage(output.result, 4000);
-        for (const chunk of chunks) {
-          await reply(chunk);
-        }
-      }
-      if (output.newSessionId) {
-        sessions.set(chatId, output.newSessionId);
-      }
-    },
-    config,
-  );
-
-  return result;
-}
-
-/**
- * Split a message into chunks at newline boundaries.
- */
-function splitMessage(text, maxLen) {
-  if (text.length <= maxLen) return [text];
-  const chunks = [];
-  let remaining = text;
-  while (remaining.length > 0) {
-    if (remaining.length <= maxLen) {
-      chunks.push(remaining);
-      break;
-    }
-    let splitAt = remaining.lastIndexOf('\n', maxLen);
-    if (splitAt === -1 || splitAt < maxLen / 2) splitAt = maxLen;
-    chunks.push(remaining.slice(0, splitAt));
-    remaining = remaining.slice(splitAt).replace(/^\n/, '');
-  }
-  return chunks;
-}
-
-// --- IPC watcher: agent MCP tools (send_message, schedule_task, ...) ---
-// ChannelManager routes outbound messages; the task handler persists
-// scheduled tasks into the TaskStore.
-
-startIpcWatcher({
-  sendMessage: channels.sendMessage,
-  onTask: createTaskIpcHandler(store, { logger: config.logger }),
-  getRegisteredAgents: () => ({}),
-}, config);
-
-// --- Scheduler: execute tasks the agent scheduled for itself ---
-
-startTaskScheduler({
-  store,
-  runTask: async (task) => {
-    await processMessage(
-      Number(task.chatJid),
-      task.prompt,
-      (msg) => channels.sendMessage(task.chatJid, msg),
-    );
-  },
-}, config);
-
-// --- Bot handlers ---
-
-bot.on('message:text', async (ctx) => {
-  const chatId = ctx.chat.id;
-  const text = ctx.message.text;
-
-  console.log(`[${chatId}] ${ctx.from.first_name}: ${text}`);
-
-  // Show typing indicator
-  await ctx.replyWithChatAction('typing');
-
-  // Use the queue to ensure one container per chat
-  try {
-    await queue.enqueueTask(String(chatId), `msg-${Date.now()}`, async () => {
-      await processMessage(chatId, text, (msg) => ctx.reply(msg));
-      return true;
+const channel = createTelegramChannel({
+  botToken: TOKEN,
+  allowFrom,
+  onMessage: (chatId, text) => {
+    queue.enqueue(chatId, async () => {
+      const result = await runContainerAgent(
+        { name: 'main', folder: 'main' },
+        { prompt: text, agentId: 'main', chatJid: chatId, isMain: true, sessionId: sessions.get(chatId) },
+        null, null, config,
+      );
+      if (result.newSessionId) sessions.set(chatId, result.newSessionId);
+      await channel.sendMessage(chatId, result.result || result.error || '(no reply)');
     });
-  } catch (err) {
-    console.error(`Error processing message:`, err.message);
-    await ctx.reply('Sorry, something went wrong. Please try again.');
-  }
+  },
 });
 
-bot.command('reset', async (ctx) => {
-  sessions.delete(ctx.chat.id);
-  await ctx.reply('Session reset. Starting fresh.');
-});
-
-bot.command('start', async (ctx) => {
-  await ctx.reply(
-    'Hi! I\'m a Claude AI agent running in an isolated container.\n\n' +
-    'Send me any message and I\'ll respond.\n' +
-    'Use /reset to start a fresh conversation.'
-  );
-});
-
-// --- Startup ---
-
-console.log('Starting Telegram bot...');
-await channels.connectAll();
-
-// Graceful shutdown
-for (const signal of ['SIGINT', 'SIGTERM']) {
-  process.on(signal, async () => {
-    console.log(`\n${signal} received, shutting down...`);
-    await channels.disconnectAll();
-    await queue.shutdown();
-    process.exit(0);
-  });
-}
+await channel.connect();
+console.log(`Telegram bot ${channel.username} is listening. Ctrl-C to stop.`);
+process.on('SIGINT', async () => { await channel.disconnect(); process.exit(0); });

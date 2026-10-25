@@ -1,7 +1,7 @@
 {
   "name": "jsclaw",
   "version": "0.0.20",
-  "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM.",
+  "description": "Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero dependencies.",
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "engines": {
@@ -40,7 +40,8 @@
     "./mount-security": "./src/mount-security.js",
     "./types": "./src/types.js",
     "./container/agent-runner": "./container/agent-runner.js",
-    "./container/mcp-server": "./container/mcp-server.js"
+    "./container/mcp-server": "./container/mcp-server.js",
+    "./telegram": "./src/telegram.js"
   },
   "main": "./src/index.js",
   "scripts": {
@@ -66,8 +67,5 @@
   "homepage": "https://github.com/jsclaw/jsclaw",
   "bugs": {
     "url": "https://github.com/jsclaw/jsclaw/issues"
-  },
-  "dependencies": {
-    "grammy": "^1.43.0"
   }
 }
