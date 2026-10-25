@@ -2,16 +2,17 @@
  * Nostr channel — decentralized encrypted DMs for jsclaw agents.
  * Zero dependencies: secp256k1 in pure BigInt (affine — auditable over
  * fast; DM volume doesn't need Jacobian), BIP340 Schnorr via tagged
- * SHA-256, NIP-04 encryption via node:crypto, relays via Node's native
- * WebSocket client.
+ * SHA-256, NIP-04 encryption via node:crypto, NIP-17 gift-wrapped DMs
+ * over NIP-44 (./nip44.js), relays via Node's native WebSocket client.
  *
  * Talk to your containerized agent from any Nostr client. No bot
  * tokens, no platform accounts, no central server.
  * @module nostr
  */
 
-import { createHash, randomBytes, createCipheriv, createDecipheriv } from 'node:crypto';
+import { createHash, randomBytes, randomInt, createCipheriv, createDecipheriv } from 'node:crypto';
 import { createLogger } from './logger.js';
+import { getConversationKey, encrypt as nip44Encrypt, decrypt as nip44Decrypt } from './nip44.js';
 
 // --- secp256k1 (pure BigInt, affine coordinates) ---
 
@@ -355,20 +356,113 @@ function toHex(key, expectedHrp) {
   return hex;
 }
 
+// --- NIP-17 private DMs (NIP-59 gift wrap over NIP-44) ---
+
+/** Senders randomize seal/wrap created_at up to this far into the past. */
+const GIFT_WRAP_WINDOW = 2 * 24 * 3600;
+
+const nowSec = () => Math.floor(Date.now() / 1000);
+const randomPast = () => nowSec() - randomInt(0, GIFT_WRAP_WINDOW);
+
+/**
+ * An unsigned kind-14 chat rumor (has an id, never a sig).
+ * @param {string} senderPubkey
+ * @param {string} recipientPubkey
+ * @param {string} text
+ */
+export function createChatRumor(senderPubkey, recipientPubkey, text) {
+  const rumor = {
+    kind: 14,
+    pubkey: senderPubkey,
+    created_at: nowSec(),
+    tags: [['p', recipientPubkey]],
+    content: text,
+  };
+  rumor.id = eventId(rumor);
+  return rumor;
+}
+
+/**
+ * Seal a rumor with the sender's key (kind 13) and gift-wrap it (kind
+ * 1059) to one recipient with a fresh ephemeral key.
+ * @param {Object} rumor - Unsigned event
+ * @param {string} senderPrivkey
+ * @param {string} recipientPubkey
+ * @returns {Object} Signed kind-1059 event
+ */
+export function giftWrap(rumor, senderPrivkey, recipientPubkey) {
+  const seal = finalizeEvent({
+    kind: 13,
+    created_at: randomPast(),
+    tags: [],
+    content: nip44Encrypt(JSON.stringify(rumor), getConversationKey(senderPrivkey, recipientPubkey)),
+  }, senderPrivkey);
+  const ephemeral = generatePrivateKey();
+  return finalizeEvent({
+    kind: 1059,
+    created_at: randomPast(),
+    tags: [['p', recipientPubkey]],
+    content: nip44Encrypt(JSON.stringify(seal), getConversationKey(ephemeral, recipientPubkey)),
+  }, ephemeral);
+}
+
+/**
+ * Open a kind-1059 gift wrap addressed to us. Verifies the seal's
+ * signature and that the rumor's author is the seal's signer (anyone can
+ * write any pubkey into an unsigned rumor). The outer wrap signature is
+ * the caller's job (checked before spending an ECDH on it).
+ * @param {Object} wrap
+ * @param {string} recipientPrivkey
+ * @returns {{ seal: Object, rumor: Object }} seal.pubkey is the real sender
+ * @throws {Error} on any decryption or validation failure
+ */
+export function unwrapGiftWrap(wrap, recipientPrivkey) {
+  if (wrap?.kind !== 1059) throw new Error('not a gift wrap');
+  const seal = JSON.parse(nip44Decrypt(wrap.content, getConversationKey(recipientPrivkey, wrap.pubkey)));
+  if (seal?.kind !== 13) throw new Error('inner event is not a seal');
+  if (!verifyEvent(seal)) throw new Error('seal has a bad signature');
+  const rumor = JSON.parse(nip44Decrypt(seal.content, getConversationKey(recipientPrivkey, seal.pubkey)));
+  if (!rumor || typeof rumor !== 'object' || !Array.isArray(rumor.tags)) throw new Error('malformed rumor');
+  if (rumor.pubkey !== seal.pubkey) throw new Error('rumor pubkey does not match seal signer (spoof attempt)');
+  return { seal, rumor };
+}
+
+/** NIP-42 auth event for a relay challenge. */
+function authEvent(url, challenge, privkey) {
+  return finalizeEvent({ kind: 22242, tags: [['relay', url], ['challenge', challenge]], content: '' }, privkey);
+}
+
+const normUrl = (u) => String(u).trim().replace(/\/+$/, '');
+
+function parseFrame(data) {
+  try {
+    const frame = JSON.parse(typeof data === 'string' ? data : data.toString());
+    return Array.isArray(frame) ? frame : null;
+  } catch {
+    return null;
+  }
+}
+
 // --- the channel ---
 
 /**
- * Create a jsclaw Channel over Nostr encrypted DMs (kind 4 / NIP-04).
+ * Create a jsclaw Channel over Nostr encrypted DMs: NIP-04 (kind 4) and
+ * NIP-17 (kind 1059 gift-wrapped kind 14, NIP-44 encrypted).
  *
  * Authorization is default-closed: only pubkeys in allowedPubkeys reach
- * onMessage, unless open: true is set explicitly.
+ * onMessage, unless open: true is set explicitly. For NIP-17 the check
+ * is against the seal signer, never the throwaway wrap key.
+ *
+ * Replies go out in the protocol the peer last used (dm: 'auto'), or
+ * always NIP-04 / NIP-17 when dm is forced.
  *
  * @param {Object} options
  * @param {string} options.privateKey - Agent's key (hex or nsec)
  * @param {string[]} options.relays - Relay websocket URLs
- * @param {(jid: string, text: string, event: Object) => void} options.onMessage - Inbound DM (jid = sender pubkey hex)
+ * @param {(jid: string, text: string, event: Object) => void} options.onMessage - Inbound DM (jid = sender pubkey hex; event = kind-4 event or kind-14 rumor)
  * @param {string[]} [options.allowedPubkeys] - Senders allowed to reach the agent (hex or npub)
  * @param {boolean} [options.open] - Accept DMs from anyone (explicit opt-in)
+ * @param {'auto'|'nip04'|'nip17'} [options.dm='auto'] - Outbound DM protocol
  * @param {import('./types.js').Logger} [options.logger]
  * @returns {import('./channel.js').Channel & { publicKey: string, npub: string }}
  */
@@ -379,12 +473,14 @@ export function createNostrChannel(options) {
     onMessage,
     allowedPubkeys = [],
     open = false,
+    dm = 'auto',
     logger = createLogger(),
   } = options;
 
   if (!privateKey) throw new Error('createNostrChannel requires a privateKey');
   if (relays.length === 0) throw new Error('createNostrChannel requires at least one relay');
   if (typeof onMessage !== 'function') throw new Error('createNostrChannel requires onMessage');
+  if (!['auto', 'nip04', 'nip17'].includes(dm)) throw new Error(`createNostrChannel: dm must be "auto", "nip04" or "nip17" (got "${dm}")`);
 
   const privkey = toHex(privateKey, 'nsec');
   const pubkey = getPublicKey(privkey);
@@ -393,18 +489,40 @@ export function createNostrChannel(options) {
   /** @type {Map<string, { ws: WebSocket|null, open: boolean, attempts: number }>} */
   const conns = new Map(relays.map((url) => [url, { ws: null, open: false, attempts: 0 }]));
   const seen = new Set();
+  /** @type {Map<string, 'nip04'|'nip17'>} protocol each peer last wrote with */
+  const peerProtocol = new Map();
+  /** @type {Map<string, { relays: string[], at: number }>} kind-10050 cache */
+  const inboxCache = new Map();
+  const pending = new Map(); // query subId -> { onEvent, onEose, finish }
+  let querySeq = 0;
   let closed = false;
-  const sinceConnect = Math.floor(Date.now() / 1000) - 10;
+  const sinceConnect = nowSec() - 10;
 
-  function handleEvent(event) {
-    if (event.kind !== 4 || event.pubkey === pubkey) return;
-    if (seen.has(event.id)) return;
-    seen.add(event.id);
+  // Gift-wrap timing rule. A wrap's created_at is randomized up to two days
+  // into the past, so the kind-1059 REQ must reach back that far or it
+  // misses almost every live message — which means each (re)connect also
+  // replays up to two days of old wraps. Those are filtered on the rumor's
+  // real created_at: a wrap is handled at most once (bounded seen set, by
+  // wrap id and by rumor id) and only if rumor.created_at >= sinceConnect
+  // - RUMOR_GRACE. The grace keeps messages sent just before a restart
+  // (or while a relay lagged); older backlog is never fed to the agent.
+  const RUMOR_GRACE = 600;
+
+  /** @returns {boolean} true the first time an id is seen */
+  function remember(id) {
+    if (seen.has(id)) return false;
+    seen.add(id);
     if (seen.size > 5000) {
       // Drop the oldest half; ids re-arriving later are harmless dupes
       const ids = [...seen];
-      for (const id of ids.slice(0, 2500)) seen.delete(id);
+      for (const old of ids.slice(0, 2500)) seen.delete(old);
     }
+    return true;
+  }
+
+  function handleDm(event) {
+    if (event.pubkey === pubkey) return;
+    if (!remember(event.id)) return;
 
     if (!verifyEvent(event)) {
       logger.warn('Nostr: dropped event with bad signature', { id: event.id });
@@ -422,7 +540,59 @@ export function createNostrChannel(options) {
       logger.warn('Nostr: failed to decrypt DM', { from: event.pubkey });
       return;
     }
+    peerProtocol.set(event.pubkey, 'nip04');
     onMessage(event.pubkey, text, event);
+  }
+
+  function handleGiftWrap(wrap) {
+    if (seen.has(wrap.id)) return;
+    if (!Array.isArray(wrap.tags) || !wrap.tags.some((t) => t[0] === 'p' && t[1] === pubkey)) return;
+    // Outer signature first (NIP-44: validate before decrypting); only a
+    // verified id goes in the seen set, so a forged copy can't shadow it.
+    if (!verifyEvent(wrap)) {
+      logger.warn('Nostr: dropped gift wrap with bad signature', { id: wrap.id });
+      return;
+    }
+    remember(wrap.id);
+
+    let seal, rumor;
+    try {
+      ({ seal, rumor } = unwrapGiftWrap(wrap, privkey));
+    } catch (err) {
+      logger.warn('Nostr: dropped gift wrap', { id: wrap.id, error: err.message });
+      return;
+    }
+    const sender = seal.pubkey;
+    if (sender === pubkey) return; // our own self-copy echoing back
+    if (rumor.kind !== 14) {
+      logger.debug?.('Nostr: ignored non-chat rumor', { kind: rumor.kind, from: sender });
+      return;
+    }
+    if (!rumor.tags.some((t) => t[0] === 'p' && t[1] === pubkey)) {
+      logger.debug?.('Nostr: dropped rumor not addressed to us', { from: sender });
+      return;
+    }
+    if (!(rumor.created_at >= sinceConnect - RUMOR_GRACE)) return; // backlog, see timing rule
+    if (!remember(`rumor:${eventId(rumor)}`)) return;
+    if (!open && !allowed.has(sender)) {
+      logger.debug?.('Nostr: dropped DM from unauthorized pubkey', { pubkey: sender });
+      return;
+    }
+    if (typeof rumor.content !== 'string') return;
+
+    peerProtocol.set(sender, 'nip17');
+    onMessage(sender, rumor.content, rumor);
+  }
+
+  function handleEvent(event) {
+    if (!event || typeof event !== 'object') return;
+    if (event.kind === 4) handleDm(event);
+    else if (event.kind === 1059) handleGiftWrap(event);
+  }
+
+  function subscribe(ws) {
+    ws.send(JSON.stringify(['REQ', 'jsclaw-dm', { kinds: [4], '#p': [pubkey], since: sinceConnect }]));
+    ws.send(JSON.stringify(['REQ', 'jsclaw-gw', { kinds: [1059], '#p': [pubkey], since: sinceConnect - GIFT_WRAP_WINDOW }]));
   }
 
   function connectRelay(url) {
@@ -436,21 +606,33 @@ export function createNostrChannel(options) {
       return;
     }
     state.ws = ws;
+    let authId = null;
 
     ws.onopen = () => {
       state.open = true;
       state.attempts = 0;
-      ws.send(JSON.stringify(['REQ', 'jsclaw-dm', { kinds: [4], '#p': [pubkey], since: sinceConnect }]));
+      subscribe(ws);
       logger.info(`Nostr: connected to ${url}`);
     };
     ws.onmessage = (e) => {
-      let frame;
-      try {
-        frame = JSON.parse(typeof e.data === 'string' ? e.data : e.data.toString());
-      } catch {
-        return;
+      const frame = parseFrame(e.data);
+      if (!frame) return;
+      const [type, a, b] = frame;
+      if (type === 'EVENT' && b) {
+        const q = pending.get(a);
+        if (q) q.onEvent(b);
+        else handleEvent(b);
+      } else if ((type === 'EOSE' || type === 'CLOSED') && pending.has(a)) {
+        pending.get(a).onEose(url);
+      } else if (type === 'AUTH' && typeof a === 'string') {
+        // NIP-42: inbox relays commonly serve kind 1059 only to the p-tagged key
+        const auth = authEvent(url, a, privkey);
+        authId = auth.id;
+        ws.send(JSON.stringify(['AUTH', auth]));
+      } else if (type === 'OK' && a === authId && b === true) {
+        authId = null;
+        subscribe(ws); // re-send anything the relay CLOSED as auth-required
       }
-      if (Array.isArray(frame) && frame[0] === 'EVENT' && frame[2]) handleEvent(frame[2]);
     };
     ws.onclose = () => {
       state.open = false;
@@ -460,6 +642,140 @@ export function createNostrChannel(options) {
       setTimeout(() => connectRelay(url), delay);
     };
     ws.onerror = () => { /* onclose handles retry */ };
+  }
+
+  const openConns = () => [...conns].filter(([, s]) => s.open);
+  const connFor = (url) => [...conns].find(([u]) => normUrl(u) === normUrl(url))?.[1];
+
+  /** One-shot REQ across connected relays; resolves at EOSE from all, or timeout. */
+  function query(filter, timeoutMs = 3000) {
+    const targets = openConns();
+    if (targets.length === 0) return Promise.resolve([]);
+    const subId = `jsclaw-q${++querySeq}`;
+    return new Promise((resolve) => {
+      const events = [];
+      const waiting = new Set(targets.map(([u]) => u));
+      const finish = () => {
+        if (!pending.has(subId)) return;
+        clearTimeout(timer);
+        pending.delete(subId);
+        for (const [, s] of targets) {
+          try { if (s.open) s.ws.send(JSON.stringify(['CLOSE', subId])); } catch { /* closing anyway */ }
+        }
+        resolve(events);
+      };
+      const timer = setTimeout(finish, timeoutMs);
+      pending.set(subId, {
+        onEvent: (ev) => { if (verifyEvent(ev)) events.push(ev); },
+        onEose: (u) => { waiting.delete(u); if (waiting.size === 0) finish(); },
+        finish,
+      });
+      for (const [u, s] of targets) {
+        try { s.ws.send(JSON.stringify(['REQ', subId, filter])); } catch { pending.get(subId)?.onEose(u); }
+      }
+    });
+  }
+
+  /** The peer's NIP-17 inbox relays (kind 10050), cached for 10 minutes. */
+  async function inboxRelays(peer) {
+    const cached = inboxCache.get(peer);
+    if (cached && Date.now() - cached.at < 10 * 60 * 1000) return cached.relays;
+    const events = await query({ kinds: [10050], authors: [peer], limit: 1 });
+    const latest = events
+      .filter((ev) => ev.kind === 10050 && ev.pubkey === peer && Array.isArray(ev.tags))
+      .sort((x, y) => y.created_at - x.created_at)[0];
+    const urls = latest
+      ? [...new Set(latest.tags
+        .filter((t) => t[0] === 'relay' && typeof t[1] === 'string' && /^wss?:\/\//i.test(t[1].trim()))
+        .map((t) => normUrl(t[1])))].slice(0, 5)
+      : [];
+    inboxCache.set(peer, { relays: urls, at: Date.now() });
+    return urls;
+  }
+
+  /** Publish over a short-lived connection: open, EVENT, wait for OK (or 5 s), close. */
+  function publishOnce(url, event, timeoutMs = 5000) {
+    return new Promise((resolve) => {
+      let ws;
+      let done = false;
+      let authId = null;
+      let resent = false;
+      const finish = (ok) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        try { ws?.close(); } catch { /* already closed */ }
+        resolve(ok);
+      };
+      const timer = setTimeout(() => finish(false), timeoutMs);
+      const send = () => ws.send(JSON.stringify(['EVENT', event]));
+      try {
+        ws = new WebSocket(url);
+      } catch {
+        finish(false);
+        return;
+      }
+      ws.onopen = send;
+      ws.onmessage = (e) => {
+        const frame = parseFrame(e.data);
+        if (!frame) return;
+        const [type, id, ok, msg] = frame;
+        if (type === 'AUTH' && typeof id === 'string') {
+          const auth = authEvent(url, id, privkey);
+          authId = auth.id;
+          ws.send(JSON.stringify(['AUTH', auth]));
+        } else if (type === 'OK' && id === authId) {
+          if (ok === true && !resent) { resent = true; send(); }
+          else if (ok !== true) finish(false);
+        } else if (type === 'OK' && id === event.id) {
+          if (ok === true) finish(true);
+          else if (/^auth-required/.test(msg || '') && !resent) { /* wait for AUTH, then resend */ }
+          else finish(false);
+        }
+      };
+      ws.onerror = () => finish(false);
+      ws.onclose = () => finish(false);
+    });
+  }
+
+  /** Send on our live connection to url if there is one, else a one-shot connection. */
+  async function publishTo(url, event) {
+    const state = connFor(url);
+    if (state?.open) {
+      try {
+        state.ws.send(JSON.stringify(['EVENT', event]));
+        return true;
+      } catch { /* fall through to a fresh connection */ }
+    }
+    return publishOnce(url, event);
+  }
+
+  async function sendNip17(recipient, text) {
+    const rumor = createChatRumor(pubkey, recipient, text);
+    const wrap = giftWrap(rumor, privkey, recipient);
+    remember(wrap.id);
+
+    // NIP-17: publish to the recipient's kind-10050 inbox relays. Without
+    // one we fall back to our own relays, where we already met the peer.
+    const inbox = await inboxRelays(recipient);
+    const targets = inbox.length > 0 ? inbox : relays;
+    const results = await Promise.all(targets.map((url) => publishTo(url, wrap)));
+    const delivered = targets.filter((_, i) => results[i]);
+    logger.info(`Nostr: NIP-17 DM to ${recipient.slice(0, 12)}… via ${inbox.length ? 'inbox' : 'own'} relays: ${delivered.join(', ') || 'none'}`);
+    if (delivered.length === 0) throw new Error('no relay accepted the NIP-17 gift wrap');
+
+    // A copy wrapped to ourselves so other clients on this key show our side
+    // of the thread. Best effort: it must never fail the real send.
+    try {
+      const mine = giftWrap(rumor, privkey, pubkey);
+      remember(mine.id);
+      const frame = JSON.stringify(['EVENT', mine]);
+      for (const [, s] of openConns()) {
+        try { s.ws.send(frame); } catch { /* relay flake */ }
+      }
+    } catch (err) {
+      logger.warn('Nostr: self-copy of NIP-17 DM failed', { error: err.message });
+    }
   }
 
   return {
@@ -474,6 +790,7 @@ export function createNostrChannel(options) {
 
     async disconnect() {
       closed = true;
+      for (const q of [...pending.values()]) q.finish();
       for (const [, state] of conns) {
         try { state.ws?.close(); } catch { /* already closed */ }
         state.open = false;
@@ -490,6 +807,11 @@ export function createNostrChannel(options) {
 
     async sendMessage(jid, text) {
       const recipient = toHex(jid, 'npub');
+      if (dm === 'nip17' || (dm === 'auto' && peerProtocol.get(recipient) === 'nip17')) {
+        await sendNip17(recipient, text);
+        return;
+      }
+
       const event = finalizeEvent({
         kind: 4,
         tags: [['p', recipient]],

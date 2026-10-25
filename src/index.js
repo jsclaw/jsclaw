@@ -58,7 +58,15 @@ export {
   eventId,
   bech32Encode,
   bech32Decode,
+  createChatRumor,
+  giftWrap,
+  unwrapGiftWrap,
 } from './nostr.js';
+export {
+  getConversationKey as nip44GetConversationKey,
+  encrypt as nip44Encrypt,
+  decrypt as nip44Decrypt,
+} from './nip44.js';
 
 // Webhooks
 export { startWebhookIngress, renderTemplate, createWebhookEmitter } from './webhooks.js';

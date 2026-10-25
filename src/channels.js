@@ -52,6 +52,7 @@ export const CHANNEL_FACTORIES = {
       open: ctx.open,
       logger: ctx.logger,
       onMessage: ctx.onMessage,
+      ...(block.dm && { dm: block.dm }),
     });
   },
 };

@@ -21,7 +21,7 @@ jsclaw provides primitives for running Claude AI agents in isolated Docker conta
 - **Heartbeat** — Periodic agent wake-up for autonomous operation (`HEARTBEAT.md`)
 - **Identity Files** — `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` loaded into the system prompt, openclaw-style
 - **Channels** — Formal `Channel` interface + `ChannelManager` routing for pluggable I/O
-- **Nostr** — Built-in decentralized channel: encrypted DMs (NIP-04) with zero-dep BIP340 Schnorr, verified against the official Bitcoin test vectors
+- **Nostr** — Built-in decentralized channel: encrypted DMs (NIP-04 and NIP-17 gift wraps over NIP-44) with zero-dep BIP340 Schnorr and ChaCha20, verified against the official Bitcoin and NIP-44 test vectors
 - **MCP Passthrough** — Wire any of the 32,000+ MCP servers into your agents via openclaw's `mcp.servers` config shape
 - **Models & Providers** — Per-agent and per-heartbeat model selection; Anthropic direct, GLM (Z.ai), Kimi (Moonshot), Bedrock, Vertex, or any Anthropic-compatible endpoint
 - **Onboarding** — `npx jsclaw onboard`: interactive setup wizard (environment checks, provider, models, scaffolding)
@@ -239,7 +239,7 @@ A `Channel` implements: `name`, `connect()`, `disconnect()`, `sendMessage(jid, t
 
 ### 6½. Nostr (a decentralized agent)
 
-Give your agent a Nostr identity and DM it from Damus, Amethyst, or any client — no bot tokens, no platform accounts, no central server. The whole stack (BIP340 Schnorr, NIP-04 encryption, bech32, relay client) is built on `node:crypto` and Node's native WebSocket: still zero dependencies.
+Give your agent a Nostr identity and DM it from Damus, Amethyst, or any client — no bot tokens, no platform accounts, no central server. The whole stack (BIP340 Schnorr, NIP-04 and NIP-44 encryption, NIP-17 gift wraps, bech32, relay client) is built on `node:crypto` and Node's native WebSocket: still zero dependencies.
 
 ```javascript
 import { createNostrChannel, generatePrivateKey } from 'jsclaw';
@@ -248,6 +248,7 @@ const channel = createNostrChannel({
   privateKey: process.env.NOSTR_PRIVATE_KEY,   // hex or nsec
   relays: ['wss://relay.damus.io', 'wss://nos.lol'],
   allowedPubkeys: ['npub1yourkey...'],          // default-closed
+  dm: 'auto',                                    // or 'nip04' / 'nip17' to force
   onMessage: (jid, text) => {
     // run an agent, reply with channel.sendMessage(jid, result)
   },
@@ -257,7 +258,9 @@ await channel.connect();
 console.log('DM your agent at', channel.npub);
 ```
 
-Incoming events are signature-verified and decrypted; only allowlisted pubkeys reach the agent (set `open: true` to accept anyone — at your own risk). See [examples/nostr-agent.js](examples/nostr-agent.js) for the full loop. Schnorr signing is validated against the official [BIP340 test vectors](https://github.com/bitcoin/bips/blob/master/bip-0340/test-vectors.csv) and cross-checked against `node:crypto`'s independent secp256k1 implementation.
+Incoming events are signature-verified and decrypted; only allowlisted pubkeys reach the agent (set `open: true` to accept anyone — at your own risk).
+
+Both DM flavours work: legacy NIP-04 (kind 4) and private NIP-17 (kind 1059 gift wrap → kind 13 seal → kind 14 message, NIP-44 encrypted). For NIP-17 the allowlist is checked against the seal signer, and a rumor that claims a different author is dropped. Replies go back in whichever protocol the peer last used (`dm: 'auto'`); NIP-17 replies are published to the peer's kind-10050 inbox relays (your own relays if they have none), with a copy wrapped to the agent so other clients show both sides. Senders backdate gift wraps by up to two days, so the agent subscribes two days back and drops anything whose real (rumor) timestamp is older than ten minutes before it connected — no backlog replay on restart. NIP-44 is checked against the [official vectors](https://github.com/paulmillr/nip44). See [examples/nostr-agent.js](examples/nostr-agent.js) for the full loop. Schnorr signing is validated against the official [BIP340 test vectors](https://github.com/bitcoin/bips/blob/master/bip-0340/test-vectors.csv) and cross-checked against `node:crypto`'s independent secp256k1 implementation.
 
 ### 7. Memory (persistent context)
 
@@ -511,7 +514,8 @@ The agent has access to these tools via the jsclaw MCP server:
     "nostr": {
       "privateKey": "${NOSTR_PRIVATE_KEY}",
       "allowFrom": ["npub1...you"],
-      "relays": ["wss://relay.damus.io", "wss://nos.lol"]
+      "relays": ["wss://relay.damus.io", "wss://nos.lol"],
+      "dm": "auto"
     },
     "telegram": {
       "botToken": "${TELEGRAM_BOT_TOKEN}",
@@ -529,8 +533,10 @@ the token in the environment, send the bot a message, and your chat id is in
 the gateway log.
 
 With `channels.nostr` configured, `npx jsclaw gateway` also answers encrypted
-Nostr DMs (NIP-04) — message the npub it prints at boot from Damus, Amethyst,
-or any Nostr client. No bot token, no platform account, zero dependencies.
+Nostr DMs — NIP-04 and NIP-17 — message the npub it prints at boot from Damus,
+Amethyst, or any Nostr client. No bot token, no platform account, zero
+dependencies. `dm` is `"auto"` (reply in the protocol each peer last used),
+`"nip04"` or `"nip17"`; NIP-17 replies go to the peer's inbox relays.
 Channel blocks use openclaw's field names: `allowFrom` (required —
 an open DM agent answers anyone and burns tokens; `dmPolicy: "open"`
 with `allowFrom: ["*"]` to accept that) and `enabled`. Routing to
