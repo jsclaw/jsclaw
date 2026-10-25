@@ -192,6 +192,16 @@ Drop a `HEARTBEAT.md` in an agent folder to give that agent standing tasks:
 
 The agent replies `HEARTBEAT_OK` when nothing needs attention (suppressed); anything else is delivered through `onAlert`.
 
+Most heartbeats find nothing to do, and a model call is an expensive way to find that out. Put an executable `HEARTBEAT.sh` next to `HEARTBEAT.md` and it runs first, with no model involved:
+
+```sh
+#!/bin/sh
+# Print only what needs the agent's attention. Silence = HEARTBEAT_OK, model stays asleep.
+cd ~/cos && bin/cos day | grep -E '^ *(timer|task)'
+```
+
+Exit 0 with empty output and the heartbeat is over, free. Anything printed is appended to the prompt under `## Pre-check output` and the model is woken to act on it. A non-zero exit or a timeout (`heartbeatPrecheckTimeout`, default 60 s) is logged and the model is woken anyway, so a broken script fails loud rather than quiet. `jsclaw heartbeat <agent> --dry-run` shows what the script printed and whether the model would run.
+
 ### 5. Identity files (personality)
 
 Drop any of `SOUL.md`, `IDENTITY.md`, `AGENTS.md`, `TOOLS.md`, `USER.md` into an agent folder and the agent loads them into its system prompt in that order — same convention as openclaw:
@@ -485,6 +495,7 @@ The agent has access to these tools via the jsclaw MCP server:
 | `JSCLAW_DATA_DIR` | `./data` | IPC data directory |
 | `JSCLAW_SCHEDULER_POLL_INTERVAL` | `60000` | Task scheduler poll interval (ms) |
 | `JSCLAW_HEARTBEAT_INTERVAL` | `1800000` | Heartbeat interval (ms, 30 min) |
+| `JSCLAW_HEARTBEAT_PRECHECK_TIMEOUT` | `60000` | Max run time (ms) for an agent's `HEARTBEAT.sh` pre-check |
 | `JSCLAW_MEMORY_MAX_CHARS` | `8000` | Memory budget loaded into system prompt (chars) |
 | `JSCLAW_SKILLS_PATH` | `./skills` | Directory of SKILL.md files |
 | `JSCLAW_CONFIG_PATH` | `./jsclaw.json` | Config file location |

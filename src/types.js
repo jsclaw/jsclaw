@@ -56,6 +56,7 @@
  * @property {number} ipcPollInterval - IPC polling interval in ms (default: 1000)
  * @property {number} schedulerPollInterval - Task scheduler poll interval in ms (default: 60000)
  * @property {number} heartbeatInterval - Heartbeat interval in ms (default: 1800000)
+ * @property {number} heartbeatPrecheckTimeout - Max run time for an agent's HEARTBEAT.sh pre-check in ms (default: 60000)
  * @property {string} dataDir - Base directory for IPC/data files
  * @property {string} agentsDir - Base directory for agent workspace folders
  * @property {string} skillsDir - Directory of SKILL.md files (default: ./skills)

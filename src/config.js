@@ -27,6 +27,7 @@ function defaults() {
     ipcPollInterval: 1000,
     schedulerPollInterval: 60 * 1000,   // 1 minute
     heartbeatInterval: 30 * 60 * 1000,  // 30 minutes
+    heartbeatPrecheckTimeout: 60 * 1000, // 1 minute for HEARTBEAT.sh
     dataDir: join(process.cwd(), 'data'),
     agentsDir: join(process.cwd(), 'agents'),
     skillsDir: join(process.cwd(), 'skills'),
@@ -90,6 +91,7 @@ const ENV_KEYS = {
   JSCLAW_IPC_POLL_INTERVAL: ['ipcPollInterval', Number],
   JSCLAW_SCHEDULER_POLL_INTERVAL: ['schedulerPollInterval', Number],
   JSCLAW_HEARTBEAT_INTERVAL: ['heartbeatInterval', Number],
+  JSCLAW_HEARTBEAT_PRECHECK_TIMEOUT: ['heartbeatPrecheckTimeout', Number],
   JSCLAW_DATA_DIR: ['dataDir', String],
   JSCLAW_AGENTS_DIR: ['agentsDir', String],
   JSCLAW_SKILLS_PATH: ['skillsDir', String],
