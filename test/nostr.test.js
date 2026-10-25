@@ -1,14 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { createECDH, randomBytes } from 'node:crypto';
-import { createServer } from 'node:http';
 import {
   getPublicKey, generatePrivateKey, schnorrSign, schnorrVerify,
   nip04Encrypt, nip04Decrypt, eventId, finalizeEvent, verifyEvent,
   bech32Encode, bech32Decode, createNostrChannel,
 } from '../src/nostr.js';
-import { acceptKey, attachWebSocket } from '../src/ws.js';
-import { nullLogger } from './helpers.js';
+import { nullLogger, startMockRelay } from './helpers.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -155,66 +153,7 @@ test('npub/nsec roundtrip and checksum enforcement', () => {
   assert.throws(() => bech32Decode(corrupted), /checksum|character/);
 });
 
-// --- mock relay (built on jsclaw's own ws.js) ---
-
-function startMockRelay() {
-  const stored = [];
-  const subs = new Map(); // conn -> { subId, filter }
-
-  const server = createServer();
-  server.on('upgrade', (req, socket, head) => {
-    const key = req.headers['sec-websocket-key'];
-    socket.write(
-      'HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n' +
-      `Sec-WebSocket-Accept: ${acceptKey(key)}\r\n\r\n`
-    );
-    const conn = {};
-    const ws = attachWebSocket(socket, {
-      onMessage: (text) => {
-        const frame = JSON.parse(text);
-        if (frame[0] === 'REQ') {
-          const [, subId, filter] = frame;
-          subs.set(conn, { subId, filter });
-          for (const ev of stored) {
-            if (matches(filter, ev)) ws.send(JSON.stringify(['EVENT', subId, ev]));
-          }
-          ws.send(JSON.stringify(['EOSE', subId]));
-        } else if (frame[0] === 'EVENT') {
-          const ev = frame[1];
-          stored.push(ev);
-          conn.ws.send(JSON.stringify(['OK', ev.id, true, '']));
-          for (const [c, sub] of subs) {
-            if (matches(sub.filter, ev)) c.ws.send(JSON.stringify(['EVENT', sub.subId, ev]));
-          }
-        } else if (frame[0] === 'CLOSE') {
-          subs.delete(conn);
-        }
-      },
-      onClose: () => subs.delete(conn),
-    }, head);
-    conn.ws = ws;
-  });
-
-  function matches(filter, ev) {
-    if (filter.kinds && !filter.kinds.includes(ev.kind)) return false;
-    if (filter['#p']) {
-      const ps = ev.tags.filter((t) => t[0] === 'p').map((t) => t[1]);
-      if (!filter['#p'].some((p) => ps.includes(p))) return false;
-    }
-    if (filter.since && ev.created_at < filter.since) return false;
-    return true;
-  }
-
-  return new Promise((resolve) => {
-    server.listen(0, '127.0.0.1', () => {
-      resolve({
-        url: `ws://127.0.0.1:${server.address().port}`,
-        stored,
-        stop: () => new Promise((r) => { server.closeAllConnections?.(); server.close(r); }),
-      });
-    });
-  });
-}
+// --- channel over a mock relay (test/helpers.js) ---
 
 test('channel E2E over a mock relay: encrypted DMs both ways, allowlist enforced', async () => {
   const relay = await startMockRelay();

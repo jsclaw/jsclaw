@@ -139,6 +139,11 @@ test('nostr factory maps registry ctx onto createNostrChannel and rejects legacy
   assert.throws(() => CHANNEL_FACTORIES.nostr({}, {}), /privateKey is required/);
   assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, allowed: ['x'] }, {}), /renamed to 'allowFrom'/);
   assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, agentId: 'main' }, {}), /route with bindings/);
+
+  // channels.nostr.dm passes through and is validated
+  const ctx = { allowFrom: [], open: true, logger: nullLogger, onMessage: () => {} };
+  assert.ok(CHANNEL_FACTORIES.nostr({ privateKey: key, relays: ['wss://example.invalid'], dm: 'nip17' }, ctx));
+  assert.throws(() => CHANNEL_FACTORIES.nostr({ privateKey: key, relays: ['wss://example.invalid'], dm: 'nip99' }, ctx), /dm must be/);
 });
 
 test('telegram factory filters by allowFrom and maps messages', async () => {
