@@ -28,7 +28,7 @@ import { startTaskScheduler } from '../src/task-scheduler.js';
 import { startIpcWatcher } from '../src/ipc.js';
 import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
 import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
-import { HEARTBEAT_OK, HEARTBEAT_SCRIPT, buildHeartbeatPrompt, runPrecheck } from '../src/heartbeat.js';
+import { startHeartbeat, HEARTBEAT_OK, HEARTBEAT_SCRIPT, buildHeartbeatPrompt, runPrecheck } from '../src/heartbeat.js';
 import { startGateway } from '../src/gateway.js';
 import { SessionStore } from '../src/sessions.js';
 import { loadPlugins } from '../src/plugins.js';
