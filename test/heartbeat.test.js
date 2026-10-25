@@ -115,3 +115,82 @@ test('triggerNow bypasses quiet hours', async () => {
   assert.equal(calls, 1);
   hb.stop();
 });
+
+// --- HEARTBEAT.sh pre-check: the cheap half of a heartbeat ---
+
+import { chmodSync } from 'node:fs';
+import { runPrecheck, buildHeartbeatPrompt, HEARTBEAT_SCRIPT } from '../src/heartbeat.js';
+
+function setupScript(config, folder, body) {
+  const path = join(config.agentsDir, folder, HEARTBEAT_SCRIPT);
+  writeFileSync(path, `#!/bin/sh\n${body}\n`);
+  chmodSync(path, 0o755);
+}
+
+test('a quiet HEARTBEAT.sh keeps the model asleep', async () => {
+  const config = tempConfig({ heartbeatInterval: 1e9 });
+  setupAgent(config, 'hb', '- check the thing');
+  setupScript(config, 'hb', 'exit 0');
+
+  let calls = 0;
+  const hb = startHeartbeat({
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
+    runAgent: async () => { calls++; return { status: 'success', result: HEARTBEAT_OK }; },
+  }, config);
+  await hb.triggerNow();
+  assert.equal(calls, 0);
+  hb.stop();
+});
+
+test('HEARTBEAT.sh output wakes the model and lands in the prompt', async () => {
+  const config = tempConfig({ heartbeatInterval: 1e9 });
+  setupAgent(config, 'hb', '- check the thing');
+  setupScript(config, 'hb', 'echo "timer: washing (at 10:30)"');
+
+  let seen;
+  const hb = startHeartbeat({
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
+    runAgent: async (agent, prompt) => { seen = prompt; return { status: 'success', result: HEARTBEAT_OK }; },
+  }, config);
+  await hb.triggerNow();
+  assert.ok(seen.includes('- check the thing'));
+  assert.ok(seen.includes(`## Pre-check output (${HEARTBEAT_SCRIPT})`));
+  assert.ok(seen.includes('timer: washing (at 10:30)'));
+  hb.stop();
+});
+
+test('a failing HEARTBEAT.sh falls through to the model', async () => {
+  const config = tempConfig({ heartbeatInterval: 1e9 });
+  setupAgent(config, 'hb', '- check the thing');
+  setupScript(config, 'hb', 'echo partial; exit 3');
+
+  let calls = 0;
+  const hb = startHeartbeat({
+    getAgents: () => [{ name: 'hb', folder: 'hb' }],
+    runAgent: async () => { calls++; return { status: 'success', result: HEARTBEAT_OK }; },
+  }, config);
+  await hb.triggerNow();
+  assert.equal(calls, 1);
+  hb.stop();
+});
+
+test('runPrecheck reports no script, quiet, output and failure', async () => {
+  const config = tempConfig();
+  setupAgent(config, 'p');
+  const dir = join(config.agentsDir, 'p');
+  assert.deepEqual(await runPrecheck(dir), { ran: false });
+
+  writeFileSync(join(dir, HEARTBEAT_SCRIPT), '#!/bin/sh\necho hi\n'); // not executable: ignored
+  assert.deepEqual(await runPrecheck(dir), { ran: false });
+
+  setupScript(config, 'p', 'echo "  hi  "');
+  assert.deepEqual(await runPrecheck(dir), { ran: true, output: 'hi' });
+
+  setupScript(config, 'p', 'sleep 5');
+  const slow = await runPrecheck(dir, { timeout: 100 });
+  assert.equal(slow.ran, true);
+  assert.ok(slow.error);
+
+  assert.equal(buildHeartbeatPrompt('- t'), buildHeartbeatPrompt('- t', ''));
+  assert.ok(buildHeartbeatPrompt('- t', 'x').endsWith('x'));
+});

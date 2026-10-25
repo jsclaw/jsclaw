@@ -28,7 +28,7 @@ import { startTaskScheduler } from '../src/task-scheduler.js';
 import { startIpcWatcher } from '../src/ipc.js';
 import { listMemoryFiles, searchMemory, clearMemory } from '../src/memory.js';
 import { runContainerAgent, reapOrphanContainers } from '../src/container-runner.js';
-import { startHeartbeat, HEARTBEAT_OK } from '../src/heartbeat.js';
+import { HEARTBEAT_OK, HEARTBEAT_SCRIPT, buildHeartbeatPrompt, runPrecheck } from '../src/heartbeat.js';
 import { startGateway } from '../src/gateway.js';
 import { SessionStore } from '../src/sessions.js';
 import { loadPlugins } from '../src/plugins.js';
@@ -149,17 +149,31 @@ function cmdDoctor(config) {
     if (major < 20) throw new Error(`found ${process.versions.node}`);
     return process.versions.node;
   });
-  check(`container runtime: ${config.containerRuntime}`, () =>
-    execSync(`${config.containerRuntime} --version`, { stdio: 'pipe' }).toString().trim().split('\n')[0]
-  );
-  check(`image: ${config.containerImage}`, () => {
-    const out = execSync(
-      `${config.containerRuntime} image inspect ${config.containerImage} --format ok`,
-      { stdio: 'pipe' }
-    ).toString().trim();
-    if (!out) throw new Error('not built — run: npm run docker:build');
-    return 'built';
-  });
+  // Sandboxing decides which runner has to be healthy: containers for
+  // 'all'/'non-main'/'auto', the localRunner for 'off' (and as the fallback
+  // 'auto' lands on when no engine is present).
+  const mode = config.sandboxMode ?? 'auto';
+  console.log(`  info  sandboxMode: ${mode}`);
+  if (mode !== 'off') {
+    check(`container runtime: ${config.containerRuntime}`, () =>
+      execSync(`${config.containerRuntime} --version`, { stdio: 'pipe' }).toString().trim().split('\n')[0]
+    );
+    check(`image: ${config.containerImage}`, () => {
+      const out = execSync(
+        `${config.containerRuntime} image inspect ${config.containerImage} --format ok`,
+        { stdio: 'pipe' }
+      ).toString().trim();
+      if (!out) throw new Error('not built — run: npm run docker:build');
+      return 'built';
+    });
+  }
+  if (mode === 'off' || mode === 'non-main' || (mode === 'auto' && config.localRunner)) {
+    check('localRunner', () => {
+      if (!config.localRunner) throw new Error(`not set (sandboxMode '${mode}' runs agents as plain processes)`);
+      if (!existsSync(config.localRunner)) throw new Error(`not found: ${config.localRunner}`);
+      return config.localRunner;
+    });
+  }
   check('ANTHROPIC_API_KEY set', () => {
     if (!process.env.ANTHROPIC_API_KEY) throw new Error('not set');
     return 'set';
@@ -261,21 +275,27 @@ async function cmdRun(config, agent, prompt) {
 
 async function cmdHeartbeat(config, agent, dryRun) {
   if (!agent) fail('heartbeat requires an agent', 2);
-  const hbPath = join(config.agentsDir, agent, 'HEARTBEAT.md');
-  if (!existsSync(hbPath)) fail(`no HEARTBEAT.md in ${join(config.agentsDir, agent)}`);
+  const agentDir = join(config.agentsDir, agent);
+  const hbPath = join(agentDir, 'HEARTBEAT.md');
+  if (!existsSync(hbPath)) fail(`no HEARTBEAT.md in ${agentDir}`);
   const tasks = readFileSync(hbPath, 'utf-8').trim();
 
-  const prompt = `[HEARTBEAT]
-Read the tasks below (from HEARTBEAT.md) and check whether any of them need action right now.
-
-- If nothing needs attention, reply with exactly: ${HEARTBEAT_OK}
-- If something needs action, take it (use your tools), then summarize what you did.
-
-${tasks}`;
+  const pre = await runPrecheck(agentDir, { timeout: config.heartbeatPrecheckTimeout, env: { JSCLAW_AGENT_ID: agent } });
+  if (pre.error) console.error(`${HEARTBEAT_SCRIPT} failed (${pre.error}); waking the model anyway`);
+  const quiet = pre.ran && !pre.error && !pre.output;
+  const prompt = buildHeartbeatPrompt(tasks, pre.output);
 
   if (dryRun) {
-    console.log('--- would send this heartbeat prompt ---');
-    console.log(prompt);
+    if (pre.ran) console.log(`--- ${HEARTBEAT_SCRIPT} ${quiet ? 'printed nothing: the model would not be woken' : 'printed:'} ---`);
+    if (pre.output) console.log(pre.output);
+    if (!quiet) {
+      console.log('--- would send this heartbeat prompt ---');
+      console.log(prompt);
+    }
+    return;
+  }
+  if (quiet) {
+    console.log(HEARTBEAT_OK);
     return;
   }
 
