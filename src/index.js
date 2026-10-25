@@ -101,3 +101,5 @@ export {
 
 // Logger
 export { createLogger } from './logger.js';
+
+export { createTelegramChannel, chunkText, TELEGRAM_MAX_TEXT } from './telegram.js';

@@ -17,6 +17,7 @@
 import { resolveBinding } from './bindings.js';
 import { normalizeAgentId } from './agents.js';
 import { createNostrChannel } from './nostr.js';
+import { createTelegramChannel } from './telegram.js';
 import { handleCommand } from './commands.js';
 import { SessionStore } from './sessions.js';
 
@@ -27,38 +28,17 @@ import { SessionStore } from './sessions.js';
  * { connect?(), disconnect?(), sendMessage(jid, text) }.
  */
 export const CHANNEL_FACTORIES = {
-  telegram: async (block, ctx) => {
+  telegram: (block, ctx) => {
     if (!block.botToken) throw new Error('channels.telegram: botToken is required (use a ${ENV_VAR} reference)');
-    let Bot;
-    try {
-      ({ Bot } = await import('grammy'));
-    } catch {
-      throw new Error('channels.telegram requires grammy — npm install grammy');
-    }
-    const bot = new Bot(block.botToken, block.botInfo ? { botInfo: block.botInfo } : undefined);
-    const allow = new Set(ctx.allowFrom.map(String));
-    bot.on('message:text', (tg) => {
-      const chatId = String(tg.chat.id);
-      const username = tg.from?.username ? `@${tg.from.username}` : null;
-      if (!ctx.open && !allow.has(chatId) && !(username && allow.has(username))) {
-        ctx.logger?.info?.(`telegram: ignored message from ${username || chatId} (not in allowFrom)`);
-        return;
-      }
-      ctx.onMessage(chatId, tg.message.text);
+    return createTelegramChannel({
+      botToken: block.botToken,
+      allowFrom: ctx.allowFrom,
+      open: ctx.open,
+      logger: ctx.logger,
+      onMessage: ctx.onMessage,
+      ...(block.pollTimeout != null && { pollTimeout: block.pollTimeout }),
+      ...(block.apiBase && { apiBase: block.apiBase }),
     });
-    let username = null;
-    return {
-      name: 'telegram',
-      _bot: bot,
-      get username() { return username; },
-      async connect() {
-        const me = await bot.api.getMe();
-        username = `@${me.username}`;
-        bot.start(); // long-polls until stop(); intentionally not awaited
-      },
-      async disconnect() { await bot.stop(); },
-      async sendMessage(jid, text) { await bot.api.sendMessage(jid, text); },
-    };
   },
 
   nostr: (block, ctx) => {

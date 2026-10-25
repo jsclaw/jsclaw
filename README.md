@@ -1,10 +1,10 @@
 # jsclaw
 
 [![CI](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml/badge.svg)](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml)
-[![one dependency](https://img.shields.io/badge/dependencies-1_(grammy)-brightgreen)](package.json)
+[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
 [![license AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
 
-Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM; one dependency (grammy, for the Telegram channel).
+Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero dependencies.
 
 A JavaScript agent host inspired by [nanoclaw](https://github.com/qwibitai/nanoclaw) — the core engine without the channel-specific code, rewritten from scratch in plain JS.
 
@@ -521,6 +521,13 @@ The agent has access to these tools via the jsclaw MCP server:
 }
 ```
 
+With `channels.telegram` configured, `npx jsclaw gateway` long-polls the Bot
+API over `fetch` (no grammy, no webhook, no public URL) and answers the chats
+in `allowFrom`, by chat id or `@username`. Replies longer than Telegram's
+4096 characters are split at a line break. Make the bot with @BotFather, put
+the token in the environment, send the bot a message, and your chat id is in
+the gateway log.
+
 With `channels.nostr` configured, `npx jsclaw gateway` also answers encrypted
 Nostr DMs (NIP-04) — message the npub it prints at boot from Damus, Amethyst,
 or any Nostr client. No bot token, no platform account, zero dependencies.
@@ -534,7 +541,7 @@ goes to `main`:
 { "bindings": [{ "match": { "channel": "nostr" }, "agentId": "research" }] }
 ```
 
-One session per (channel, peer). Telegram is next (#44).
+One session per (channel, peer), on Nostr and Telegram alike.
 
 ### Sandboxing — openclaw-style, per agent
 
@@ -574,7 +581,7 @@ contained workers. `additionalMounts` are ignored for unsandboxed agents
 
 ## Differences from nanoclaw
 
-- No WhatsApp/Telegram channels — bring your own I/O
+- Telegram and Nostr channels built in, zero dependencies (grammy is gone); WhatsApp — bring your own I/O
 - No SQLite database — bring your own storage
 - No router or message loop — build your own orchestration
 - No task scheduler — implement your own scheduling
