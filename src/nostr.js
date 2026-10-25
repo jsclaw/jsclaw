@@ -494,6 +494,7 @@ export function createNostrChannel(options) {
   /** @type {Map<string, { relays: string[], at: number }>} kind-10050 cache */
   const inboxCache = new Map();
   const pending = new Map(); // query subId -> { onEvent, onEose, finish }
+  const acks = new Map(); // event id -> resolve(ok, msg) for a publish on a live connection
   let querySeq = 0;
   let closed = false;
   const sinceConnect = nowSec() - 10;
@@ -632,6 +633,8 @@ export function createNostrChannel(options) {
       } else if (type === 'OK' && a === authId && b === true) {
         authId = null;
         subscribe(ws); // re-send anything the relay CLOSED as auth-required
+      } else if (type === 'OK' && acks.has(a)) {
+        acks.get(a)(b === true, frame[3] || '');
       }
     };
     ws.onclose = () => {
@@ -738,16 +741,31 @@ export function createNostrChannel(options) {
     });
   }
 
-  /** Send on our live connection to url if there is one, else a one-shot connection. */
-  async function publishTo(url, event) {
+  /**
+   * Publish on our live connection to url when there is one, and wait for the
+   * relay's OK (NIP-20). A rejection, a timeout, or no live connection falls
+   * through to a one-shot connection, which also handles an AUTH challenge.
+   * "Sent on the socket" is not "accepted": relays drop or refuse events all
+   * the time, and the caller needs to know.
+   */
+  async function publishTo(url, event, timeoutMs = 5000) {
     const state = connFor(url);
     if (state?.open) {
-      try {
-        state.ws.send(JSON.stringify(['EVENT', event]));
-        return true;
-      } catch { /* fall through to a fresh connection */ }
+      const live = await new Promise((resolve) => {
+        const timer = setTimeout(() => { acks.delete(event.id); resolve({ ok: false, msg: 'timeout waiting for OK' }); }, timeoutMs);
+        acks.set(event.id, (ok, msg) => { clearTimeout(timer); acks.delete(event.id); resolve({ ok, msg }); });
+        try {
+          state.ws.send(JSON.stringify(['EVENT', event]));
+        } catch (err) {
+          clearTimeout(timer); acks.delete(event.id); resolve({ ok: false, msg: err.message });
+        }
+      });
+      if (live.ok) return true;
+      logger.warn(`Nostr: ${url} did not accept event ${event.id.slice(0, 8)} on the live connection (${live.msg}); retrying on a fresh one`);
     }
-    return publishOnce(url, event);
+    const ok = await publishOnce(url, event, timeoutMs);
+    if (!ok) logger.warn(`Nostr: ${url} rejected or never acknowledged event ${event.id.slice(0, 8)}`);
+    return ok;
   }
 
   async function sendNip17(recipient, text) {
