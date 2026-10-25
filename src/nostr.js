@@ -175,6 +175,24 @@ function sharedSecret(privkeyHex, pubkeyHex) {
 }
 
 /**
+ * Validated ECDH: the unhashed 32-byte x coordinate of privkey · pubkey
+ * (NIP-44's `shared_x`). Rejects scalars outside [1, n-1] and x-only
+ * pubkeys that aren't on the curve (twist points included).
+ * @param {string} privkeyHex
+ * @param {string} pubkeyHex - x-only
+ * @returns {Buffer}
+ */
+export function sharedSecretX(privkeyHex, pubkeyHex) {
+  if (!/^[0-9a-f]{64}$/i.test(privkeyHex)) throw new Error('invalid private key');
+  if (!/^[0-9a-f]{64}$/i.test(pubkeyHex)) throw new Error('invalid public key');
+  const d = bytesToBig(Buffer.from(privkeyHex, 'hex'));
+  if (d === 0n || d >= N) throw new Error('invalid private key');
+  const point = pointMul(d, liftX(bytesToBig(Buffer.from(pubkeyHex, 'hex'))));
+  if (point === null) throw new Error('invalid shared point');
+  return bigToBytes(point.x);
+}
+
+/**
  * @param {string} privkeyHex - Sender's private key
  * @param {string} pubkeyHex - Recipient's x-only pubkey
  * @param {string} text
