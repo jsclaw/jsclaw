@@ -1,33 +1,105 @@
 # [jsclaw](https://github.com/jsclaw/jsclaw)
 
-- [README · 5 ›](./readme.jsonld)
-  - [What is jsclaw?](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw)
-  - [Install](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
-  - [Quick Start](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
-    - parts 1/3
-      - [-1. Even faster: the wizard](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#-1-even-faster-the-wizard)
-      - [The fast path: a full agent host in one…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#0-the-fast-path-a-full-agent-host-in-one-command)
-      - [Build the container image](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#1-build-the-container-image)
-      - [Run an agent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#2-run-an-agent)
-      - [With Queue + IPC](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#3-with-queue-ipc)
-      - [Scheduled tasks + heartbeat](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#4-scheduled-tasks-heartbeat-autonomous-operation)
-    - parts 2/3
-      - [Identity files](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#5-identity-files-personality)
-      - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6-channels-pluggable-io)
-      - [6½. Nostr](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6½-nostr-a-decentralized-agent)
-      - [Memory](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#7-memory-persistent-context)
-      - [Webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#8-webhooks-http-ingress)
-      - [Skills](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#9-skills)
-    - parts 3/3
-      - [Multi-agent bindings](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#10-multi-agent-bindings)
-      - [Outgoing webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11-outgoing-webhooks)
-      - [11½. MCP servers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11½-mcp-servers-plug-into-the-mcp-ecosystem)
-      - [11¾. Models & providers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11¾-models-providers)
-      - [Config file](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#12-config-file)
-      - [CLI](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#13-cli)
-  - [Architecture](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
-  - [API](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api)
-    - [createConfig](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#createconfigoverrides)
+- [README · 8 ›](./readme.jsonld)
+  - sections 1/2
+    - [What is jsclaw?](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw)
+    - [Install](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
+    - [Quick Start](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - parts 1/3
+        - [-1. Even faster: the wizard](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#-1-even-faster-the-wizard)
+        - [The fast path: a full agent host in one…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#0-the-fast-path-a-full-agent-host-in-one-command)
+        - [Build the container image](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#1-build-the-container-image)
+        - [Run an agent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#2-run-an-agent)
+        - [With Queue + IPC](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#3-with-queue-ipc)
+        - [Scheduled tasks + heartbeat](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#4-scheduled-tasks-heartbeat-autonomous-operation)
+      - parts 2/3
+        - [Identity files](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#5-identity-files-personality)
+        - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6-channels-pluggable-io)
+        - [6½. Nostr](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6½-nostr-a-decentralized-agent)
+        - [Memory](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#7-memory-persistent-context)
+        - [Webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#8-webhooks-http-ingress)
+        - [Skills](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#9-skills)
+      - parts 3/3
+        - [Multi-agent bindings](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#10-multi-agent-bindings)
+        - [Outgoing webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11-outgoing-webhooks)
+        - [11½. MCP servers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11½-mcp-servers-plug-into-the-mcp-ecosystem)
+        - [11¾. Models & providers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11¾-models-providers)
+        - [Config file](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#12-config-file)
+        - [CLI](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#13-cli)
+    - [Architecture](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+  - sections 2/2
+    - [API](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api)
+      - [createConfig](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#createconfigoverrides)
+      - [runContainerAgent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#runcontaineragentagent-input-onprocess-onoutput-config)
+      - [AgentQueue](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#agentqueue)
+      - [startIpcWatcher](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#startipcwatcherdeps-config)
+      - [writeIpcFile / readIpcFile / drainIpcDir](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#writeipcfiledir-data-readipcfilepath-drainipcdirdir)
+      - [validateAdditionalMounts](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#validateadditionalmountsmounts-agentname-ismain-allowlistpath)
+    - [MCP Tools](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [Configuration](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#channels-dm-your-agent)
+      - [Sandboxing](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#sandboxing-openclaw-style-per-agent)
+    - [Differences from nanoclaw](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#differences-from-nanoclaw)
+- [CLI · 21 commands ›](./cli.jsonld)
+  - commands 1/2
+    - onboard
+      - Interactive setup wizard
+    - status
+      - Show config, agents, task counts
+    - doctor
+      - Check environment health
+    - tasks · 4
+      - list [--agent <folder>]
+        - List scheduled tasks
+      - pause <id>
+        - Pause a task
+      - resume <id>
+        - Resume a task
+      - cancel <id>
+        - Cancel a task
+    - memory · 3
+      - list <agent>
+        - List an agent's memory files
+      - search <agent> <query>
+        - Search an agent's memory
+      - clear <agent>
+        - Delete an agent's memory
+    - run <agent> <prompt...>
+      - Run an agent once with a prompt
+  - commands 2/2
+    - heartbeat <agent> [--dry-run]
+      - Trigger a heartbeat cycle now
+    - reap
+      - Remove orphaned jsclaw containers
+    - gateway [--port <n>]
+      - Run the full agent host: gateway,
+    - skill · 4
+      - list
+        - List installed skills
+      - install <path>
+        - Install a SKILL.md file
+      - remove <name>
+        - Remove an installed skill
+      - test <path> <message...>
+        - Check whether a message triggers a skill
+    - config · 3
+      - list
+        - Show effective configuration
+      - get <key>
+        - Read a config value
+      - set <key> <value>
+        - Write a value to jsclaw.json
+  - Options · 5
+    - --agent <folder>
+      - Filter tasks by agent
+    - --dry-run
+      - Show what would run without running it
+    - --json
+      - Machine-readable output
+    - --version
+      - Show version
+    - --help
+      - Show this help
 - [Source · src/ · 30 files ›](./src.jsonld)
   - around index.js · 6
     - [index.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js)
@@ -242,21 +314,20 @@
         - [attachWebSocket()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L66)
       - [196 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js)
 - [Open issues · 12 ›](./issues.jsonld)
-  - [unlabelled · 12 ›](./issues-unlabelled.jsonld)
-    - unlabelled 1/2
-      - [#88 Self-improvement loop: a `reflect`…](https://github.com/jsclaw/jsclaw/issues/88)
-      - [#85 Support coding-plan (OAuth) endpoin…](https://github.com/jsclaw/jsclaw/issues/85)
-      - [#79 Align workspace conventions with op…](https://github.com/jsclaw/jsclaw/issues/79)
-      - [#63 ACP support: IDEs (Zed) talk to jsc…](https://github.com/jsclaw/jsclaw/issues/63)
-      - [#62 Model catalog: models.list with rea…](https://github.com/jsclaw/jsclaw/issues/62)
-      - [#61 Sub-agent spawning: agents that sta…](https://github.com/jsclaw/jsclaw/issues/61)
-    - unlabelled 2/2
-      - [#59 dmPolicy 'pairing': approve unknown…](https://github.com/jsclaw/jsclaw/issues/59)
-      - [#58 Exec approvals: human sign-off for…](https://github.com/jsclaw/jsclaw/issues/58)
-      - [#47 Share the skills ecosystem with ope…](https://github.com/jsclaw/jsclaw/issues/47)
-      - [#46 Gateway protocol parity with opencl…](https://github.com/jsclaw/jsclaw/issues/46)
-      - [#45 openclaw client compatibility: run…](https://github.com/jsclaw/jsclaw/issues/45)
-      - [#27 Verify GLM (Z.ai) and Kimi (Moonsho…](https://github.com/jsclaw/jsclaw/issues/27)
+  - issues 1/2
+    - [#88 Self-improvement loop: a `reflect`…](https://github.com/jsclaw/jsclaw/issues/88)
+    - [#85 Support coding-plan (OAuth) endpoin…](https://github.com/jsclaw/jsclaw/issues/85)
+    - [#79 Align workspace conventions with op…](https://github.com/jsclaw/jsclaw/issues/79)
+    - [#63 ACP support: IDEs (Zed) talk to jsc…](https://github.com/jsclaw/jsclaw/issues/63)
+    - [#62 Model catalog: models.list with rea…](https://github.com/jsclaw/jsclaw/issues/62)
+    - [#61 Sub-agent spawning: agents that sta…](https://github.com/jsclaw/jsclaw/issues/61)
+  - issues 2/2
+    - [#59 dmPolicy 'pairing': approve unknown…](https://github.com/jsclaw/jsclaw/issues/59)
+    - [#58 Exec approvals: human sign-off for…](https://github.com/jsclaw/jsclaw/issues/58)
+    - [#47 Share the skills ecosystem with ope…](https://github.com/jsclaw/jsclaw/issues/47)
+    - [#46 Gateway protocol parity with opencl…](https://github.com/jsclaw/jsclaw/issues/46)
+    - [#45 openclaw client compatibility: run…](https://github.com/jsclaw/jsclaw/issues/45)
+    - [#27 Verify GLM (Z.ai) and Kimi (Moonsho…](https://github.com/jsclaw/jsclaw/issues/27)
 - [Examples · 3](https://github.com/jsclaw/jsclaw/tree/gh-pages/examples)
   - [nostr-agent.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js)
   - [plugins](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins)

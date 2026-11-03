@@ -19,19 +19,134 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#bq9ccn",
-      "name": "unlabelled · 12 ›",
-      "x": 217,
-      "y": 106,
-      "link": "./issues-unlabelled.jsonld",
+      "@id": "#yyjnxk",
+      "name": "issues 1/2",
+      "x": 233,
+      "y": 77,
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#3yirdr",
+      "@id": "#hrvxpy",
+      "name": "#88 Self-improvement loop: a `reflect`…",
+      "x": 405,
+      "y": -249,
+      "link": "https://github.com/jsclaw/jsclaw/issues/88",
+      "bgColor": "#daeeff",
+      "parent": "#yyjnxk"
+    },
+    {
+      "@id": "#hzsqn4",
+      "name": "#85 Support coding-plan (OAuth) endpoin…",
+      "x": 574,
+      "y": -115,
+      "link": "https://github.com/jsclaw/jsclaw/issues/85",
+      "bgColor": "#daeeff",
+      "parent": "#yyjnxk"
+    },
+    {
+      "@id": "#dttxwc",
+      "name": "#79 Align workspace conventions with op…",
+      "x": 493,
+      "y": 70,
+      "link": "https://github.com/jsclaw/jsclaw/issues/79",
+      "bgColor": "#daeeff",
+      "parent": "#yyjnxk"
+    },
+    {
+      "@id": "#p8ysyk",
+      "name": "#63 ACP support: IDEs (Zed) talk to jsc…",
+      "x": 499,
+      "y": 268,
+      "link": "https://github.com/jsclaw/jsclaw/issues/63",
+      "bgColor": "#daeeff",
+      "parent": "#yyjnxk"
+    },
+    {
+      "@id": "#9c2qhr",
+      "name": "#62 Model catalog: models.list with rea…",
+      "x": 286,
+      "y": 349,
+      "link": "https://github.com/jsclaw/jsclaw/issues/62",
+      "bgColor": "#daeeff",
+      "parent": "#yyjnxk"
+    },
+    {
+      "@id": "#h59t8f",
+      "name": "#61 Sub-agent spawning: agents that sta…",
+      "x": 123,
+      "y": 490,
+      "link": "https://github.com/jsclaw/jsclaw/issues/61",
+      "bgColor": "#daeeff",
+      "parent": "#yyjnxk"
+    },
+    {
+      "@id": "#rfby2g",
+      "name": "issues 2/2",
+      "x": -250,
+      "y": -12,
+      "bgColor": "#febdc6",
+      "parent": "#this"
+    },
+    {
+      "@id": "#arxjt8",
+      "name": "#59 dmPolicy 'pairing': approve unknown…",
+      "x": -299,
+      "y": 341,
+      "link": "https://github.com/jsclaw/jsclaw/issues/59",
+      "bgColor": "#ffe2e6",
+      "parent": "#rfby2g"
+    },
+    {
+      "@id": "#jtyjdw",
+      "name": "#58 Exec approvals: human sign-off for…",
+      "x": -507,
+      "y": 257,
+      "link": "https://github.com/jsclaw/jsclaw/issues/58",
+      "bgColor": "#ffe2e6",
+      "parent": "#rfby2g"
+    },
+    {
+      "@id": "#dtqx4z",
+      "name": "#47 Share the skills ecosystem with ope…",
+      "x": -495,
+      "y": 61,
+      "link": "https://github.com/jsclaw/jsclaw/issues/47",
+      "bgColor": "#ffe2e6",
+      "parent": "#rfby2g"
+    },
+    {
+      "@id": "#u2s2vv",
+      "name": "#46 Gateway protocol parity with opencl…",
+      "x": -571,
+      "y": -126,
+      "link": "https://github.com/jsclaw/jsclaw/issues/46",
+      "bgColor": "#ffe2e6",
+      "parent": "#rfby2g"
+    },
+    {
+      "@id": "#vx2z65",
+      "name": "#45 openclaw client compatibility: run…",
+      "x": -398,
+      "y": -257,
+      "link": "https://github.com/jsclaw/jsclaw/issues/45",
+      "bgColor": "#ffe2e6",
+      "parent": "#rfby2g"
+    },
+    {
+      "@id": "#xwei9g",
+      "name": "#27 Verify GLM (Z.ai) and Kimi (Moonsho…",
+      "x": -298,
+      "y": -433,
+      "link": "https://github.com/jsclaw/jsclaw/issues/27",
+      "bgColor": "#ffe2e6",
+      "parent": "#rfby2g"
+    },
+    {
+      "@id": "#6bzs4i",
       "name": "← jsclaw",
-      "x": -217,
-      "y": -106,
+      "x": 52,
+      "y": -208,
       "link": "./index.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -43,8 +158,60 @@
       "end": 1
     },
     {
-      "start": 0,
+      "start": 1,
       "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 1,
+      "end": 5
+    },
+    {
+      "start": 1,
+      "end": 6
+    },
+    {
+      "start": 1,
+      "end": 7
+    },
+    {
+      "start": 0,
+      "end": 8
+    },
+    {
+      "start": 8,
+      "end": 9
+    },
+    {
+      "start": 8,
+      "end": 10
+    },
+    {
+      "start": 8,
+      "end": 11
+    },
+    {
+      "start": 8,
+      "end": 12
+    },
+    {
+      "start": 8,
+      "end": 13
+    },
+    {
+      "start": 8,
+      "end": 14
+    },
+    {
+      "start": 0,
+      "end": 15
     }
   ],
   "selectedNode": 0
