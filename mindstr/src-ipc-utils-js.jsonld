@@ -19,63 +19,72 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#aya9s9",
-      "name": "exports",
-      "x": 242,
-      "y": 54,
+      "@id": "#uhqx6j",
+      "name": "Shared IPC file utilities",
+      "x": 217,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#vn2imx",
+      "@id": "#aurbbn",
+      "name": "exports",
+      "x": 43,
+      "y": 192,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#fxz322",
       "name": "writeIpcFile()",
-      "x": 422,
-      "y": -229,
+      "x": 316,
+      "y": 248,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L21",
-      "bgColor": "#daeeff",
-      "parent": "#aya9s9"
+      "bgColor": "#fce3f3",
+      "parent": "#aurbbn"
     },
     {
-      "@id": "#2tznvh",
+      "@id": "#s77s87",
       "name": "readIpcFile()",
-      "x": 590,
-      "y": -14,
+      "x": 198,
+      "y": 390,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L37",
-      "bgColor": "#daeeff",
-      "parent": "#aya9s9"
+      "bgColor": "#fce3f3",
+      "parent": "#aurbbn"
     },
     {
-      "@id": "#cnh2fk",
+      "@id": "#k73rni",
       "name": "drainIpcDir()",
-      "x": 435,
-      "y": 209,
+      "x": -5,
+      "y": 365,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L52",
-      "bgColor": "#daeeff",
-      "parent": "#aya9s9"
+      "bgColor": "#fce3f3",
+      "parent": "#aurbbn"
     },
     {
-      "@id": "#dk76uz",
+      "@id": "#r8zm2z",
       "name": "writeCloseSentinel()",
-      "x": 283,
-      "y": 440,
+      "x": -213,
+      "y": 384,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L84",
-      "bgColor": "#daeeff",
-      "parent": "#aya9s9"
+      "bgColor": "#fce3f3",
+      "parent": "#aurbbn"
     },
     {
-      "@id": "#5aggpq",
+      "@id": "#wzv4c3",
       "name": "89 lines",
-      "x": -198,
-      "y": 130,
+      "x": -230,
+      "y": 7,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#eqmaaw",
+      "@id": "#7fnz2s",
       "name": "← src/",
-      "x": -96,
-      "y": -196,
+      "x": -43,
+      "y": -192,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -87,28 +96,32 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 6
     },
     {
       "start": 0,
       "end": 7
+    },
+    {
+      "start": 0,
+      "end": 8
     }
   ],
   "selectedNode": 0

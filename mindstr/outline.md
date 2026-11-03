@@ -1,54 +1,153 @@
 # [jsclaw](https://github.com/jsclaw/jsclaw)
 
-- [README · 8 ›](./readme.jsonld)
-  - sections 1/2
-    - [What is jsclaw?](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw)
-    - [Install](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
-    - [Quick Start](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
-      - parts 1/3
-        - [-1. Even faster: the wizard](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#-1-even-faster-the-wizard)
-        - [The fast path: a full agent host in one…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#0-the-fast-path-a-full-agent-host-in-one-command)
-        - [Build the container image](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#1-build-the-container-image)
-        - [Run an agent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#2-run-an-agent)
-        - [With Queue + IPC](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#3-with-queue-ipc)
-        - [Scheduled tasks + heartbeat](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#4-scheduled-tasks-heartbeat-autonomous-operation)
-      - parts 2/3
-        - [Identity files](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#5-identity-files-personality)
-        - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6-channels-pluggable-io)
-        - [6½. Nostr](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6½-nostr-a-decentralized-agent)
-        - [Memory](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#7-memory-persistent-context)
-        - [Webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#8-webhooks-http-ingress)
-        - [Skills](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#9-skills)
-      - parts 3/3
-        - [Multi-agent bindings](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#10-multi-agent-bindings)
-        - [Outgoing webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11-outgoing-webhooks)
-        - [11½. MCP servers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11½-mcp-servers-plug-into-the-mcp-ecosystem)
-        - [11¾. Models & providers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11¾-models-providers)
+- [Live site](https://jsclaw.dev/jsclaw/)
+  - [Architecture](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+    - [stdin/stdout](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+    - [IPC files](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+    - [Container workspace](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+  - [Lightweight container orchestration for Claude AI agents.…](https://jsclaw.dev/jsclaw/)
+  - [jsclaw.dev/jsclaw](https://jsclaw.dev/jsclaw/)
+  - [since Feb 2026 · last 25 Oct 2026](https://github.com/jsclaw/jsclaw/commits/gh-pages)
+  - [README · 8 ›](./readme.jsonld)
+    - [What is jsclaw? → Quick Start ›](./readme-1.jsonld)
+      - [What is jsclaw?](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw)
+      - [Install](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
+      - [Quick Start](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+        - parts 1/3
+          - [-1. Even faster: the wizard](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#-1-even-faster-the-wizard)
+          - [The fast path: a full agent host in one…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#0-the-fast-path-a-full-agent-host-in-one-command)
+          - [Build the container image](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#1-build-the-container-image)
+          - [Run an agent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#2-run-an-agent)
+          - [With Queue + IPC](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#3-with-queue-ipc)
+        - parts 2/3
+          - [Scheduled tasks + heartbeat](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#4-scheduled-tasks-heartbeat-autonomous-operation)
+          - [Identity files](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#5-identity-files-personality)
+          - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6-channels-pluggable-io)
+          - [6½. Nostr](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6½-nostr-a-decentralized-agent)
+          - [Memory](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#7-memory-persistent-context)
+        - parts 3/3
+          - [Webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#8-webhooks-http-ingress)
+          - [Skills](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#9-skills)
+          - [Multi-agent bindings](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#10-multi-agent-bindings)
+          - [Outgoing webhooks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11-outgoing-webhooks)
+          - [11½. MCP servers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11½-mcp-servers-plug-into-the-mcp-ecosystem)
+    - [11¾. Models & providers → API ›](./readme-2.jsonld)
+      - [11¾. Models & providers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11¾-models-providers)
         - [Config file](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#12-config-file)
         - [CLI](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#13-cli)
-    - [Architecture](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
-  - sections 2/2
-    - [API](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api)
-      - [createConfig](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#createconfigoverrides)
-      - [runContainerAgent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#runcontaineragentagent-input-onprocess-onoutput-config)
-      - [AgentQueue](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#agentqueue)
-      - [startIpcWatcher](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#startipcwatcherdeps-config)
-      - [writeIpcFile / readIpcFile / drainIpcDir](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#writeipcfiledir-data-readipcfilepath-drainipcdirdir)
-      - [validateAdditionalMounts](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#validateadditionalmountsmounts-agentname-ismain-allowlistpath)
-    - [MCP Tools](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
-    - [Configuration](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
-      - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#channels-dm-your-agent)
-      - [Sandboxing](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#sandboxing-openclaw-style-per-agent)
-    - [Differences from nanoclaw](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#differences-from-nanoclaw)
+      - [Architecture](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+      - [API](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api)
+        - [createConfig](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#createconfigoverrides)
+        - [runContainerAgent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#runcontaineragentagent-input-onprocess-onoutput-config)
+        - [AgentQueue](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#agentqueue)
+        - [startIpcWatcher](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#startipcwatcherdeps-config)
+        - [writeIpcFile / readIpcFile / drainIpcDir](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#writeipcfiledir-data-readipcfilepath-drainipcdirdir)
+        - [validateAdditionalMounts](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#validateadditionalmountsmounts-agentname-ismain-allowlistpath)
+    - [MCP Tools → Differences from nanoclaw ›](./readme-3.jsonld)
+      - [MCP Tools](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+      - [Configuration](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+        - [Channels](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#channels-dm-your-agent)
+        - [Sandboxing](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#sandboxing-openclaw-style-per-agent)
+      - [Differences from nanoclaw](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#differences-from-nanoclaw)
+- [Data · 2 ›](./kb-data.jsonld)
+  - [MCP Tools · 6](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [send_message: Send a message to the chat…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [schedule_task: Schedule a cron, interval,…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [list_tasks: List scheduled tasks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [pause_task: Pause a scheduled task](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [resume_task: Resume a paused task](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+    - [cancel_task: Cancel and delete a task](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+  - [Configuration · 20](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+    - fields 1/3
+      - [JSCLAW_CONTAINER_IMAGE: jsclaw-agent:latest](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_CONTAINER_RUNTIME: docker](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_SANDBOX_MODE: auto](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_LOCAL_RUNNER: —](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_CONTAINER_TIMEOUT: 1800000](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_MAX_CONCURRENT: 5](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_DATA_DIR: ./data](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+    - fields 2/3
+      - [JSCLAW_SCHEDULER_POLL_INTERVAL: 60000](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_HEARTBEAT_INTERVAL: 1800000](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_HEARTBEAT_PRECHECK_TIMEOUT: 60000](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_MEMORY_MAX_CHARS: 8000](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_SKILLS_PATH: ./skills](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_CONFIG_PATH: ./jsclaw.json](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [JSCLAW_AGENTS_DIR: ./agents](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+    - fields 3/3
+      - [JSCLAW_LOG_LEVEL: info](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [ANTHROPIC_API_KEY: —](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [auto: Sandbox when the container engine…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [all: Every agent in a container](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [non-main: main agent on the host, every…](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+      - [off: Every agent as a plain process](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration)
+- [Install · 6 ›](./kb-run.jsonld)
+  - [Pipeline · 13](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
+    - steps 1/2
+      - [npm install](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
+      - [npx jsclaw](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: config, agents, task counts](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: environment health checks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: scheduled tasks](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: memory files for an agent](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: one-shot agent run](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+    - steps 2/2
+      - [npx jsclaw: preview a heartbeat cycle](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: installed skills](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: install a SKILL.md](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: trigger check](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: effective configuration](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+      - [npx jsclaw: writes jsclaw.json](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+  - [Other scripts · 3 ›](./kb-scripts.jsonld)
+    - [bin/ · 2](https://github.com/jsclaw/jsclaw/tree/gh-pages/bin)
+      - [jsclaw.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/bin/jsclaw.js)
+      - [onboard.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/bin/onboard.js)
+    - [test/ · 28](https://github.com/jsclaw/jsclaw/tree/gh-pages/test)
+      - test 1/4
+        - [agent-queue.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/agent-queue.test.js)
+        - [agents.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/agents.test.js)
+        - [bindings.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/bindings.test.js)
+        - [channel.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/channel.test.js)
+        - [channels.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/channels.test.js)
+        - [cli.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/cli.test.js)
+        - [commands.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/commands.test.js)
+      - test 2/4
+        - [config.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/config.test.js)
+        - [cron.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/cron.test.js)
+        - [e2e.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/e2e.test.js)
+        - [gateway.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/gateway.test.js)
+        - [heartbeat.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/heartbeat.test.js)
+        - [helpers.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/helpers.js)
+        - [ipc-utils.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/ipc-utils.test.js)
+      - test 3/4
+        - [local-runner.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/local-runner.test.js)
+        - [mcp.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/mcp.test.js)
+        - [memory.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/memory.test.js)
+        - [nip17.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/nip17.test.js)
+        - [nip44.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/nip44.test.js)
+        - [nostr.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/nostr.test.js)
+        - [plugins.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/plugins.test.js)
+      - test 4/4
+        - [providers.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/providers.test.js)
+        - [reap.e2e.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/reap.e2e.test.js)
+        - [sessions.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/sessions.test.js)
+        - [skills.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/skills.test.js)
+        - [task-store.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/task-store.test.js)
+        - [telegram.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/telegram.test.js)
+        - [webhooks.test.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/webhooks.test.js)
+    - [test/fixtures/ · 2](https://github.com/jsclaw/jsclaw/tree/gh-pages/test/fixtures)
+      - [local-mock-runner.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/fixtures/local-mock-runner.js)
+      - [mock-agent.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/test/fixtures/mock-agent.js)
+  - [Precedence](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+  - [heartbeatModel](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+  - [Providers](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+  - [Security](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
 - [CLI · 21 commands ›](./cli.jsonld)
   - commands 1/2
     - onboard
-      - Interactive setup wizard
     - status
-      - Show config, agents, task counts
     - doctor
-      - Check environment health
-    - tasks · 4
+    - [tasks · 4 ›](./cli-tasks.jsonld)
       - list [--agent <folder>]
         - List scheduled tasks
       - pause <id>
@@ -57,7 +156,7 @@
         - Resume a task
       - cancel <id>
         - Cancel a task
-    - memory · 3
+    - [memory · 3 ›](./cli-memory.jsonld)
       - list <agent>
         - List an agent's memory files
       - search <agent> <query>
@@ -65,15 +164,11 @@
       - clear <agent>
         - Delete an agent's memory
     - run <agent> <prompt...>
-      - Run an agent once with a prompt
   - commands 2/2
     - heartbeat <agent> [--dry-run]
-      - Trigger a heartbeat cycle now
     - reap
-      - Remove orphaned jsclaw containers
     - gateway [--port <n>]
-      - Run the full agent host: gateway,
-    - skill · 4
+    - [skill · 4 ›](./cli-skill.jsonld)
       - list
         - List installed skills
       - install <path>
@@ -82,7 +177,7 @@
         - Remove an installed skill
       - test <path> <message...>
         - Check whether a message triggers a skill
-    - config · 3
+    - [config · 3 ›](./cli-config.jsonld)
       - list
         - Show effective configuration
       - get <key>
@@ -104,12 +199,14 @@
   - around index.js · 6
     - [index.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js)
     - [config.js · 3 ›](./src-config-js.jsonld)
+      - [Configuration with defaults, optional jsclaw.json…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L1)
       - exports
         - [loadConfigFile()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L67)
         - [createConfig()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L110)
-        - [defaultConfig()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L136)
+        - [defaultConfig](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L136)
       - [137 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js)
     - [container-runner.js · 11 ›](./src-container-runner-js.jsonld)
+      - [Container execution engine](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L1)
       - exports 1/2
         - [resolveSkillsForRun()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L31)
         - [engineAvailable()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L70)
@@ -125,10 +222,12 @@
         - [writeTasksSnapshot()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L562)
       - [567 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js)
     - [ipc.js · 1 ›](./src-ipc-js.jsonld)
+      - [Host-side IPC watcher](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js#L1)
       - exports
         - [startIpcWatcher()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js#L21)
       - [142 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js)
     - [ipc-utils.js · 4 ›](./src-ipc-utils-js.jsonld)
+      - [Shared IPC file utilities](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L1)
       - exports
         - [writeIpcFile()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L21)
         - [readIpcFile()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L37)
@@ -136,37 +235,43 @@
         - [writeCloseSentinel()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L84)
       - [89 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js)
     - [agent-queue.js · 1 ›](./src-agent-queue-js.jsonld)
+      - [Per-agent concurrency queue with global container…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agent-queue.js#L1)
       - exports
         - [AgentQueue()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agent-queue.js#L23)
       - [242 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agent-queue.js)
   - around types.js · 6
     - [types.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/types.js)
     - [channel.js · 1 ›](./src-channel-js.jsonld)
+      - [Channel contract and manager](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channel.js#L1)
       - exports
         - [ChannelManager()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channel.js#L25)
       - [126 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channel.js)
     - [channels.js · 3 ›](./src-channels-js.jsonld)
+      - [Channel registry — gateway-hosted chat surfaces…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L1)
       - exports
-        - [CHANNEL_FACTORIES()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L30)
+        - [CHANNEL_FACTORIES](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L30)
         - [validateChannelBlock()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L66)
         - [startChannels()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L94)
       - [159 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js)
     - [commands.js · 5 ›](./src-commands-js.jsonld)
+      - [Slash commands — openclaw's registry shapes (#60)](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L1)
       - exports
         - [registerPluginCommands()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L20)
-        - [BUILTIN_COMMANDS()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L29)
+        - [BUILTIN_COMMANDS](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L29)
         - [parseCommand()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L41)
         - [listCommands()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L54)
         - [handleCommand()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L104)
       - [154 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js)
     - [gateway.js · 1 ›](./src-gateway-js.jsonld)
+      - [Gateway — WebSocket control plane speaking…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js#L1)
       - exports
         - [startGateway()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js#L62)
       - [495 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js)
     - [heartbeat.js · 6 ›](./src-heartbeat-js.jsonld)
+      - [Heartbeat — periodic agent wake-up for autonomous…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L1)
       - exports
-        - [HEARTBEAT_OK()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L21)
-        - [HEARTBEAT_SCRIPT()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L23)
+        - [HEARTBEAT_OK](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L21)
+        - [HEARTBEAT_SCRIPT](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L23)
         - [buildHeartbeatPrompt()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L41)
         - [runPrecheck()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L63)
         - [inQuietHours()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L85)
@@ -174,13 +279,15 @@
       - [197 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js)
   - around agents.js · 3
     - [agents.js · 2 ›](./src-agents-js.jsonld)
+      - [Agent id handling (#79 Phase 0)](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L1)
       - exports
-        - [DEFAULT_AGENT_ID()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L13)
+        - [DEFAULT_AGENT_ID](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L13)
         - [normalizeAgentId()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L19)
       - [29 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js)
     - [memory.js · 8 ›](./src-memory-js.jsonld)
+      - [Markdown memory — openclaw's convention, per agent](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L1)
       - exports 1/2
-        - [MEMORY_CATEGORIES()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L21)
+        - [MEMORY_CATEGORIES](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L21)
         - [memoryDir()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L29)
         - [initMemory()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L41)
         - [listMemoryFiles()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L60)
@@ -191,6 +298,7 @@
         - [clearMemory()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L172)
       - [175 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js)
     - [skills.js · 9 ›](./src-skills-js.jsonld)
+      - [Skills — reusable agent capabilities in openclaw's…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L1)
       - exports 1/2
         - [parseFrontmatter()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L132)
         - [parseSkill()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L148)
@@ -205,6 +313,7 @@
       - [354 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js)
   - around nostr.js · 3
     - [nostr.js · 16 ›](./src-nostr-js.jsonld)
+      - [Nostr channel — decentralized encrypted DMs for…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L1)
       - exports 1/3
         - [getPublicKey()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L105)
         - [generatePrivateKey()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L112)
@@ -226,6 +335,7 @@
         - [createNostrChannel()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L469)
       - [853 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js)
     - [nip44.js · 6 ›](./src-nip44-js.jsonld)
+      - [NIP-44 v2 encrypted payloads — zero dependencies](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L1)
       - exports
         - [chacha20()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L68)
         - [getConversationKey()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L103)
@@ -235,36 +345,42 @@
         - [decrypt()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L200)
       - [207 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js)
     - [logger.js · 1 ›](./src-logger-js.jsonld)
+      - [Minimal logger with no external dependencies](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js#L1)
       - exports
         - [createLogger()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js#L13)
       - [38 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js)
   - around task-store.js · 3
     - [task-store.js · 3 ›](./src-task-store-js.jsonld)
+      - [JSON file-backed task persistence](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L1)
       - exports
         - [computeNextRun()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L39)
         - [TaskStore()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L63)
         - [createTaskIpcHandler()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L276)
       - [323 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js)
     - [task-scheduler.js · 1 ›](./src-task-scheduler-js.jsonld)
+      - [Task scheduler](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js#L1)
       - exports
         - [startTaskScheduler()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js#L25)
       - [72 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js)
     - [cron.js · 3 ›](./src-cron-js.jsonld)
+      - [Minimal 5-field cron expression parser](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/cron.js#L1)
       - exports
         - [parseCron()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/cron.js#L85)
         - [isValidCron()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/cron.js#L104)
         - [nextCron()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/cron.js#L142)
       - [181 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/cron.js)
-  - other 1 · 7
+  - standalone 1 · 7
     - [bindings.js · 2 ›](./src-bindings-js.jsonld)
+      - [Multi-agent bindings — openclaw's routing shape](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/bindings.js#L1)
       - exports
         - [resolveBinding()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/bindings.js#L48)
         - [resolveAgentConfig()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/bindings.js#L79)
       - [86 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/bindings.js)
     - [mcp.js · 8 ›](./src-mcp-js.jsonld)
+      - [MCP server envelope — Streamable HTTP transport…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L1)
       - exports 1/2
-        - [MCP_PROTOCOL_VERSION()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L11)
-        - [RPC_ERRORS()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L13)
+        - [MCP_PROTOCOL_VERSION](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L11)
+        - [RPC_ERRORS](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L13)
         - [rpcResult()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L21)
         - [rpcError()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L25)
       - exports 2/2
@@ -274,6 +390,7 @@
         - [createMcpHandler()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L50)
       - [97 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js)
     - [mount-security.js · 4 ›](./src-mount-security-js.jsonld)
+      - [Volume mount validation against an allowlist](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L1)
       - exports
         - [loadMountAllowlist()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L35)
         - [validateMount()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L75)
@@ -281,33 +398,39 @@
         - [generateAllowlistTemplate()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L154)
       - [161 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js)
     - [plugins.js · 1 ›](./src-plugins-js.jsonld)
+      - [Plugin loader — openclaw's config shape over…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js#L1)
       - exports
         - [loadPlugins()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js#L43)
       - [98 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js)
     - [providers.js · 3 ›](./src-providers-js.jsonld)
+      - [Model provider presets](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L1)
       - exports
-        - [PROVIDERS()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L27)
-        - [PROVIDER_ENV_KEYS()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L87)
+        - [PROVIDERS](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L27)
+        - [PROVIDER_ENV_KEYS](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L87)
         - [resolveProviderEnv()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L110)
       - [119 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js)
     - [sessions.js · 1 ›](./src-sessions-js.jsonld)
+      - [Session store — openclaw's session model (#57)](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js#L1)
       - exports
         - [SessionStore()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js#L29)
       - [169 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js)
     - [telegram.js · 3 ›](./src-telegram-js.jsonld)
+      - [Telegram channel — Bot API over fetch, long…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L1)
       - exports
-        - [TELEGRAM_MAX_TEXT()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L13)
+        - [TELEGRAM_MAX_TEXT](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L13)
         - [chunkText()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L22)
         - [createTelegramChannel()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L50)
       - [142 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js)
-  - other 2 · 2
+  - standalone 2 · 2
     - [webhooks.js · 3 ›](./src-webhooks-js.jsonld)
+      - [Webhook ingress — HTTP endpoints that turn…](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/webhooks.js#L1)
       - exports
         - [renderTemplate()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/webhooks.js#L29)
         - [startWebhookIngress()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/webhooks.js#L76)
         - [createWebhookEmitter()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/webhooks.js#L190)
       - [228 lines](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/webhooks.js)
     - [ws.js · 3 ›](./src-ws-js.jsonld)
+      - [Minimal RFC 6455 WebSocket server](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L1)
       - exports
         - [acceptKey()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L26)
         - [encodeFrame()](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L36)
@@ -332,6 +455,3 @@
   - [nostr-agent.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js)
   - [plugins](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins)
   - [telegram.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/telegram.js)
-- [Lightweight container orchestration for Claude AI…](https://github.com/jsclaw/jsclaw)
-  - [since Feb 2026 · last 25 Oct 2026](https://github.com/jsclaw/jsclaw/commits/gh-pages)
-  - [jsclaw.dev/jsclaw](https://jsclaw.dev/jsclaw/)

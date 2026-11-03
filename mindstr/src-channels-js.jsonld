@@ -19,54 +19,63 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#e9sufn",
-      "name": "exports",
-      "x": 248,
-      "y": 28,
+      "@id": "#fiqrfa",
+      "name": "Channel registry — gateway-hosted chat surfaces…",
+      "x": 220,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#g45zx9",
-      "name": "CHANNEL_FACTORIES()",
-      "x": 429,
-      "y": -219,
+      "@id": "#fad69b",
+      "name": "exports",
+      "x": 53,
+      "y": 190,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#fnrzmm",
+      "name": "CHANNEL_FACTORIES",
+      "x": 288,
+      "y": 271,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L30",
-      "bgColor": "#daeeff",
-      "parent": "#e9sufn"
+      "bgColor": "#fce3f3",
+      "parent": "#fad69b"
     },
     {
-      "@id": "#vz8rhu",
+      "@id": "#3y3s3p",
       "name": "validateChannelBlock()",
-      "x": 585,
-      "y": 68,
+      "x": 98,
+      "y": 356,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L66",
-      "bgColor": "#daeeff",
-      "parent": "#e9sufn"
+      "bgColor": "#fce3f3",
+      "parent": "#fad69b"
     },
     {
-      "@id": "#35gtrs",
+      "@id": "#ujs2ci",
       "name": "startChannels()",
-      "x": 346,
-      "y": 307,
+      "x": -116,
+      "y": 352,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js#L94",
-      "bgColor": "#daeeff",
-      "parent": "#e9sufn"
+      "bgColor": "#fce3f3",
+      "parent": "#fad69b"
     },
     {
-      "@id": "#fiqrfa",
+      "@id": "#442pm7",
       "name": "159 lines",
-      "x": -165,
-      "y": 160,
+      "x": -227,
+      "y": 33,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#fad69b",
+      "@id": "#imr4n9",
       "name": "← src/",
-      "x": -111,
-      "y": -191,
+      "x": -53,
+      "y": -190,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -78,24 +87,28 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 5
     },
     {
       "start": 0,
       "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
     }
   ],
   "selectedNode": 0

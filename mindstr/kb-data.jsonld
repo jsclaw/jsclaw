@@ -1,0 +1,438 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "jsclaw: Data",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#3yirdr",
+      "name": "MCP Tools · 6",
+      "x": 240,
+      "y": -60,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ptf2jy",
+      "name": "send_message: Send a message to the chat…",
+      "x": 346,
+      "y": -313,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#daeeff",
+      "parent": "#3yirdr"
+    },
+    {
+      "@id": "#4bfy6j",
+      "name": "schedule_task: Schedule a cron, interval,…",
+      "x": 497,
+      "y": -267,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#daeeff",
+      "parent": "#3yirdr"
+    },
+    {
+      "@id": "#4wkdd9",
+      "name": "list_tasks: List scheduled tasks",
+      "x": 469,
+      "y": -147,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#daeeff",
+      "parent": "#3yirdr"
+    },
+    {
+      "@id": "#yiscsp",
+      "name": "pause_task: Pause a scheduled task",
+      "x": 583,
+      "y": -79,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#daeeff",
+      "parent": "#3yirdr"
+    },
+    {
+      "@id": "#2fzfhg",
+      "name": "resume_task: Resume a paused task",
+      "x": 500,
+      "y": 17,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#daeeff",
+      "parent": "#3yirdr"
+    },
+    {
+      "@id": "#6ab87r",
+      "name": "cancel_task: Cancel and delete a task",
+      "x": 572,
+      "y": 122,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "bgColor": "#daeeff",
+      "parent": "#3yirdr"
+    },
+    {
+      "@id": "#uyfscv",
+      "name": "Configuration · 20",
+      "x": -223,
+      "y": 96,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#febdc6",
+      "parent": "#this"
+    },
+    {
+      "@id": "#z5cumb",
+      "name": "fields 1/3",
+      "x": 67,
+      "y": 421,
+      "bgColor": "#f0bfe6",
+      "parent": "#uyfscv"
+    },
+    {
+      "@id": "#7iejm3",
+      "name": "JSCLAW_CONTAINER_IMAGE: jsclaw-agent:latest",
+      "x": 387,
+      "y": 546,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#452y5w",
+      "name": "JSCLAW_CONTAINER_RUNTIME: docker",
+      "x": 295,
+      "y": 666,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#yyjnxk",
+      "name": "JSCLAW_SANDBOX_MODE: auto",
+      "x": 159,
+      "y": 606,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#hrvxpy",
+      "name": "JSCLAW_LOCAL_RUNNER: —",
+      "x": 76,
+      "y": 712,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#hzsqn4",
+      "name": "JSCLAW_CONTAINER_TIMEOUT: 1800000",
+      "x": -37,
+      "y": 650,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#dttxwc",
+      "name": "JSCLAW_MAX_CONCURRENT: 5",
+      "x": -162,
+      "y": 701,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#p8ysyk",
+      "name": "JSCLAW_DATA_DIR: ./data",
+      "x": -234,
+      "y": 604,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#fbe3f5",
+      "parent": "#z5cumb"
+    },
+    {
+      "@id": "#9c2qhr",
+      "name": "fields 2/3",
+      "x": -539,
+      "y": 204,
+      "bgColor": "#febdc6",
+      "parent": "#uyfscv"
+    },
+    {
+      "@id": "#h59t8f",
+      "name": "JSCLAW_SCHEDULER_POLL_INTERVAL: 60000",
+      "x": -469,
+      "y": 510,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#rfby2g",
+      "name": "JSCLAW_HEARTBEAT_INTERVAL: 1800000",
+      "x": -631,
+      "y": 464,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#arxjt8",
+      "name": "JSCLAW_HEARTBEAT_PRECHECK_TIMEOUT: 60000",
+      "x": -643,
+      "y": 328,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#jtyjdw",
+      "name": "JSCLAW_MEMORY_MAX_CHARS: 8000",
+      "x": -783,
+      "y": 258,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#dtqx4z",
+      "name": "JSCLAW_SKILLS_PATH: ./skills",
+      "x": -731,
+      "y": 142,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#u2s2vv",
+      "name": "JSCLAW_CONFIG_PATH: ./jsclaw.json",
+      "x": -838,
+      "y": 51,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#vx2z65",
+      "name": "JSCLAW_AGENTS_DIR: ./agents",
+      "x": -748,
+      "y": -51,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe2e6",
+      "parent": "#9c2qhr"
+    },
+    {
+      "@id": "#xwei9g",
+      "name": "fields 3/3",
+      "x": -342,
+      "y": -310,
+      "bgColor": "#fcc2a8",
+      "parent": "#uyfscv"
+    },
+    {
+      "@id": "#6bzs4i",
+      "name": "JSCLAW_LOG_LEVEL: info",
+      "x": -689,
+      "y": -252,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe5d8",
+      "parent": "#xwei9g"
+    },
+    {
+      "@id": "#fkywkd",
+      "name": "ANTHROPIC_API_KEY: —",
+      "x": -730,
+      "y": -352,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe5d8",
+      "parent": "#xwei9g"
+    },
+    {
+      "@id": "#j8deiz",
+      "name": "auto: Sandbox when the container engine…",
+      "x": -588,
+      "y": -397,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe5d8",
+      "parent": "#xwei9g"
+    },
+    {
+      "@id": "#aya9s9",
+      "name": "all: Every agent in a container",
+      "x": -558,
+      "y": -510,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe5d8",
+      "parent": "#xwei9g"
+    },
+    {
+      "@id": "#vn2imx",
+      "name": "non-main: main agent on the host, every…",
+      "x": -393,
+      "y": -556,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe5d8",
+      "parent": "#xwei9g"
+    },
+    {
+      "@id": "#2tznvh",
+      "name": "off: Every agent as a plain process",
+      "x": -302,
+      "y": -666,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "bgColor": "#ffe5d8",
+      "parent": "#xwei9g"
+    },
+    {
+      "@id": "#cnh2fk",
+      "name": "← jsclaw",
+      "x": 84,
+      "y": -200,
+      "link": "./index.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 1,
+      "end": 5
+    },
+    {
+      "start": 1,
+      "end": 6
+    },
+    {
+      "start": 1,
+      "end": 7
+    },
+    {
+      "start": 0,
+      "end": 8
+    },
+    {
+      "start": 8,
+      "end": 9
+    },
+    {
+      "start": 9,
+      "end": 10
+    },
+    {
+      "start": 9,
+      "end": 11
+    },
+    {
+      "start": 9,
+      "end": 12
+    },
+    {
+      "start": 9,
+      "end": 13
+    },
+    {
+      "start": 9,
+      "end": 14
+    },
+    {
+      "start": 9,
+      "end": 15
+    },
+    {
+      "start": 9,
+      "end": 16
+    },
+    {
+      "start": 8,
+      "end": 17
+    },
+    {
+      "start": 17,
+      "end": 18
+    },
+    {
+      "start": 17,
+      "end": 19
+    },
+    {
+      "start": 17,
+      "end": 20
+    },
+    {
+      "start": 17,
+      "end": 21
+    },
+    {
+      "start": 17,
+      "end": 22
+    },
+    {
+      "start": 17,
+      "end": 23
+    },
+    {
+      "start": 17,
+      "end": 24
+    },
+    {
+      "start": 8,
+      "end": 25
+    },
+    {
+      "start": 25,
+      "end": 26
+    },
+    {
+      "start": 25,
+      "end": 27
+    },
+    {
+      "start": 25,
+      "end": 28
+    },
+    {
+      "start": 25,
+      "end": 29
+    },
+    {
+      "start": 25,
+      "end": 30
+    },
+    {
+      "start": 25,
+      "end": 31
+    },
+    {
+      "start": 0,
+      "end": 32
+    }
+  ],
+  "selectedNode": 0
+}

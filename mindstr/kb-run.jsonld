@@ -1,0 +1,348 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "jsclaw: Install",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#t6q67m",
+      "name": "Pipeline · 13",
+      "x": 177,
+      "y": 125,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#abq85r",
+      "name": "steps 1/2",
+      "x": 430,
+      "y": -2,
+      "bgColor": "#a1dafb",
+      "parent": "#t6q67m"
+    },
+    {
+      "@id": "#sy2ncx",
+      "name": "npm install",
+      "x": 514,
+      "y": -295,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#fertai",
+      "name": "npx jsclaw",
+      "x": 635,
+      "y": -263,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#9u36xp",
+      "name": "npx jsclaw: config, agents, task counts",
+      "x": 606,
+      "y": -148,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#5q2nc4",
+      "name": "npx jsclaw: environment health checks",
+      "x": 699,
+      "y": -31,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#eegh3a",
+      "name": "npx jsclaw: scheduled tasks",
+      "x": 624,
+      "y": 76,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#tmtdcb",
+      "name": "npx jsclaw: memory files for an agent",
+      "x": 660,
+      "y": 198,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#ziixui",
+      "name": "npx jsclaw: one-shot agent run",
+      "x": 540,
+      "y": 276,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#d6f0ff",
+      "parent": "#abq85r"
+    },
+    {
+      "@id": "#qnf7j2",
+      "name": "steps 2/2",
+      "x": 49,
+      "y": 363,
+      "bgColor": "#b9d1ff",
+      "parent": "#t6q67m"
+    },
+    {
+      "@id": "#rx55k2",
+      "name": "npx jsclaw: preview a heartbeat cycle",
+      "x": 349,
+      "y": 446,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0ebff",
+      "parent": "#qnf7j2"
+    },
+    {
+      "@id": "#ux93wm",
+      "name": "npx jsclaw: installed skills",
+      "x": 262,
+      "y": 564,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0ebff",
+      "parent": "#qnf7j2"
+    },
+    {
+      "@id": "#a464iu",
+      "name": "npx jsclaw: install a SKILL.md",
+      "x": 157,
+      "y": 518,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0ebff",
+      "parent": "#qnf7j2"
+    },
+    {
+      "@id": "#simp87",
+      "name": "npx jsclaw: trigger check",
+      "x": 14,
+      "y": 595,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0ebff",
+      "parent": "#qnf7j2"
+    },
+    {
+      "@id": "#tzmucf",
+      "name": "npx jsclaw: effective configuration",
+      "x": -127,
+      "y": 515,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0ebff",
+      "parent": "#qnf7j2"
+    },
+    {
+      "@id": "#xmtzgz",
+      "name": "npx jsclaw: writes jsclaw.json",
+      "x": -257,
+      "y": 560,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0ebff",
+      "parent": "#qnf7j2"
+    },
+    {
+      "@id": "#b9snuz",
+      "name": "Other scripts · 3 ›",
+      "x": -206,
+      "y": 86,
+      "link": "./kb-scripts.jsonld",
+      "bgColor": "#d9c6fb",
+      "parent": "#this"
+    },
+    {
+      "@id": "#nxqgmq",
+      "name": "bin/ · 2 ›",
+      "x": -355,
+      "y": 208,
+      "link": "./kb-scripts.jsonld",
+      "bgColor": "#efe6ff",
+      "parent": "#b9snuz"
+    },
+    {
+      "@id": "#dguykc",
+      "name": "test/ · 28 ›",
+      "x": -385,
+      "y": 162,
+      "link": "./kb-scripts.jsonld",
+      "bgColor": "#efe6ff",
+      "parent": "#b9snuz"
+    },
+    {
+      "@id": "#28eue2",
+      "name": "test/fixtures/ · 2 ›",
+      "x": -408,
+      "y": 115,
+      "link": "./kb-scripts.jsonld",
+      "bgColor": "#efe6ff",
+      "parent": "#b9snuz"
+    },
+    {
+      "@id": "#f4n9qu",
+      "name": "Precedence",
+      "x": -230,
+      "y": -4,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#f9bdd5",
+      "parent": "#this"
+    },
+    {
+      "@id": "#krwt6e",
+      "name": "heartbeatModel",
+      "x": -204,
+      "y": -91,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#fcc2a9",
+      "parent": "#this"
+    },
+    {
+      "@id": "#emecna",
+      "name": "Providers",
+      "x": -140,
+      "y": -158,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#e0d199",
+      "parent": "#this"
+    },
+    {
+      "@id": "#u8v9bw",
+      "name": "Security",
+      "x": -35,
+      "y": -193,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#b1dfb5",
+      "parent": "#this"
+    },
+    {
+      "@id": "#j6zbf9",
+      "name": "← jsclaw",
+      "x": 67,
+      "y": -187,
+      "link": "./index.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 2,
+      "end": 3
+    },
+    {
+      "start": 2,
+      "end": 4
+    },
+    {
+      "start": 2,
+      "end": 5
+    },
+    {
+      "start": 2,
+      "end": 6
+    },
+    {
+      "start": 2,
+      "end": 7
+    },
+    {
+      "start": 2,
+      "end": 8
+    },
+    {
+      "start": 2,
+      "end": 9
+    },
+    {
+      "start": 1,
+      "end": 10
+    },
+    {
+      "start": 10,
+      "end": 11
+    },
+    {
+      "start": 10,
+      "end": 12
+    },
+    {
+      "start": 10,
+      "end": 13
+    },
+    {
+      "start": 10,
+      "end": 14
+    },
+    {
+      "start": 10,
+      "end": 15
+    },
+    {
+      "start": 10,
+      "end": 16
+    },
+    {
+      "start": 0,
+      "end": 17
+    },
+    {
+      "start": 17,
+      "end": 18
+    },
+    {
+      "start": 17,
+      "end": 19
+    },
+    {
+      "start": 17,
+      "end": 20
+    },
+    {
+      "start": 0,
+      "end": 21
+    },
+    {
+      "start": 0,
+      "end": 22
+    },
+    {
+      "start": 0,
+      "end": 23
+    },
+    {
+      "start": 0,
+      "end": 24
+    },
+    {
+      "start": 0,
+      "end": 25
+    }
+  ],
+  "selectedNode": 0
+}

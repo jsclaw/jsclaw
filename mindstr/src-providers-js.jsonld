@@ -19,54 +19,63 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#miy6ts",
-      "name": "exports",
-      "x": 249,
-      "y": 23,
+      "@id": "#cyfvb8",
+      "name": "Model provider presets",
+      "x": 221,
+      "y": -55,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#ft3k8u",
-      "name": "PROVIDERS()",
-      "x": 427,
-      "y": -221,
+      "@id": "#ngjuhg",
+      "name": "exports",
+      "x": 54,
+      "y": 190,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ad25k5",
+      "name": "PROVIDERS",
+      "x": 284,
+      "y": 274,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L27",
-      "bgColor": "#daeeff",
-      "parent": "#miy6ts"
+      "bgColor": "#fce3f3",
+      "parent": "#ngjuhg"
     },
     {
-      "@id": "#it6792",
-      "name": "PROVIDER_ENV_KEYS()",
-      "x": 588,
-      "y": 45,
+      "@id": "#6zhwac",
+      "name": "PROVIDER_ENV_KEYS",
+      "x": 107,
+      "y": 354,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L87",
-      "bgColor": "#daeeff",
-      "parent": "#miy6ts"
+      "bgColor": "#fce3f3",
+      "parent": "#ngjuhg"
     },
     {
-      "@id": "#dnz3gb",
+      "@id": "#sigj2h",
       "name": "resolveProviderEnv()",
-      "x": 368,
-      "y": 287,
+      "x": -100,
+      "y": 356,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js#L110",
-      "bgColor": "#daeeff",
-      "parent": "#miy6ts"
+      "bgColor": "#fce3f3",
+      "parent": "#ngjuhg"
     },
     {
-      "@id": "#3ifse5",
+      "@id": "#2gvkzt",
       "name": "119 lines",
-      "x": -158,
-      "y": 165,
+      "x": -226,
+      "y": 37,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/providers.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#ju3xzh",
+      "@id": "#5gpqg5",
       "name": "← src/",
-      "x": -113,
-      "y": -189,
+      "x": -54,
+      "y": -190,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -78,24 +87,28 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 5
     },
     {
       "start": 0,
       "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
     }
   ],
   "selectedNode": 0

@@ -1,0 +1,541 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "jsclaw: Other scripts",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#dk76uz",
+      "name": "bin/ · 2",
+      "x": 174,
+      "y": -153,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/bin",
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#5aggpq",
+      "name": "jsclaw.js",
+      "x": 309,
+      "y": -334,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/bin/jsclaw.js",
+      "bgColor": "#daeeff",
+      "parent": "#dk76uz"
+    },
+    {
+      "@id": "#eqmaaw",
+      "name": "onboard.js",
+      "x": 451,
+      "y": -323,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/bin/onboard.js",
+      "bgColor": "#daeeff",
+      "parent": "#dk76uz"
+    },
+    {
+      "@id": "#pjbq25",
+      "name": "test/ · 28",
+      "x": -69,
+      "y": 204,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/test",
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#tz98k5",
+      "name": "test 1/4",
+      "x": 472,
+      "y": 140,
+      "bgColor": "#e2c3f5",
+      "parent": "#pjbq25"
+    },
+    {
+      "@id": "#437yyk",
+      "name": "agent-queue.test.js",
+      "x": 750,
+      "y": -19,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/agent-queue.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#j3k2bu",
+      "name": "agents.test.js",
+      "x": 836,
+      "y": 67,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/agents.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#uhqx6j",
+      "name": "bindings.test.js",
+      "x": 733,
+      "y": 136,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/bindings.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#aurbbn",
+      "name": "channel.test.js",
+      "x": 793,
+      "y": 236,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/channel.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#fxz322",
+      "name": "channels.test.js",
+      "x": 672,
+      "y": 283,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/channels.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#s77s87",
+      "name": "cli.test.js",
+      "x": 710,
+      "y": 392,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/cli.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#k73rni",
+      "name": "commands.test.js",
+      "x": 567,
+      "y": 412,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/commands.test.js",
+      "bgColor": "#f4e5fc",
+      "parent": "#tz98k5"
+    },
+    {
+      "@id": "#r8zm2z",
+      "name": "test 2/4",
+      "x": 133,
+      "y": 489,
+      "bgColor": "#efc0e8",
+      "parent": "#pjbq25"
+    },
+    {
+      "@id": "#wzv4c3",
+      "name": "config.test.js",
+      "x": 415,
+      "y": 531,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/config.test.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#7fnz2s",
+      "name": "cron.test.js",
+      "x": 381,
+      "y": 638,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/cron.test.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#p89exh",
+      "name": "e2e.test.js",
+      "x": 253,
+      "y": 599,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/e2e.test.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#urtpxv",
+      "name": "gateway.test.js",
+      "x": 190,
+      "y": 696,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/gateway.test.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#4dg5c4",
+      "name": "heartbeat.test.js",
+      "x": 82,
+      "y": 634,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/heartbeat.test.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#kwm3he",
+      "name": "helpers.js",
+      "x": -9,
+      "y": 714,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/helpers.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#qvd9cw",
+      "name": "ipc-utils.test.js",
+      "x": -97,
+      "y": 632,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/ipc-utils.test.js",
+      "bgColor": "#fae3f6",
+      "parent": "#r8zm2z"
+    },
+    {
+      "@id": "#sf37xb",
+      "name": "test 3/4",
+      "x": -347,
+      "y": 306,
+      "bgColor": "#f8bdd9",
+      "parent": "#pjbq25"
+    },
+    {
+      "@id": "#fuhjpf",
+      "name": "local-runner.test.js",
+      "x": -300,
+      "y": 575,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/local-runner.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#dry8wx",
+      "name": "mcp.test.js",
+      "x": -427,
+      "y": 619,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/mcp.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#rmckuv",
+      "name": "memory.test.js",
+      "x": -447,
+      "y": 507,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/memory.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#6cicry",
+      "name": "nip17.test.js",
+      "x": -590,
+      "y": 512,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/nip17.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#7c28q6",
+      "name": "nip44.test.js",
+      "x": -576,
+      "y": 401,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/nip44.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#4qbh3e",
+      "name": "nostr.test.js",
+      "x": -715,
+      "y": 381,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/nostr.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#m3xps2",
+      "name": "plugins.test.js",
+      "x": -677,
+      "y": 273,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/plugins.test.js",
+      "bgColor": "#fee2ef",
+      "parent": "#sf37xb"
+    },
+    {
+      "@id": "#yxjf84",
+      "name": "test 4/4",
+      "x": -577,
+      "y": -106,
+      "bgColor": "#fdbdc8",
+      "parent": "#pjbq25"
+    },
+    {
+      "@id": "#mrv4db",
+      "name": "providers.test.js",
+      "x": -741,
+      "y": 101,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/providers.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#i6483q",
+      "name": "reap.e2e.test.js",
+      "x": -839,
+      "y": 25,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/reap.e2e.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#kmcrgd",
+      "name": "sessions.test.js",
+      "x": -747,
+      "y": -57,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/sessions.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#ktiw89",
+      "name": "skills.test.js",
+      "x": -821,
+      "y": -151,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/skills.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#c74y5q",
+      "name": "task-store.test.js",
+      "x": -708,
+      "y": -211,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/task-store.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#374kep",
+      "name": "telegram.test.js",
+      "x": -752,
+      "y": -311,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/telegram.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#ba2cgp",
+      "name": "webhooks.test.js",
+      "x": -625,
+      "y": -355,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/webhooks.test.js",
+      "bgColor": "#ffe2e7",
+      "parent": "#yxjf84"
+    },
+    {
+      "@id": "#h7ym9k",
+      "name": "test/fixtures/ · 2",
+      "x": -63,
+      "y": -208,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/test/fixtures",
+      "bgColor": "#f1c99c",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ius84b",
+      "name": "local-mock-runner.js",
+      "x": -153,
+      "y": -405,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/fixtures/local-mock-runner.js",
+      "bgColor": "#fbe8d3",
+      "parent": "#h7ym9k"
+    },
+    {
+      "@id": "#583aqh",
+      "name": "mock-agent.js",
+      "x": -62,
+      "y": -499,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/test/fixtures/mock-agent.js",
+      "bgColor": "#fbe8d3",
+      "parent": "#h7ym9k"
+    },
+    {
+      "@id": "#sbf4ee",
+      "name": "← jsclaw",
+      "x": 76,
+      "y": -204,
+      "link": "./index.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 0,
+      "end": 4
+    },
+    {
+      "start": 4,
+      "end": 5
+    },
+    {
+      "start": 5,
+      "end": 6
+    },
+    {
+      "start": 5,
+      "end": 7
+    },
+    {
+      "start": 5,
+      "end": 8
+    },
+    {
+      "start": 5,
+      "end": 9
+    },
+    {
+      "start": 5,
+      "end": 10
+    },
+    {
+      "start": 5,
+      "end": 11
+    },
+    {
+      "start": 5,
+      "end": 12
+    },
+    {
+      "start": 4,
+      "end": 13
+    },
+    {
+      "start": 13,
+      "end": 14
+    },
+    {
+      "start": 13,
+      "end": 15
+    },
+    {
+      "start": 13,
+      "end": 16
+    },
+    {
+      "start": 13,
+      "end": 17
+    },
+    {
+      "start": 13,
+      "end": 18
+    },
+    {
+      "start": 13,
+      "end": 19
+    },
+    {
+      "start": 13,
+      "end": 20
+    },
+    {
+      "start": 4,
+      "end": 21
+    },
+    {
+      "start": 21,
+      "end": 22
+    },
+    {
+      "start": 21,
+      "end": 23
+    },
+    {
+      "start": 21,
+      "end": 24
+    },
+    {
+      "start": 21,
+      "end": 25
+    },
+    {
+      "start": 21,
+      "end": 26
+    },
+    {
+      "start": 21,
+      "end": 27
+    },
+    {
+      "start": 21,
+      "end": 28
+    },
+    {
+      "start": 4,
+      "end": 29
+    },
+    {
+      "start": 29,
+      "end": 30
+    },
+    {
+      "start": 29,
+      "end": 31
+    },
+    {
+      "start": 29,
+      "end": 32
+    },
+    {
+      "start": 29,
+      "end": 33
+    },
+    {
+      "start": 29,
+      "end": 34
+    },
+    {
+      "start": 29,
+      "end": 35
+    },
+    {
+      "start": 29,
+      "end": 36
+    },
+    {
+      "start": 0,
+      "end": 37
+    },
+    {
+      "start": 37,
+      "end": 38
+    },
+    {
+      "start": 37,
+      "end": 39
+    },
+    {
+      "start": 0,
+      "end": 40
+    }
+  ],
+  "selectedNode": 0
+}

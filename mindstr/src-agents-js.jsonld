@@ -19,45 +19,54 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ejt2c7",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#tvx8v7",
+      "name": "Agent id handling (#79 Phase 0)",
+      "x": 222,
+      "y": -51,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#tvx8v7",
-      "name": "DEFAULT_AGENT_ID()",
-      "x": 452,
-      "y": -181,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L13",
-      "bgColor": "#daeeff",
-      "parent": "#ejt2c7"
-    },
-    {
       "@id": "#4bfmpa",
-      "name": "normalizeAgentId()",
-      "x": 534,
-      "y": 214,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L19",
-      "bgColor": "#daeeff",
-      "parent": "#ejt2c7"
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
       "@id": "#c2mpq8",
+      "name": "DEFAULT_AGENT_ID",
+      "x": 240,
+      "y": 303,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L13",
+      "bgColor": "#fce3f3",
+      "parent": "#4bfmpa"
+    },
+    {
+      "@id": "#yykmee",
+      "name": "normalizeAgentId()",
+      "x": -29,
+      "y": 365,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js#L19",
+      "bgColor": "#fce3f3",
+      "parent": "#4bfmpa"
+    },
+    {
+      "@id": "#7kgwkb",
       "name": "29 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/agents.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#yykmee",
+      "@id": "#x7t4w7",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -69,20 +78,24 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 4
     },
     {
       "start": 0,
       "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
     }
   ],
   "selectedNode": 0

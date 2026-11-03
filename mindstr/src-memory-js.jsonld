@@ -19,107 +19,116 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#rmckuv",
-      "name": "exports 1/2",
-      "x": 248,
-      "y": -24,
+      "@id": "#583aqh",
+      "name": "Markdown memory — openclaw's convention, per agent",
+      "x": 201,
+      "y": -95,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#6cicry",
-      "name": "MEMORY_CATEGORIES()",
-      "x": 383,
-      "y": -273,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L21",
-      "bgColor": "#daeeff",
-      "parent": "#rmckuv"
-    },
-    {
-      "@id": "#7c28q6",
-      "name": "memoryDir()",
-      "x": 563,
-      "y": -150,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L29",
-      "bgColor": "#daeeff",
-      "parent": "#rmckuv"
-    },
-    {
-      "@id": "#4qbh3e",
-      "name": "initMemory()",
-      "x": 498,
-      "y": 37,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L41",
-      "bgColor": "#daeeff",
-      "parent": "#rmckuv"
-    },
-    {
-      "@id": "#m3xps2",
-      "name": "listMemoryFiles()",
-      "x": 524,
-      "y": 231,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L60",
-      "bgColor": "#daeeff",
-      "parent": "#rmckuv"
-    },
-    {
-      "@id": "#yxjf84",
-      "name": "exports 2/2",
-      "x": -41,
-      "y": 210,
-      "bgColor": "#f3bee1",
+      "@id": "#sbf4ee",
+      "name": "exports 1/2",
+      "x": 161,
+      "y": 140,
+      "bgColor": "#e9c1ef",
       "parent": "#this"
     },
     {
-      "@id": "#mrv4db",
+      "@id": "#t6q67m",
+      "name": "MEMORY_CATEGORIES",
+      "x": 409,
+      "y": 113,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L21",
+      "bgColor": "#f7e4f9",
+      "parent": "#sbf4ee"
+    },
+    {
+      "@id": "#abq85r",
+      "name": "memoryDir()",
+      "x": 403,
+      "y": 252,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L29",
+      "bgColor": "#f7e4f9",
+      "parent": "#sbf4ee"
+    },
+    {
+      "@id": "#sy2ncx",
+      "name": "initMemory()",
+      "x": 248,
+      "y": 298,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L41",
+      "bgColor": "#f7e4f9",
+      "parent": "#sbf4ee"
+    },
+    {
+      "@id": "#fertai",
+      "name": "listMemoryFiles()",
+      "x": 146,
+      "y": 407,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L60",
+      "bgColor": "#f7e4f9",
+      "parent": "#sbf4ee"
+    },
+    {
+      "@id": "#9u36xp",
+      "name": "exports 2/2",
+      "x": -156,
+      "y": 144,
+      "bgColor": "#fec0b1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#5q2nc4",
       "name": "loadMemoryContext()",
-      "x": 198,
-      "y": 390,
+      "x": -114,
+      "y": 352,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L92",
-      "bgColor": "#fce3f3",
-      "parent": "#yxjf84"
+      "bgColor": "#ffe3dc",
+      "parent": "#9u36xp"
     },
     {
-      "@id": "#i6483q",
+      "@id": "#eegh3a",
       "name": "appendMemory()",
-      "x": 14,
-      "y": 501,
+      "x": -278,
+      "y": 353,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L131",
-      "bgColor": "#fce3f3",
-      "parent": "#yxjf84"
+      "bgColor": "#ffe3dc",
+      "parent": "#9u36xp"
     },
     {
-      "@id": "#kmcrgd",
+      "@id": "#tmtdcb",
       "name": "searchMemory()",
-      "x": -175,
-      "y": 398,
+      "x": -339,
+      "y": 225,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L148",
-      "bgColor": "#fce3f3",
-      "parent": "#yxjf84"
+      "bgColor": "#ffe3dc",
+      "parent": "#9u36xp"
     },
     {
-      "@id": "#ktiw89",
+      "@id": "#ziixui",
       "name": "clearMemory()",
-      "x": -397,
-      "y": 371,
+      "x": -470,
+      "y": 144,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js#L172",
-      "bgColor": "#fce3f3",
-      "parent": "#yxjf84"
+      "bgColor": "#ffe3dc",
+      "parent": "#9u36xp"
     },
     {
-      "@id": "#c74y5q",
+      "@id": "#qnf7j2",
       "name": "175 lines",
-      "x": -247,
-      "y": -32,
+      "x": -205,
+      "y": -89,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/memory.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#374kep",
+      "@id": "#rx55k2",
       "name": "← src/",
-      "x": -31,
-      "y": -211,
+      "x": -4,
+      "y": -195,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -131,48 +140,52 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 6,
+      "start": 0,
       "end": 7
     },
     {
-      "start": 6,
+      "start": 7,
       "end": 8
     },
     {
-      "start": 6,
+      "start": 7,
       "end": 9
     },
     {
-      "start": 6,
+      "start": 7,
       "end": 10
     },
     {
-      "start": 0,
+      "start": 7,
       "end": 11
     },
     {
       "start": 0,
       "end": 12
+    },
+    {
+      "start": 0,
+      "end": 13
     }
   ],
   "selectedNode": 0

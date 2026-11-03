@@ -18,482 +18,206 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ab9ysn",
+      "@id": "#v5njcx",
       "name": "commands 1/2",
-      "x": 248,
-      "y": 24,
+      "x": 228,
+      "y": -28,
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#qhtzie",
-      "name": "onboard",
-      "x": 359,
-      "y": -296,
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#2sgmjt",
-      "name": "Interactive setup wizard",
-      "x": 539,
-      "y": -444,
-      "bgColor": "#ececec",
-      "parent": "#qhtzie"
-    },
-    {
-      "@id": "#j9h6ge",
-      "name": "status",
-      "x": 500,
-      "y": -267,
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#ejt2c7",
-      "name": "Show config, agents, task counts",
-      "x": 635,
-      "y": -339,
-      "bgColor": "#ececec",
-      "parent": "#j9h6ge"
-    },
-    {
-      "@id": "#tvx8v7",
-      "name": "doctor",
-      "x": 470,
-      "y": -146,
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#4bfmpa",
-      "name": "Check environment health",
-      "x": 704,
-      "y": -219,
-      "bgColor": "#ececec",
-      "parent": "#tvx8v7"
-    },
-    {
-      "@id": "#c2mpq8",
-      "name": "tasks · 4",
-      "x": 590,
-      "y": 5,
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#yykmee",
-      "name": "list [--agent <folder>]",
-      "x": 741,
-      "y": -100,
-      "bgColor": "#daeeff",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#7kgwkb",
-      "name": "List scheduled tasks",
-      "x": 988,
-      "y": -133,
-      "bgColor": "#ececec",
-      "parent": "#yykmee"
-    },
-    {
-      "@id": "#x7t4w7",
-      "name": "pause <id>",
-      "x": 839,
-      "y": -31,
-      "bgColor": "#daeeff",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#dsw684",
-      "name": "Pause a task",
-      "x": 999,
-      "y": -37,
-      "bgColor": "#ececec",
-      "parent": "#x7t4w7"
-    },
-    {
-      "@id": "#v88t4a",
-      "name": "resume <id>",
-      "x": 748,
-      "y": 43,
-      "bgColor": "#daeeff",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#skzt29",
-      "name": "Resume a task",
-      "x": 998,
-      "y": 58,
-      "bgColor": "#ececec",
-      "parent": "#v88t4a"
-    },
-    {
-      "@id": "#t4pwzt",
-      "name": "cancel <id>",
-      "x": 827,
-      "y": 127,
-      "bgColor": "#daeeff",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#jhaa84",
-      "name": "Cancel a task",
-      "x": 984,
-      "y": 151,
-      "bgColor": "#ececec",
-      "parent": "#t4pwzt"
-    },
-    {
-      "@id": "#wavvy9",
-      "name": "memory · 3",
-      "x": 422,
-      "y": 228,
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#i9w3v4",
-      "name": "list <agent>",
-      "x": 687,
-      "y": 255,
-      "bgColor": "#daeeff",
-      "parent": "#wavvy9"
-    },
-    {
-      "@id": "#e9sufn",
-      "name": "List an agent's memory files",
-      "x": 916,
-      "y": 340,
-      "bgColor": "#ececec",
-      "parent": "#i9w3v4"
-    },
-    {
-      "@id": "#g45zx9",
-      "name": "search <agent> <query>",
-      "x": 704,
-      "y": 384,
-      "bgColor": "#daeeff",
-      "parent": "#wavvy9"
-    },
-    {
-      "@id": "#vz8rhu",
-      "name": "Search an agent's memory",
-      "x": 838,
-      "y": 464,
-      "bgColor": "#ececec",
-      "parent": "#g45zx9"
-    },
-    {
-      "@id": "#35gtrs",
-      "name": "clear <agent>",
-      "x": 558,
-      "y": 429,
-      "bgColor": "#daeeff",
-      "parent": "#wavvy9"
-    },
-    {
-      "@id": "#fiqrfa",
-      "name": "Delete an agent's memory",
-      "x": 744,
-      "y": 568,
-      "bgColor": "#ececec",
-      "parent": "#35gtrs"
-    },
-    {
-      "@id": "#fad69b",
-      "name": "run <agent> <prompt...>",
-      "x": 334,
-      "y": 414,
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#fnrzmm",
-      "name": "Run an agent once with a prompt",
-      "x": 424,
-      "y": 526,
-      "bgColor": "#ececec",
-      "parent": "#fad69b"
-    },
-    {
-      "@id": "#3y3s3p",
-      "name": "commands 2/2",
-      "x": -202,
-      "y": 125,
-      "bgColor": "#f3bee1",
-      "parent": "#this"
-    },
-    {
-      "@id": "#ujs2ci",
-      "name": "heartbeat <agent> [--dry-run]",
-      "x": -3,
-      "y": 425,
-      "bgColor": "#fce3f3",
-      "parent": "#3y3s3p"
-    },
-    {
-      "@id": "#442pm7",
-      "name": "Trigger a heartbeat cycle now",
-      "x": -4,
-      "y": 655,
-      "bgColor": "#ececec",
-      "parent": "#ujs2ci"
-    },
-    {
-      "@id": "#imr4n9",
-      "name": "reap",
-      "x": -136,
-      "y": 488,
-      "bgColor": "#fce3f3",
-      "parent": "#3y3s3p"
-    },
-    {
-      "@id": "#tpktj6",
-      "name": "Remove orphaned jsclaw containers",
-      "x": -173,
-      "y": 611,
-      "bgColor": "#ececec",
-      "parent": "#imr4n9"
-    },
-    {
-      "@id": "#u94rpy",
-      "name": "gateway [--port <n>]",
-      "x": -228,
-      "y": 378,
-      "bgColor": "#fce3f3",
-      "parent": "#3y3s3p"
-    },
-    {
-      "@id": "#7txfyn",
-      "name": "Run the full agent host: gateway,",
-      "x": -342,
-      "y": 567,
-      "bgColor": "#ececec",
-      "parent": "#u94rpy"
-    },
-    {
-      "@id": "#v5njcx",
-      "name": "skill · 4",
-      "x": -498,
-      "y": 269,
-      "bgColor": "#fce3f3",
-      "parent": "#3y3s3p"
-    },
-    {
       "@id": "#z8kicz",
-      "name": "list",
-      "x": -500,
-      "y": 475,
-      "bgColor": "#fce3f3",
+      "name": "onboard",
+      "x": 306,
+      "y": -257,
+      "bgColor": "#daeeff",
       "parent": "#v5njcx"
     },
     {
       "@id": "#7348h9",
-      "name": "List installed skills",
-      "x": -667,
-      "y": 634,
-      "bgColor": "#ececec",
-      "parent": "#z8kicz"
+      "name": "status",
+      "x": 430,
+      "y": -216,
+      "bgColor": "#daeeff",
+      "parent": "#v5njcx"
     },
     {
       "@id": "#jtny2v",
-      "name": "install <path>",
-      "x": -644,
-      "y": 458,
-      "bgColor": "#fce3f3",
+      "name": "doctor",
+      "x": 412,
+      "y": -104,
+      "bgColor": "#daeeff",
       "parent": "#v5njcx"
     },
     {
       "@id": "#zvvi4r",
-      "name": "Install a SKILL.md file",
-      "x": -767,
-      "y": 546,
-      "bgColor": "#ececec",
-      "parent": "#jtny2v"
+      "name": "tasks · 4 ›",
+      "x": 500,
+      "y": -18,
+      "link": "./cli-tasks.jsonld",
+      "bgColor": "#daeeff",
+      "parent": "#v5njcx"
     },
     {
       "@id": "#ezqtt6",
-      "name": "remove <name>",
-      "x": -642,
-      "y": 329,
-      "bgColor": "#fce3f3",
+      "name": "memory · 3 ›",
+      "x": 421,
+      "y": 74,
+      "link": "./cli-memory.jsonld",
+      "bgColor": "#daeeff",
       "parent": "#v5njcx"
     },
     {
       "@id": "#8edjsn",
-      "name": "Remove an installed skill",
-      "x": -857,
-      "y": 439,
-      "bgColor": "#ececec",
-      "parent": "#ezqtt6"
-    },
-    {
-      "@id": "#75s7ir",
-      "name": "test <path> <message...>",
-      "x": -791,
-      "y": 240,
-      "bgColor": "#fce3f3",
+      "name": "run <agent> <prompt...>",
+      "x": 446,
+      "y": 193,
+      "bgColor": "#daeeff",
       "parent": "#v5njcx"
     },
     {
+      "@id": "#75s7ir",
+      "name": "commands 2/2",
+      "x": -8,
+      "y": 195,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
       "@id": "#7x3k79",
-      "name": "Check whether a message triggers a skill",
-      "x": -942,
-      "y": 285,
-      "bgColor": "#ececec",
+      "name": "heartbeat <agent> [--dry-run]",
+      "x": 203,
+      "y": 322,
+      "bgColor": "#fce3f3",
       "parent": "#75s7ir"
     },
     {
       "@id": "#4af2dc",
-      "name": "config · 3",
-      "x": -496,
-      "y": -55,
+      "name": "reap",
+      "x": 88,
+      "y": 418,
       "bgColor": "#fce3f3",
-      "parent": "#3y3s3p"
+      "parent": "#75s7ir"
     },
     {
       "@id": "#7iui3z",
-      "name": "list",
-      "x": -750,
-      "y": 15,
+      "name": "gateway [--port <n>]",
+      "x": -38,
+      "y": 358,
       "bgColor": "#fce3f3",
-      "parent": "#4af2dc"
+      "parent": "#75s7ir"
     },
     {
       "@id": "#bq9ccn",
-      "name": "Show effective configuration",
-      "x": -1000,
-      "y": 20,
-      "bgColor": "#ececec",
-      "parent": "#7iui3z"
+      "name": "skill · 4 ›",
+      "x": -173,
+      "y": 402,
+      "link": "./cli-skill.jsonld",
+      "bgColor": "#fce3f3",
+      "parent": "#75s7ir"
     },
     {
       "@id": "#3yirdr",
-      "name": "get <key>",
-      "x": -833,
-      "y": -92,
+      "name": "config · 3 ›",
+      "x": -247,
+      "y": 299,
+      "link": "./cli-config.jsonld",
       "bgColor": "#fce3f3",
-      "parent": "#4af2dc"
+      "parent": "#75s7ir"
     },
     {
       "@id": "#ptf2jy",
-      "name": "Read a config value",
-      "x": -992,
-      "y": -109,
-      "bgColor": "#ececec",
-      "parent": "#3yirdr"
+      "name": "Options · 5",
+      "x": -223,
+      "y": -53,
+      "bgColor": "#f1c99c",
+      "parent": "#this"
     },
     {
       "@id": "#4bfy6j",
-      "name": "set <key> <value>",
-      "x": -721,
-      "y": -177,
-      "bgColor": "#fce3f3",
-      "parent": "#4af2dc"
+      "name": "--agent <folder>",
+      "x": -397,
+      "y": 140,
+      "bgColor": "#fcc2aa",
+      "parent": "#ptf2jy"
     },
     {
       "@id": "#4wkdd9",
-      "name": "Write a value to jsclaw.json",
-      "x": -961,
-      "y": -236,
+      "name": "Filter tasks by agent",
+      "x": -582,
+      "y": 205,
       "bgColor": "#ececec",
       "parent": "#4bfy6j"
     },
     {
       "@id": "#yiscsp",
-      "name": "Options · 5",
-      "x": -107,
-      "y": -192,
-      "bgColor": "#f1c99c",
-      "parent": "#this"
+      "name": "--dry-run",
+      "x": -469,
+      "y": 1,
+      "bgColor": "#f8c5a2",
+      "parent": "#ptf2jy"
     },
     {
       "@id": "#2fzfhg",
-      "name": "--agent <folder>",
-      "x": -358,
-      "y": -297,
-      "bgColor": "#fbe8d3",
+      "name": "Show what would run without running it",
+      "x": -687,
+      "y": 1,
+      "bgColor": "#ececec",
       "parent": "#yiscsp"
     },
     {
       "@id": "#6ab87r",
-      "name": "Filter tasks by agent",
-      "x": -536,
-      "y": -446,
-      "bgColor": "#ececec",
-      "parent": "#2fzfhg"
+      "name": "--json",
+      "x": -396,
+      "y": -142,
+      "bgColor": "#f1c99c",
+      "parent": "#ptf2jy"
     },
     {
       "@id": "#uyfscv",
-      "name": "--dry-run",
-      "x": -328,
-      "y": -417,
-      "bgColor": "#fbe8d3",
-      "parent": "#yiscsp"
+      "name": "Machine-readable output",
+      "x": -581,
+      "y": -208,
+      "bgColor": "#ececec",
+      "parent": "#6ab87r"
     },
     {
       "@id": "#z5cumb",
-      "name": "Show what would run without running it",
-      "x": -417,
-      "y": -530,
-      "bgColor": "#ececec",
-      "parent": "#uyfscv"
+      "name": "--version",
+      "x": -385,
+      "y": -271,
+      "bgColor": "#e9cd99",
+      "parent": "#ptf2jy"
     },
     {
       "@id": "#7iejm3",
-      "name": "--json",
-      "x": -184,
-      "y": -395,
-      "bgColor": "#fbe8d3",
-      "parent": "#yiscsp"
+      "name": "Show version",
+      "x": -486,
+      "y": -341,
+      "bgColor": "#ececec",
+      "parent": "#z5cumb"
     },
     {
       "@id": "#452y5w",
-      "name": "Machine-readable output",
-      "x": -276,
-      "y": -582,
-      "bgColor": "#ececec",
-      "parent": "#7iejm3"
+      "name": "--help",
+      "x": -247,
+      "y": -299,
+      "bgColor": "#dfd299",
+      "parent": "#ptf2jy"
     },
     {
       "@id": "#yyjnxk",
-      "name": "--version",
-      "x": -130,
-      "y": -489,
-      "bgColor": "#fbe8d3",
-      "parent": "#yiscsp"
+      "name": "Show this help",
+      "x": -362,
+      "y": -438,
+      "bgColor": "#ececec",
+      "parent": "#452y5w"
     },
     {
       "@id": "#hrvxpy",
-      "name": "Show version",
-      "x": -187,
-      "y": -628,
-      "bgColor": "#ececec",
-      "parent": "#yyjnxk"
-    },
-    {
-      "@id": "#hzsqn4",
-      "name": "--help",
-      "x": -39,
-      "y": -424,
-      "bgColor": "#fbe8d3",
-      "parent": "#yiscsp"
-    },
-    {
-      "@id": "#dttxwc",
-      "name": "Show this help",
-      "x": -48,
-      "y": -636,
-      "bgColor": "#ececec",
-      "parent": "#hzsqn4"
-    },
-    {
-      "@id": "#p8ysyk",
       "name": "← jsclaw",
-      "x": 74,
-      "y": -203,
+      "x": 23,
+      "y": -195,
       "link": "./index.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -509,7 +233,7 @@
       "end": 2
     },
     {
-      "start": 2,
+      "start": 1,
       "end": 3
     },
     {
@@ -517,7 +241,7 @@
       "end": 4
     },
     {
-      "start": 4,
+      "start": 1,
       "end": 5
     },
     {
@@ -525,11 +249,11 @@
       "end": 6
     },
     {
-      "start": 6,
+      "start": 1,
       "end": 7
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 8
     },
     {
@@ -537,7 +261,7 @@
       "end": 9
     },
     {
-      "start": 9,
+      "start": 8,
       "end": 10
     },
     {
@@ -545,7 +269,7 @@
       "end": 11
     },
     {
-      "start": 11,
+      "start": 8,
       "end": 12
     },
     {
@@ -553,11 +277,11 @@
       "end": 13
     },
     {
-      "start": 13,
+      "start": 0,
       "end": 14
     },
     {
-      "start": 8,
+      "start": 14,
       "end": 15
     },
     {
@@ -565,7 +289,7 @@
       "end": 16
     },
     {
-      "start": 1,
+      "start": 14,
       "end": 17
     },
     {
@@ -573,172 +297,32 @@
       "end": 18
     },
     {
-      "start": 18,
+      "start": 14,
       "end": 19
     },
     {
-      "start": 17,
+      "start": 19,
       "end": 20
     },
     {
-      "start": 20,
+      "start": 14,
       "end": 21
     },
     {
-      "start": 17,
+      "start": 21,
       "end": 22
     },
     {
-      "start": 22,
+      "start": 14,
       "end": 23
     },
     {
-      "start": 1,
+      "start": 23,
       "end": 24
     },
     {
-      "start": 24,
+      "start": 0,
       "end": 25
-    },
-    {
-      "start": 0,
-      "end": 26
-    },
-    {
-      "start": 26,
-      "end": 27
-    },
-    {
-      "start": 27,
-      "end": 28
-    },
-    {
-      "start": 26,
-      "end": 29
-    },
-    {
-      "start": 29,
-      "end": 30
-    },
-    {
-      "start": 26,
-      "end": 31
-    },
-    {
-      "start": 31,
-      "end": 32
-    },
-    {
-      "start": 26,
-      "end": 33
-    },
-    {
-      "start": 33,
-      "end": 34
-    },
-    {
-      "start": 34,
-      "end": 35
-    },
-    {
-      "start": 33,
-      "end": 36
-    },
-    {
-      "start": 36,
-      "end": 37
-    },
-    {
-      "start": 33,
-      "end": 38
-    },
-    {
-      "start": 38,
-      "end": 39
-    },
-    {
-      "start": 33,
-      "end": 40
-    },
-    {
-      "start": 40,
-      "end": 41
-    },
-    {
-      "start": 26,
-      "end": 42
-    },
-    {
-      "start": 42,
-      "end": 43
-    },
-    {
-      "start": 43,
-      "end": 44
-    },
-    {
-      "start": 42,
-      "end": 45
-    },
-    {
-      "start": 45,
-      "end": 46
-    },
-    {
-      "start": 42,
-      "end": 47
-    },
-    {
-      "start": 47,
-      "end": 48
-    },
-    {
-      "start": 0,
-      "end": 49
-    },
-    {
-      "start": 49,
-      "end": 50
-    },
-    {
-      "start": 50,
-      "end": 51
-    },
-    {
-      "start": 49,
-      "end": 52
-    },
-    {
-      "start": 52,
-      "end": 53
-    },
-    {
-      "start": 49,
-      "end": 54
-    },
-    {
-      "start": 54,
-      "end": 55
-    },
-    {
-      "start": 49,
-      "end": 56
-    },
-    {
-      "start": 56,
-      "end": 57
-    },
-    {
-      "start": 49,
-      "end": 58
-    },
-    {
-      "start": 58,
-      "end": 59
-    },
-    {
-      "start": 0,
-      "end": 60
     }
   ],
   "selectedNode": 0

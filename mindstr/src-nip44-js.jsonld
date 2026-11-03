@@ -19,81 +19,90 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#sy2ncx",
-      "name": "exports",
-      "x": 211,
-      "y": 114,
+      "@id": "#28eue2",
+      "name": "NIP-44 v2 encrypted payloads — zero dependencies",
+      "x": 209,
+      "y": -82,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#fertai",
+      "@id": "#f4n9qu",
+      "name": "exports",
+      "x": 21,
+      "y": 195,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#krwt6e",
       "name": "chacha20()",
-      "x": 422,
-      "y": -227,
+      "x": 362,
+      "y": 197,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L68",
-      "bgColor": "#daeeff",
-      "parent": "#sy2ncx"
+      "bgColor": "#fce3f3",
+      "parent": "#f4n9qu"
     },
     {
-      "@id": "#9u36xp",
+      "@id": "#emecna",
       "name": "getConversationKey()",
-      "x": 587,
-      "y": -52,
+      "x": 295,
+      "y": 343,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L103",
-      "bgColor": "#daeeff",
-      "parent": "#sy2ncx"
+      "bgColor": "#fce3f3",
+      "parent": "#f4n9qu"
     },
     {
-      "@id": "#5q2nc4",
+      "@id": "#u8v9bw",
       "name": "getMessageKeys()",
-      "x": 469,
-      "y": 148,
+      "x": 111,
+      "y": 353,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L113",
-      "bgColor": "#daeeff",
-      "parent": "#sy2ncx"
+      "bgColor": "#fce3f3",
+      "parent": "#f4n9qu"
     },
     {
-      "@id": "#eegh3a",
+      "@id": "#j6zbf9",
       "name": "calcPaddedLen()",
-      "x": 409,
-      "y": 361,
+      "x": -50,
+      "y": 423,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L127",
-      "bgColor": "#daeeff",
-      "parent": "#sy2ncx"
+      "bgColor": "#fce3f3",
+      "parent": "#f4n9qu"
     },
     {
-      "@id": "#tmtdcb",
+      "@id": "#2z3p7w",
       "name": "encrypt()",
-      "x": 156,
-      "y": 404,
+      "x": -191,
+      "y": 327,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L165",
-      "bgColor": "#daeeff",
-      "parent": "#sy2ncx"
+      "bgColor": "#fce3f3",
+      "parent": "#f4n9qu"
     },
     {
-      "@id": "#ziixui",
+      "@id": "#pvzwd8",
       "name": "decrypt()",
-      "x": -77,
-      "y": 497,
+      "x": -366,
+      "y": 290,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js#L200",
-      "bgColor": "#daeeff",
-      "parent": "#sy2ncx"
+      "bgColor": "#fce3f3",
+      "parent": "#f4n9qu"
     },
     {
-      "@id": "#qnf7j2",
+      "@id": "#57iy7q",
       "name": "207 lines",
-      "x": -245,
-      "y": 41,
+      "x": -223,
+      "y": -49,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nip44.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#rx55k2",
+      "@id": "#qprvms",
       "name": "← src/",
-      "x": -59,
-      "y": -206,
+      "x": -21,
+      "y": -195,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -105,36 +114,40 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 7
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 8
     },
     {
       "start": 0,
       "end": 9
+    },
+    {
+      "start": 0,
+      "end": 10
     }
   ],
   "selectedNode": 0

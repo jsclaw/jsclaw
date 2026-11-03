@@ -19,36 +19,45 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#p46jmx",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#wzta82",
+      "name": "Session store — openclaw's session model (#57)",
+      "x": 222,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#bu7kuh",
-      "name": "SessionStore()",
-      "x": 500,
-      "y": 0,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js#L29",
-      "bgColor": "#daeeff",
-      "parent": "#p46jmx"
+      "@id": "#jw3kjf",
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
-      "@id": "#2iffkx",
+      "@id": "#r76gtv",
+      "name": "SessionStore()",
+      "x": 111,
+      "y": 353,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js#L29",
+      "bgColor": "#fce3f3",
+      "parent": "#jw3kjf"
+    },
+    {
+      "@id": "#qmk4u7",
       "name": "169 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#ssgz3q",
+      "@id": "#ysvez3",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -60,16 +69,20 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 3
     },
     {
       "start": 0,
       "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
     }
   ],
   "selectedNode": 0

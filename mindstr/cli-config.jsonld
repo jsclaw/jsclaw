@@ -1,0 +1,109 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "jsclaw config · 3",
+      "x": 0,
+      "y": 0,
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#3y3s3p",
+      "name": "list",
+      "x": 222,
+      "y": -51,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ujs2ci",
+      "name": "Show effective configuration",
+      "x": 415,
+      "y": -95,
+      "bgColor": "#ececec",
+      "parent": "#3y3s3p"
+    },
+    {
+      "@id": "#442pm7",
+      "name": "get <key>",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#imr4n9",
+      "name": "Read a config value",
+      "x": 111,
+      "y": 353,
+      "bgColor": "#ececec",
+      "parent": "#442pm7"
+    },
+    {
+      "@id": "#tpktj6",
+      "name": "set <key> <value>",
+      "x": -222,
+      "y": 51,
+      "bgColor": "#f1c99c",
+      "parent": "#this"
+    },
+    {
+      "@id": "#u94rpy",
+      "name": "Write a value to jsclaw.json",
+      "x": -415,
+      "y": 95,
+      "bgColor": "#ececec",
+      "parent": "#tpktj6"
+    },
+    {
+      "@id": "#7txfyn",
+      "name": "← CLI",
+      "x": -60,
+      "y": -189,
+      "link": "./cli.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 0,
+      "end": 3
+    },
+    {
+      "start": 3,
+      "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
+    },
+    {
+      "start": 5,
+      "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
+    }
+  ],
+  "selectedNode": 0
+}

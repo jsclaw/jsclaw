@@ -19,36 +19,45 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#6zhwac",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#qbizrq",
+      "name": "Task scheduler",
+      "x": 222,
+      "y": -51,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#sigj2h",
-      "name": "startTaskScheduler()",
-      "x": 500,
-      "y": 0,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js#L25",
-      "bgColor": "#daeeff",
-      "parent": "#6zhwac"
+      "@id": "#yyfuzg",
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
-      "@id": "#2gvkzt",
+      "@id": "#xet7zf",
+      "name": "startTaskScheduler()",
+      "x": 111,
+      "y": 353,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js#L25",
+      "bgColor": "#fce3f3",
+      "parent": "#yyfuzg"
+    },
+    {
+      "@id": "#wjzwqw",
       "name": "72 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-scheduler.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#5gpqg5",
+      "@id": "#cpmgtf",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -60,16 +69,20 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 3
     },
     {
       "start": 0,
       "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
     }
   ],
   "selectedNode": 0

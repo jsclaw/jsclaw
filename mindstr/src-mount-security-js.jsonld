@@ -19,63 +19,72 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ba2cgp",
-      "name": "exports",
-      "x": 225,
-      "y": 93,
+      "@id": "#ux93wm",
+      "name": "Volume mount validation against an allowlist",
+      "x": 212,
+      "y": -75,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#h7ym9k",
+      "@id": "#a464iu",
+      "name": "exports",
+      "x": 29,
+      "y": 194,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#simp87",
       "name": "loadMountAllowlist()",
-      "x": 433,
-      "y": -213,
+      "x": 337,
+      "y": 227,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L35",
-      "bgColor": "#daeeff",
-      "parent": "#ba2cgp"
+      "bgColor": "#fce3f3",
+      "parent": "#a464iu"
     },
     {
-      "@id": "#ius84b",
+      "@id": "#tzmucf",
       "name": "validateMount()",
-      "x": 590,
-      "y": 12,
+      "x": 225,
+      "y": 380,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L75",
-      "bgColor": "#daeeff",
-      "parent": "#ba2cgp"
+      "bgColor": "#fce3f3",
+      "parent": "#a464iu"
     },
     {
-      "@id": "#583aqh",
+      "@id": "#xmtzgz",
       "name": "validateAdditionalMounts()",
-      "x": 401,
-      "y": 254,
+      "x": -10,
+      "y": 365,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L119",
-      "bgColor": "#daeeff",
-      "parent": "#ba2cgp"
+      "bgColor": "#fce3f3",
+      "parent": "#a464iu"
     },
     {
-      "@id": "#sbf4ee",
+      "@id": "#b9snuz",
       "name": "generateAllowlistTemplate()",
-      "x": 130,
-      "y": 489,
+      "x": -276,
+      "y": 355,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L154",
-      "bgColor": "#daeeff",
-      "parent": "#ba2cgp"
+      "bgColor": "#fce3f3",
+      "parent": "#a464iu"
     },
     {
-      "@id": "#t6q67m",
+      "@id": "#nxqgmq",
       "name": "161 lines",
-      "x": -233,
-      "y": 77,
+      "x": -228,
+      "y": -27,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#abq85r",
+      "@id": "#dguykc",
       "name": "← src/",
-      "x": -73,
-      "y": -203,
+      "x": -29,
+      "y": -194,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -87,28 +96,32 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 6
     },
     {
       "start": 0,
       "end": 7
+    },
+    {
+      "start": 0,
+      "end": 8
     }
   ],
   "selectedNode": 0

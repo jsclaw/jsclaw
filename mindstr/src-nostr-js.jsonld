@@ -19,187 +19,196 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ux93wm",
-      "name": "exports 1/3",
-      "x": 246,
-      "y": -38,
+      "@id": "#7fucmt",
+      "name": "Nostr channel — decentralized encrypted DMs for…",
+      "x": 179,
+      "y": -123,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#a464iu",
-      "name": "getPublicKey()",
-      "x": 353,
-      "y": -303,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L105",
-      "bgColor": "#daeeff",
-      "parent": "#ux93wm"
-    },
-    {
-      "@id": "#simp87",
-      "name": "generatePrivateKey()",
-      "x": 506,
-      "y": -257,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L112",
-      "bgColor": "#daeeff",
-      "parent": "#ux93wm"
-    },
-    {
-      "@id": "#tzmucf",
-      "name": "schnorrSign()",
-      "x": 479,
-      "y": -122,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L127",
-      "bgColor": "#daeeff",
-      "parent": "#ux93wm"
-    },
-    {
-      "@id": "#xmtzgz",
-      "name": "schnorrVerify()",
-      "x": 589,
-      "y": -25,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L154",
-      "bgColor": "#daeeff",
-      "parent": "#ux93wm"
-    },
-    {
-      "@id": "#b9snuz",
-      "name": "sharedSecretX()",
-      "x": 491,
-      "y": 81,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L186",
-      "bgColor": "#daeeff",
-      "parent": "#ux93wm"
-    },
-    {
-      "@id": "#nxqgmq",
-      "name": "nip04Encrypt()",
-      "x": 536,
-      "y": 210,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L202",
-      "bgColor": "#daeeff",
-      "parent": "#ux93wm"
-    },
-    {
-      "@id": "#dguykc",
-      "name": "exports 2/3",
-      "x": 12,
-      "y": 212,
-      "bgColor": "#e9c1ef",
-      "parent": "#this"
-    },
-    {
-      "@id": "#28eue2",
-      "name": "nip04Decrypt()",
-      "x": 295,
-      "y": 343,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L217",
-      "bgColor": "#f7e4f9",
-      "parent": "#dguykc"
-    },
-    {
-      "@id": "#f4n9qu",
-      "name": "eventId()",
-      "x": 229,
-      "y": 462,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L234",
-      "bgColor": "#f7e4f9",
-      "parent": "#dguykc"
-    },
-    {
-      "@id": "#krwt6e",
-      "name": "finalizeEvent()",
-      "x": 82,
-      "y": 419,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L245",
-      "bgColor": "#f7e4f9",
-      "parent": "#dguykc"
-    },
-    {
-      "@id": "#emecna",
-      "name": "verifyEvent()",
-      "x": -40,
-      "y": 500,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L263",
-      "bgColor": "#f7e4f9",
-      "parent": "#dguykc"
-    },
-    {
-      "@id": "#u8v9bw",
-      "name": "bech32Encode()",
-      "x": -148,
-      "y": 406,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L323",
-      "bgColor": "#f7e4f9",
-      "parent": "#dguykc"
-    },
-    {
-      "@id": "#j6zbf9",
-      "name": "bech32Decode()",
-      "x": -299,
-      "y": 432,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L336",
-      "bgColor": "#f7e4f9",
-      "parent": "#dguykc"
-    },
-    {
-      "@id": "#2z3p7w",
-      "name": "exports 3/3",
-      "x": -246,
-      "y": 37,
-      "bgColor": "#fec0b1",
-      "parent": "#this"
-    },
-    {
-      "@id": "#pvzwd8",
-      "name": "createChatRumor()",
-      "x": -423,
-      "y": 227,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L373",
-      "bgColor": "#ffe3dc",
-      "parent": "#2z3p7w"
-    },
-    {
-      "@id": "#57iy7q",
-      "name": "giftWrap()",
-      "x": -562,
-      "y": 153,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L393",
-      "bgColor": "#ffe3dc",
-      "parent": "#2z3p7w"
-    },
-    {
-      "@id": "#qprvms",
-      "name": "unwrapGiftWrap()",
-      "x": -499,
-      "y": 24,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L419",
-      "bgColor": "#ffe3dc",
-      "parent": "#2z3p7w"
-    },
-    {
-      "@id": "#7fucmt",
-      "name": "createNostrChannel()",
-      "x": -578,
-      "y": -103,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L469",
-      "bgColor": "#ffe3dc",
-      "parent": "#2z3p7w"
-    },
-    {
       "@id": "#t922yq",
+      "name": "exports 1/3",
+      "x": 207,
+      "y": 85,
+      "bgColor": "#e0c4f6",
+      "parent": "#this"
+    },
+    {
+      "@id": "#26rfi6",
+      "name": "getPublicKey()",
+      "x": 428,
+      "y": -31,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L105",
+      "bgColor": "#f2e5fd",
+      "parent": "#t922yq"
+    },
+    {
+      "@id": "#u28rkq",
+      "name": "generatePrivateKey()",
+      "x": 496,
+      "y": 56,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L112",
+      "bgColor": "#f2e5fd",
+      "parent": "#t922yq"
+    },
+    {
+      "@id": "#varvfj",
+      "name": "schnorrSign()",
+      "x": 404,
+      "y": 126,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L127",
+      "bgColor": "#f2e5fd",
+      "parent": "#t922yq"
+    },
+    {
+      "@id": "#ucttef",
+      "name": "schnorrVerify()",
+      "x": 422,
+      "y": 217,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L154",
+      "bgColor": "#f2e5fd",
+      "parent": "#t922yq"
+    },
+    {
+      "@id": "#vzipyd",
+      "name": "sharedSecretX()",
+      "x": 306,
+      "y": 263,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L186",
+      "bgColor": "#f2e5fd",
+      "parent": "#t922yq"
+    },
+    {
+      "@id": "#miy6ts",
+      "name": "nip04Encrypt()",
+      "x": 274,
+      "y": 356,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L202",
+      "bgColor": "#f2e5fd",
+      "parent": "#t922yq"
+    },
+    {
+      "@id": "#ft3k8u",
+      "name": "exports 2/3",
+      "x": -86,
+      "y": 181,
+      "bgColor": "#febdc6",
+      "parent": "#this"
+    },
+    {
+      "@id": "#it6792",
+      "name": "nip04Decrypt()",
+      "x": 56,
+      "y": 362,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L217",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#dnz3gb",
+      "name": "eventId()",
+      "x": -38,
+      "y": 424,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L234",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#3ifse5",
+      "name": "finalizeEvent()",
+      "x": -99,
+      "y": 351,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L245",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#ju3xzh",
+      "name": "verifyEvent()",
+      "x": -244,
+      "y": 376,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L263",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#p46jmx",
+      "name": "bech32Encode()",
+      "x": -256,
+      "y": 282,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L323",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#bu7kuh",
+      "name": "bech32Decode()",
+      "x": -401,
+      "y": 265,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L336",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#2iffkx",
+      "name": "exports 3/3",
+      "x": -229,
+      "y": -17,
+      "bgColor": "#f1c99c",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ssgz3q",
+      "name": "createChatRumor()",
+      "x": -416,
+      "y": 92,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L373",
+      "bgColor": "#fbe8d3",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#gksydt",
+      "name": "giftWrap()",
+      "x": -500,
+      "y": 13,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L393",
+      "bgColor": "#fbe8d3",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#8su7v6",
+      "name": "unwrapGiftWrap()",
+      "x": -422,
+      "y": -71,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L419",
+      "bgColor": "#fbe8d3",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#2da7xj",
+      "name": "createNostrChannel()",
+      "x": -455,
+      "y": -176,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L469",
+      "bgColor": "#fbe8d3",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#9e878e",
       "name": "853 lines",
-      "x": -165,
-      "y": -160,
+      "x": -125,
+      "y": -164,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#26rfi6",
+      "@id": "#cp2str",
       "name": "← src/",
-      "x": 27,
-      "y": -211,
+      "x": 36,
+      "y": -193,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -211,84 +220,88 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 7
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 8
     },
     {
-      "start": 8,
+      "start": 0,
       "end": 9
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 10
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 11
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 12
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 13
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 14
     },
     {
-      "start": 0,
+      "start": 9,
       "end": 15
     },
     {
-      "start": 15,
+      "start": 0,
       "end": 16
     },
     {
-      "start": 15,
+      "start": 16,
       "end": 17
     },
     {
-      "start": 15,
+      "start": 16,
       "end": 18
     },
     {
-      "start": 15,
+      "start": 16,
       "end": 19
     },
     {
-      "start": 0,
+      "start": 16,
       "end": 20
     },
     {
       "start": 0,
       "end": 21
+    },
+    {
+      "start": 0,
+      "end": 22
     }
   ],
   "selectedNode": 0

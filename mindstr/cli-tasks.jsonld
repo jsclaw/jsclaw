@@ -1,0 +1,133 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "jsclaw tasks · 4",
+      "x": 0,
+      "y": 0,
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#ab9ysn",
+      "name": "list [--agent <folder>]",
+      "x": 210,
+      "y": -80,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#qhtzie",
+      "name": "List scheduled tasks",
+      "x": 393,
+      "y": -149,
+      "bgColor": "#ececec",
+      "parent": "#ab9ysn"
+    },
+    {
+      "@id": "#2sgmjt",
+      "name": "pause <id>",
+      "x": 154,
+      "y": 145,
+      "bgColor": "#e9c1ef",
+      "parent": "#this"
+    },
+    {
+      "@id": "#j9h6ge",
+      "name": "Pause a task",
+      "x": 288,
+      "y": 272,
+      "bgColor": "#ececec",
+      "parent": "#2sgmjt"
+    },
+    {
+      "@id": "#ejt2c7",
+      "name": "resume <id>",
+      "x": -115,
+      "y": 169,
+      "bgColor": "#fec0b1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#tvx8v7",
+      "name": "Resume a task",
+      "x": -215,
+      "y": 317,
+      "bgColor": "#ececec",
+      "parent": "#ejt2c7"
+    },
+    {
+      "@id": "#4bfmpa",
+      "name": "cancel <id>",
+      "x": -225,
+      "y": -41,
+      "bgColor": "#d7d59b",
+      "parent": "#this"
+    },
+    {
+      "@id": "#c2mpq8",
+      "name": "Cancel a task",
+      "x": -421,
+      "y": -76,
+      "bgColor": "#ececec",
+      "parent": "#4bfmpa"
+    },
+    {
+      "@id": "#yykmee",
+      "name": "← CLI",
+      "x": -24,
+      "y": -194,
+      "link": "./cli.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 0,
+      "end": 3
+    },
+    {
+      "start": 3,
+      "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
+    },
+    {
+      "start": 5,
+      "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
+    },
+    {
+      "start": 7,
+      "end": 8
+    },
+    {
+      "start": 0,
+      "end": 9
+    }
+  ],
+  "selectedNode": 0
+}

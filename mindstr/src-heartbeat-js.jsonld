@@ -19,81 +19,90 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#arxjt8",
-      "name": "exports",
-      "x": 207,
-      "y": 120,
+      "@id": "#vn2imx",
+      "name": "Heartbeat — periodic agent wake-up for autonomous…",
+      "x": 208,
+      "y": -83,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#jtyjdw",
-      "name": "HEARTBEAT_OK()",
-      "x": 424,
-      "y": -225,
+      "@id": "#2tznvh",
+      "name": "exports",
+      "x": 19,
+      "y": 195,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#cnh2fk",
+      "name": "HEARTBEAT_OK",
+      "x": 364,
+      "y": 194,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L21",
-      "bgColor": "#daeeff",
-      "parent": "#arxjt8"
+      "bgColor": "#fce3f3",
+      "parent": "#2tznvh"
     },
     {
-      "@id": "#dtqx4z",
-      "name": "HEARTBEAT_SCRIPT()",
-      "x": 587,
-      "y": -54,
+      "@id": "#dk76uz",
+      "name": "HEARTBEAT_SCRIPT",
+      "x": 303,
+      "y": 338,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L23",
-      "bgColor": "#daeeff",
-      "parent": "#arxjt8"
+      "bgColor": "#fce3f3",
+      "parent": "#2tznvh"
     },
     {
-      "@id": "#u2s2vv",
+      "@id": "#5aggpq",
       "name": "buildHeartbeatPrompt()",
-      "x": 466,
-      "y": 155,
+      "x": 113,
+      "y": 353,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L41",
-      "bgColor": "#daeeff",
-      "parent": "#arxjt8"
+      "bgColor": "#fce3f3",
+      "parent": "#2tznvh"
     },
     {
-      "@id": "#vx2z65",
+      "@id": "#eqmaaw",
       "name": "runPrecheck()",
-      "x": 387,
-      "y": 378,
+      "x": -60,
+      "y": 422,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L63",
-      "bgColor": "#daeeff",
-      "parent": "#arxjt8"
+      "bgColor": "#fce3f3",
+      "parent": "#2tznvh"
     },
     {
-      "@id": "#xwei9g",
+      "@id": "#pjbq25",
       "name": "inQuietHours()",
-      "x": 131,
-      "y": 410,
+      "x": -199,
+      "y": 324,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L85",
-      "bgColor": "#daeeff",
-      "parent": "#arxjt8"
+      "bgColor": "#fce3f3",
+      "parent": "#2tznvh"
     },
     {
-      "@id": "#6bzs4i",
+      "@id": "#tz98k5",
       "name": "startHeartbeat()",
-      "x": -108,
-      "y": 493,
+      "x": -373,
+      "y": 283,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js#L118",
-      "bgColor": "#daeeff",
-      "parent": "#arxjt8"
+      "bgColor": "#fce3f3",
+      "parent": "#2tznvh"
     },
     {
-      "@id": "#fkywkd",
+      "@id": "#437yyk",
       "name": "197 lines",
-      "x": -247,
-      "y": 32,
+      "x": -222,
+      "y": -52,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/heartbeat.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#j8deiz",
+      "@id": "#j3k2bu",
       "name": "← src/",
-      "x": -56,
-      "y": -207,
+      "x": -19,
+      "y": -195,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -105,36 +114,40 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 7
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 8
     },
     {
       "start": 0,
       "end": 9
+    },
+    {
+      "start": 0,
+      "end": 10
     }
   ],
   "selectedNode": 0

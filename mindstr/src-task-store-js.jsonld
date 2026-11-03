@@ -19,54 +19,63 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#wzta82",
-      "name": "exports",
-      "x": 249,
-      "y": 20,
+      "@id": "#a85fzz",
+      "name": "JSON file-backed task persistence",
+      "x": 220,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#jw3kjf",
+      "@id": "#eitj67",
+      "name": "exports",
+      "x": 53,
+      "y": 190,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#bpmjzd",
       "name": "computeNextRun()",
-      "x": 424,
-      "y": -225,
+      "x": 287,
+      "y": 272,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L39",
-      "bgColor": "#daeeff",
-      "parent": "#wzta82"
+      "bgColor": "#fce3f3",
+      "parent": "#eitj67"
     },
     {
-      "@id": "#r76gtv",
+      "@id": "#r8aetn",
       "name": "TaskStore()",
-      "x": 589,
-      "y": 27,
+      "x": 113,
+      "y": 353,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L63",
-      "bgColor": "#daeeff",
-      "parent": "#wzta82"
+      "bgColor": "#fce3f3",
+      "parent": "#eitj67"
     },
     {
-      "@id": "#qmk4u7",
+      "@id": "#j3rh5f",
       "name": "createTaskIpcHandler()",
-      "x": 380,
-      "y": 276,
+      "x": -98,
+      "y": 356,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L276",
-      "bgColor": "#daeeff",
-      "parent": "#wzta82"
+      "bgColor": "#fce3f3",
+      "parent": "#eitj67"
     },
     {
-      "@id": "#ysvez3",
+      "@id": "#mhgzj7",
       "name": "323 lines",
-      "x": -155,
-      "y": 167,
+      "x": -226,
+      "y": 35,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#83zuf9",
+      "@id": "#67qhwk",
       "name": "← src/",
-      "x": -114,
-      "y": -189,
+      "x": -53,
+      "y": -190,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -78,24 +87,28 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 5
     },
     {
       "start": 0,
       "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
     }
   ],
   "selectedNode": 0

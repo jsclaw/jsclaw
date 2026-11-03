@@ -19,54 +19,63 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#v5njcx",
-      "name": "exports",
-      "x": 250,
-      "y": 4,
+      "@id": "#8edjsn",
+      "name": "Configuration with defaults, optional jsclaw.json…",
+      "x": 222,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#z8kicz",
+      "@id": "#75s7ir",
+      "name": "exports",
+      "x": 59,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#7x3k79",
       "name": "loadConfigFile()",
-      "x": 419,
-      "y": -232,
+      "x": 279,
+      "y": 278,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L67",
-      "bgColor": "#daeeff",
-      "parent": "#v5njcx"
+      "bgColor": "#fce3f3",
+      "parent": "#75s7ir"
     },
     {
-      "@id": "#7348h9",
+      "@id": "#4af2dc",
       "name": "createConfig()",
-      "x": 590,
-      "y": 10,
+      "x": 109,
+      "y": 353,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L110",
-      "bgColor": "#daeeff",
-      "parent": "#v5njcx"
+      "bgColor": "#fce3f3",
+      "parent": "#75s7ir"
     },
     {
-      "@id": "#jtny2v",
-      "name": "defaultConfig()",
-      "x": 408,
-      "y": 246,
+      "@id": "#7iui3z",
+      "name": "defaultConfig",
+      "x": -81,
+      "y": 359,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L136",
-      "bgColor": "#daeeff",
-      "parent": "#v5njcx"
+      "bgColor": "#fce3f3",
+      "parent": "#75s7ir"
     },
     {
-      "@id": "#zvvi4r",
+      "@id": "#bq9ccn",
       "name": "137 lines",
-      "x": -131,
-      "y": 181,
+      "x": -223,
+      "y": 48,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#ezqtt6",
+      "@id": "#3yirdr",
       "name": "← src/",
-      "x": -123,
-      "y": -185,
+      "x": -59,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -78,24 +87,28 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 5
     },
     {
       "start": 0,
       "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
     }
   ],
   "selectedNode": 0

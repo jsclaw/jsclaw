@@ -19,36 +19,45 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#pjbq25",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#p89exh",
+      "name": "Host-side IPC watcher",
+      "x": 222,
+      "y": -51,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#tz98k5",
-      "name": "startIpcWatcher()",
-      "x": 500,
-      "y": 0,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js#L21",
-      "bgColor": "#daeeff",
-      "parent": "#pjbq25"
+      "@id": "#urtpxv",
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
-      "@id": "#437yyk",
+      "@id": "#4dg5c4",
+      "name": "startIpcWatcher()",
+      "x": 111,
+      "y": 353,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js#L21",
+      "bgColor": "#fce3f3",
+      "parent": "#urtpxv"
+    },
+    {
+      "@id": "#kwm3he",
       "name": "142 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#j3k2bu",
+      "@id": "#qvd9cw",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -60,16 +69,20 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 3
     },
     {
       "start": 0,
       "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
     }
   ],
   "selectedNode": 0

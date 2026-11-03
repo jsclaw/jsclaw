@@ -19,36 +19,45 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#u28rkq",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#swzzzt",
+      "name": "Plugin loader — openclaw's config shape over…",
+      "x": 222,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#varvfj",
-      "name": "loadPlugins()",
-      "x": 500,
-      "y": 0,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js#L43",
-      "bgColor": "#daeeff",
-      "parent": "#u28rkq"
+      "@id": "#pj9sd5",
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
-      "@id": "#ucttef",
+      "@id": "#9incsq",
+      "name": "loadPlugins()",
+      "x": 111,
+      "y": 353,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js#L43",
+      "bgColor": "#fce3f3",
+      "parent": "#pj9sd5"
+    },
+    {
+      "@id": "#gwp9qx",
       "name": "98 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/plugins.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#vzipyd",
+      "@id": "#7csjb6",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -60,16 +69,20 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 3
     },
     {
       "start": 0,
       "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
     }
   ],
   "selectedNode": 0

@@ -19,36 +19,45 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#uhqx6j",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#sf37xb",
+      "name": "Minimal logger with no external dependencies",
+      "x": 222,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#aurbbn",
-      "name": "createLogger()",
-      "x": 500,
-      "y": 0,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js#L13",
-      "bgColor": "#daeeff",
-      "parent": "#uhqx6j"
+      "@id": "#fuhjpf",
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
-      "@id": "#fxz322",
+      "@id": "#dry8wx",
+      "name": "createLogger()",
+      "x": 111,
+      "y": 353,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js#L13",
+      "bgColor": "#fce3f3",
+      "parent": "#fuhjpf"
+    },
+    {
+      "@id": "#rmckuv",
       "name": "38 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#s77s87",
+      "@id": "#6cicry",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -60,16 +69,20 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 3
     },
     {
       "start": 0,
       "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
     }
   ],
   "selectedNode": 0

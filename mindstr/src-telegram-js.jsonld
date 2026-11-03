@@ -19,54 +19,63 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#vrzefk",
-      "name": "exports",
-      "x": 248,
-      "y": 29,
+      "@id": "#s9du6c",
+      "name": "Telegram channel — Bot API over fetch, long…",
+      "x": 220,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#hvyxxr",
-      "name": "TELEGRAM_MAX_TEXT()",
-      "x": 428,
-      "y": -219,
+      "@id": "#tjeu4p",
+      "name": "exports",
+      "x": 52,
+      "y": 190,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#x9rczq",
+      "name": "TELEGRAM_MAX_TEXT",
+      "x": 289,
+      "y": 270,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L13",
-      "bgColor": "#daeeff",
-      "parent": "#vrzefk"
+      "bgColor": "#fce3f3",
+      "parent": "#tjeu4p"
     },
     {
-      "@id": "#qahfae",
+      "@id": "#48j6uy",
       "name": "chunkText()",
-      "x": 588,
-      "y": 43,
+      "x": 115,
+      "y": 352,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L22",
-      "bgColor": "#daeeff",
-      "parent": "#vrzefk"
+      "bgColor": "#fce3f3",
+      "parent": "#tjeu4p"
     },
     {
-      "@id": "#tgdsut",
+      "@id": "#9kbx2m",
       "name": "createTelegramChannel()",
-      "x": 361,
-      "y": 294,
+      "x": -102,
+      "y": 355,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L50",
-      "bgColor": "#daeeff",
-      "parent": "#vrzefk"
+      "bgColor": "#fce3f3",
+      "parent": "#tjeu4p"
     },
     {
-      "@id": "#ijf3kk",
+      "@id": "#9gbbfy",
       "name": "142 lines",
-      "x": -167,
-      "y": 158,
+      "x": -227,
+      "y": 31,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#anp567",
+      "@id": "#kue24d",
       "name": "← src/",
-      "x": -110,
-      "y": -191,
+      "x": -52,
+      "y": -190,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -78,24 +87,28 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 5
     },
     {
       "start": 0,
       "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
     }
   ],
   "selectedNode": 0

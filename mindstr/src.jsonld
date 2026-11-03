@@ -19,7 +19,7 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#a85fzz",
+      "@id": "#4cdvsg",
       "name": "around index.js · 6",
       "x": 224,
       "y": -94,
@@ -27,61 +27,61 @@
       "parent": "#this"
     },
     {
-      "@id": "#eitj67",
+      "@id": "#ur7wv9",
       "name": "index.js",
       "x": 318,
       "y": -326,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js",
       "bgColor": "#daeeff",
-      "parent": "#a85fzz"
+      "parent": "#4cdvsg"
     },
     {
-      "@id": "#bpmjzd",
+      "@id": "#j2eaqz",
       "name": "config.js · 3 ›",
       "x": 446,
       "y": -330,
       "link": "./src-config-js.jsonld",
       "bgColor": "#daeeff",
-      "parent": "#a85fzz"
+      "parent": "#4cdvsg"
     },
     {
-      "@id": "#r8aetn",
+      "@id": "#vqbwbg",
       "name": "container-runner.js · 11 ›",
       "x": 429,
       "y": -220,
       "link": "./src-container-runner-js.jsonld",
       "bgColor": "#daeeff",
-      "parent": "#a85fzz"
+      "parent": "#4cdvsg"
     },
     {
-      "@id": "#j3rh5f",
+      "@id": "#y9jt3w",
       "name": "ipc.js · 1 ›",
       "x": 553,
       "y": -175,
       "link": "./src-ipc-js.jsonld",
       "bgColor": "#daeeff",
-      "parent": "#a85fzz"
+      "parent": "#4cdvsg"
     },
     {
-      "@id": "#mhgzj7",
+      "@id": "#vxinpu",
       "name": "ipc-utils.js · 4 ›",
       "x": 490,
       "y": -85,
       "link": "./src-ipc-utils-js.jsonld",
       "bgColor": "#daeeff",
-      "parent": "#a85fzz"
+      "parent": "#4cdvsg"
     },
     {
-      "@id": "#67qhwk",
+      "@id": "#spatem",
       "name": "agent-queue.js · 1 ›",
       "x": 589,
       "y": -21,
       "link": "./src-agent-queue-js.jsonld",
       "bgColor": "#daeeff",
-      "parent": "#a85fzz"
+      "parent": "#4cdvsg"
     },
     {
-      "@id": "#s9du6c",
+      "@id": "#twzhxn",
       "name": "around types.js · 6",
       "x": 193,
       "y": 135,
@@ -89,61 +89,61 @@
       "parent": "#this"
     },
     {
-      "@id": "#tjeu4p",
+      "@id": "#ir6eif",
       "name": "types.js",
       "x": 478,
       "y": 126,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/types.js",
       "bgColor": "#efe6ff",
-      "parent": "#s9du6c"
+      "parent": "#twzhxn"
     },
     {
-      "@id": "#x9rczq",
+      "@id": "#bwj4g5",
       "name": "channel.js · 1 ›",
       "x": 560,
       "y": 221,
       "link": "./src-channel-js.jsonld",
       "bgColor": "#efe6ff",
-      "parent": "#s9du6c"
+      "parent": "#twzhxn"
     },
     {
-      "@id": "#48j6uy",
+      "@id": "#9fjvd8",
       "name": "channels.js · 3 ›",
       "x": 395,
       "y": 243,
       "link": "./src-channels-js.jsonld",
       "bgColor": "#efe6ff",
-      "parent": "#s9du6c"
+      "parent": "#twzhxn"
     },
     {
-      "@id": "#9kbx2m",
+      "@id": "#6fwnzy",
       "name": "commands.js · 5 ›",
       "x": 454,
       "y": 347,
       "link": "./src-commands-js.jsonld",
       "bgColor": "#efe6ff",
-      "parent": "#s9du6c"
+      "parent": "#twzhxn"
     },
     {
-      "@id": "#9gbbfy",
+      "@id": "#rtnzsk",
       "name": "gateway.js · 1 ›",
       "x": 289,
       "y": 338,
       "link": "./src-gateway-js.jsonld",
       "bgColor": "#efe6ff",
-      "parent": "#s9du6c"
+      "parent": "#twzhxn"
     },
     {
-      "@id": "#kue24d",
+      "@id": "#v8phzs",
       "name": "heartbeat.js · 6 ›",
       "x": 303,
       "y": 440,
       "link": "./src-heartbeat-js.jsonld",
       "bgColor": "#efe6ff",
-      "parent": "#s9du6c"
+      "parent": "#twzhxn"
     },
     {
-      "@id": "#ezqvf7",
+      "@id": "#izxsmt",
       "name": "around agents.js · 3",
       "x": 19,
       "y": 228,
@@ -151,34 +151,34 @@
       "parent": "#this"
     },
     {
-      "@id": "#4c22a7",
+      "@id": "#er3xwg",
       "name": "agents.js · 2 ›",
       "x": 139,
       "y": 415,
       "link": "./src-agents-js.jsonld",
       "bgColor": "#ffe2ed",
-      "parent": "#ezqvf7"
+      "parent": "#izxsmt"
     },
     {
-      "@id": "#zpagjg",
+      "@id": "#3p4wn2",
       "name": "memory.js · 8 ›",
       "x": 45,
       "y": 500,
       "link": "./src-memory-js.jsonld",
       "bgColor": "#ffe2ed",
-      "parent": "#ezqvf7"
+      "parent": "#izxsmt"
     },
     {
-      "@id": "#sptvks",
+      "@id": "#f356md",
       "name": "skills.js · 9 ›",
       "x": -15,
       "y": 424,
       "link": "./src-skills-js.jsonld",
       "bgColor": "#ffe2ed",
-      "parent": "#ezqvf7"
+      "parent": "#izxsmt"
     },
     {
-      "@id": "#u6iz6f",
+      "@id": "#c9pfmk",
       "name": "around nostr.js · 3",
       "x": -106,
       "y": 184,
@@ -186,34 +186,34 @@
       "parent": "#this"
     },
     {
-      "@id": "#vb6nak",
+      "@id": "#metvfr",
       "name": "nostr.js · 16 ›",
       "x": -168,
       "y": 407,
       "link": "./src-nostr-js.jsonld",
       "bgColor": "#ffe4d9",
-      "parent": "#u6iz6f"
+      "parent": "#c9pfmk"
     },
     {
-      "@id": "#zv6fek",
+      "@id": "#rnyi3y",
       "name": "nip44.js · 6 ›",
       "x": -249,
       "y": 454,
       "link": "./src-nip44-js.jsonld",
       "bgColor": "#ffe4d9",
-      "parent": "#u6iz6f"
+      "parent": "#c9pfmk"
     },
     {
-      "@id": "#y6p8te",
+      "@id": "#ph8a5e",
       "name": "logger.js · 1 ›",
       "x": -274,
       "y": 356,
       "link": "./src-logger-js.jsonld",
       "bgColor": "#ffe4d9",
-      "parent": "#u6iz6f"
+      "parent": "#c9pfmk"
     },
     {
-      "@id": "#kpttum",
+      "@id": "#uncmtp",
       "name": "around task-store.js · 3",
       "x": -210,
       "y": 115,
@@ -221,133 +221,133 @@
       "parent": "#this"
     },
     {
-      "@id": "#t62ib9",
+      "@id": "#3vjzm2",
       "name": "task-store.js · 3 ›",
       "x": -367,
       "y": 306,
       "link": "./src-task-store-js.jsonld",
       "bgColor": "#f2ecd2",
-      "parent": "#kpttum"
+      "parent": "#uncmtp"
     },
     {
-      "@id": "#qcu5gk",
+      "@id": "#6wz95i",
       "name": "task-scheduler.js · 1 ›",
       "x": -496,
       "y": 262,
       "link": "./src-task-scheduler-js.jsonld",
       "bgColor": "#f2ecd2",
-      "parent": "#kpttum"
+      "parent": "#uncmtp"
     },
     {
-      "@id": "#za8che",
+      "@id": "#mkijzp",
       "name": "cron.js · 3 ›",
       "x": -461,
       "y": 164,
       "link": "./src-cron-js.jsonld",
       "bgColor": "#f2ecd2",
-      "parent": "#kpttum"
+      "parent": "#uncmtp"
     },
     {
-      "@id": "#rbwcef",
-      "name": "other 1 · 7",
+      "@id": "#wm3fr8",
+      "name": "standalone 1 · 7",
       "x": -285,
       "y": -105,
       "bgColor": "#b1dfb5",
       "parent": "#this"
     },
     {
-      "@id": "#mvt9ib",
+      "@id": "#xx6ai9",
       "name": "bindings.js · 2 ›",
       "x": -498,
       "y": 34,
       "link": "./src-bindings-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#4cdvsg",
+      "@id": "#t5gcp9",
       "name": "mcp.js · 8 ›",
       "x": -588,
       "y": -39,
       "link": "./src-mcp-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#ur7wv9",
+      "@id": "#wdgxta",
       "name": "mount-security.js · 4 ›",
       "x": -484,
       "y": -105,
       "link": "./src-mount-security-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#j2eaqz",
+      "@id": "#4pcagq",
       "name": "plugins.js · 1 ›",
       "x": -538,
       "y": -194,
       "link": "./src-plugins-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#vqbwbg",
+      "@id": "#5b4mbz",
       "name": "providers.js · 3 ›",
       "x": -418,
       "y": -240,
       "link": "./src-providers-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#y9jt3w",
+      "@id": "#6kbx7u",
       "name": "sessions.js · 1 ›",
       "x": -465,
       "y": -337,
       "link": "./src-sessions-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#vxinpu",
+      "@id": "#9bysfh",
       "name": "telegram.js · 3 ›",
       "x": -297,
       "y": -332,
       "link": "./src-telegram-js.jsonld",
       "bgColor": "#ddf2de",
-      "parent": "#rbwcef"
+      "parent": "#wm3fr8"
     },
     {
-      "@id": "#spatem",
-      "name": "other 2 · 2",
-      "x": -58,
+      "@id": "#cyd9xx",
+      "name": "standalone 2 · 2",
+      "x": -61,
       "y": -207,
       "bgColor": "#95e1e3",
       "parent": "#this"
     },
     {
-      "@id": "#twzhxn",
+      "@id": "#bvsynb",
       "name": "webhooks.js · 3 ›",
       "x": -167,
       "y": -400,
       "link": "./src-webhooks-js.jsonld",
       "bgColor": "#d1f3f4",
-      "parent": "#spatem"
+      "parent": "#cyd9xx"
     },
     {
-      "@id": "#ir6eif",
+      "@id": "#xintwj",
       "name": "ws.js · 3 ›",
       "x": -76,
       "y": -497,
       "link": "./src-ws-js.jsonld",
       "bgColor": "#d1f3f4",
-      "parent": "#spatem"
+      "parent": "#cyd9xx"
     },
     {
-      "@id": "#bwj4g5",
+      "@id": "#yhbdjy",
       "name": "← jsclaw",
-      "x": 67,
+      "x": 69,
       "y": -205,
       "link": "./index.jsonld",
       "bgColor": "#ececec",

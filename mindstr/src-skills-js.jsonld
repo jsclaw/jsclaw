@@ -19,116 +19,125 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#gksydt",
-      "name": "exports 1/2",
-      "x": 250,
-      "y": -1,
+      "@id": "#83zuf9",
+      "name": "Skills — reusable agent capabilities in openclaw's…",
+      "x": 197,
+      "y": -100,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#8su7v6",
-      "name": "parseFrontmatter()",
-      "x": 381,
-      "y": -275,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L132",
-      "bgColor": "#daeeff",
-      "parent": "#gksydt"
-    },
-    {
-      "@id": "#2da7xj",
-      "name": "parseSkill()",
-      "x": 553,
-      "y": -174,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L148",
-      "bgColor": "#daeeff",
-      "parent": "#gksydt"
-    },
-    {
-      "@id": "#9e878e",
-      "name": "loadSkills()",
-      "x": 500,
-      "y": -1,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L211",
-      "bgColor": "#daeeff",
-      "parent": "#gksydt"
-    },
-    {
-      "@id": "#cp2str",
-      "name": "installSkill()",
-      "x": 555,
-      "y": 171,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L231",
-      "bgColor": "#daeeff",
-      "parent": "#gksydt"
-    },
-    {
-      "@id": "#swzzzt",
-      "name": "removeSkill()",
-      "x": 383,
-      "y": 273,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L263",
-      "bgColor": "#daeeff",
-      "parent": "#gksydt"
-    },
-    {
-      "@id": "#pj9sd5",
-      "name": "exports 2/2",
-      "x": -87,
-      "y": 199,
-      "bgColor": "#f3bee1",
+      "@id": "#vrzefk",
+      "name": "exports 1/2",
+      "x": 153,
+      "y": 146,
+      "bgColor": "#e9c1ef",
       "parent": "#this"
     },
     {
-      "@id": "#9incsq",
+      "@id": "#hvyxxr",
+      "name": "parseFrontmatter()",
+      "x": 416,
+      "y": 93,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L132",
+      "bgColor": "#f7e4f9",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#qahfae",
+      "name": "parseSkill()",
+      "x": 426,
+      "y": 222,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L148",
+      "bgColor": "#f7e4f9",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#tgdsut",
+      "name": "loadSkills()",
+      "x": 286,
+      "y": 273,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L211",
+      "bgColor": "#f7e4f9",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#ijf3kk",
+      "name": "installSkill()",
+      "x": 210,
+      "y": 386,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L231",
+      "bgColor": "#f7e4f9",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#anp567",
+      "name": "removeSkill()",
+      "x": 59,
+      "y": 362,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L263",
+      "bgColor": "#f7e4f9",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#svn3gp",
+      "name": "exports 2/2",
+      "x": -179,
+      "y": 123,
+      "bgColor": "#fec0b1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#vbyvwg",
       "name": "skillMatches()",
-      "x": 101,
-      "y": 416,
+      "x": -176,
+      "y": 333,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L286",
-      "bgColor": "#fce3f3",
-      "parent": "#pj9sd5"
+      "bgColor": "#ffe3dc",
+      "parent": "#svn3gp"
     },
     {
-      "@id": "#gwp9qx",
+      "@id": "#ahre4u",
       "name": "matchSkills()",
-      "x": -98,
-      "y": 494,
+      "x": -335,
+      "y": 316,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L324",
-      "bgColor": "#fce3f3",
-      "parent": "#pj9sd5"
+      "bgColor": "#ffe3dc",
+      "parent": "#svn3gp"
     },
     {
-      "@id": "#7csjb6",
+      "@id": "#ibdfdz",
       "name": "buildSkillContext()",
-      "x": -257,
-      "y": 364,
+      "x": -372,
+      "y": 183,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L333",
-      "bgColor": "#fce3f3",
-      "parent": "#pj9sd5"
+      "bgColor": "#ffe3dc",
+      "parent": "#svn3gp"
     },
     {
-      "@id": "#cyfvb8",
+      "@id": "#z7edqb",
       "name": "buildSkillsIndex()",
-      "x": -467,
-      "y": 306,
+      "x": -489,
+      "y": 89,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js#L348",
-      "bgColor": "#fce3f3",
-      "parent": "#pj9sd5"
+      "bgColor": "#ffe3dc",
+      "parent": "#svn3gp"
     },
     {
-      "@id": "#ngjuhg",
+      "@id": "#2qq2fn",
       "name": "354 lines",
-      "x": -241,
-      "y": -58,
+      "x": -194,
+      "y": -106,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/skills.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#ad25k5",
+      "@id": "#ri2pzw",
       "name": "← src/",
-      "x": -21,
-      "y": -212,
+      "x": 4,
+      "y": -195,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -140,52 +149,56 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 7
     },
     {
-      "start": 7,
+      "start": 0,
       "end": 8
     },
     {
-      "start": 7,
+      "start": 8,
       "end": 9
     },
     {
-      "start": 7,
+      "start": 8,
       "end": 10
     },
     {
-      "start": 7,
+      "start": 8,
       "end": 11
     },
     {
-      "start": 0,
+      "start": 8,
       "end": 12
     },
     {
       "start": 0,
       "end": 13
+    },
+    {
+      "start": 0,
+      "end": 14
     }
   ],
   "selectedNode": 0

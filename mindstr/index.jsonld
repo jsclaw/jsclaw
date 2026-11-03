@@ -19,166 +19,238 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#fkywkd",
-      "name": "README · 8 ›",
-      "x": 310,
-      "y": -13,
-      "link": "./readme.jsonld",
+      "@id": "#7csjb6",
+      "name": "Live site",
+      "x": 230,
+      "y": -2,
+      "link": "https://jsclaw.dev/jsclaw/",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#j8deiz",
-      "name": "What is jsclaw?",
-      "x": 360,
-      "y": -295,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw",
-      "bgColor": "#daeeff",
-      "parent": "#fkywkd"
-    },
-    {
-      "@id": "#aya9s9",
-      "name": "Install",
-      "x": 510,
-      "y": -252,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
-      "bgColor": "#daeeff",
-      "parent": "#fkywkd"
-    },
-    {
-      "@id": "#vn2imx",
-      "name": "Quick Start",
-      "x": 479,
-      "y": -120,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
-      "bgColor": "#daeeff",
-      "parent": "#fkywkd"
-    },
-    {
-      "@id": "#2tznvh",
+      "@id": "#cyfvb8",
       "name": "Architecture",
-      "x": 589,
-      "y": -24,
+      "x": 350,
+      "y": -213,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
       "bgColor": "#daeeff",
-      "parent": "#fkywkd"
+      "parent": "#7csjb6"
     },
     {
-      "@id": "#cnh2fk",
-      "name": "API",
-      "x": 491,
-      "y": 81,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api",
+      "@id": "#ngjuhg",
+      "name": "stdin/stdout",
+      "x": 453,
+      "y": -372,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
       "bgColor": "#daeeff",
-      "parent": "#fkywkd"
+      "parent": "#cyfvb8"
     },
     {
-      "@id": "#dk76uz",
-      "name": "MCP Tools",
-      "x": 536,
-      "y": 210,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container",
+      "@id": "#ad25k5",
+      "name": "IPC files",
+      "x": 512,
+      "y": -312,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
       "bgColor": "#daeeff",
-      "parent": "#fkywkd"
+      "parent": "#cyfvb8"
     },
     {
-      "@id": "#5aggpq",
-      "name": "Configuration",
-      "x": 391,
-      "y": 265,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#configuration",
+      "@id": "#6zhwac",
+      "name": "Container workspace",
+      "x": 560,
+      "y": -246,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
       "bgColor": "#daeeff",
-      "parent": "#fkywkd"
+      "parent": "#cyfvb8"
     },
     {
-      "@id": "#eqmaaw",
-      "name": "CLI · 21 commands ›",
-      "x": 47,
-      "y": 211,
-      "link": "./cli.jsonld",
-      "bgColor": "#e0c4f6",
-      "parent": "#this"
+      "@id": "#sigj2h",
+      "name": "Lightweight container orchestration for Claude AI agents.…",
+      "x": 497,
+      "y": -46,
+      "link": "https://jsclaw.dev/jsclaw/",
+      "bgColor": "#daeeff",
+      "parent": "#7csjb6"
     },
     {
-      "@id": "#pjbq25",
-      "name": "Source · src/ · 30 files ›",
-      "x": -154,
-      "y": 166,
-      "link": "./src.jsonld",
-      "bgColor": "#febdc6",
-      "parent": "#this"
+      "@id": "#2gvkzt",
+      "name": "jsclaw.dev/jsclaw",
+      "x": 417,
+      "y": 90,
+      "link": "https://jsclaw.dev/jsclaw/",
+      "bgColor": "#daeeff",
+      "parent": "#7csjb6"
     },
     {
-      "@id": "#tz98k5",
-      "name": "Open issues · 12 ›",
-      "x": -250,
-      "y": 11,
-      "link": "./issues.jsonld",
-      "bgColor": "#f1c99c",
-      "parent": "#this"
-    },
-    {
-      "@id": "#437yyk",
-      "name": "Examples · 3",
-      "x": -174,
-      "y": -153,
-      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/examples",
-      "bgColor": "#c1dba8",
-      "parent": "#this"
-    },
-    {
-      "@id": "#j3k2bu",
-      "name": "nostr-agent.js",
-      "x": -423,
-      "y": -227,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js",
-      "bgColor": "#e3f0d8",
-      "parent": "#437yyk"
-    },
-    {
-      "@id": "#uhqx6j",
-      "name": "plugins",
-      "x": -410,
-      "y": -361,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins",
-      "bgColor": "#e3f0d8",
-      "parent": "#437yyk"
-    },
-    {
-      "@id": "#aurbbn",
-      "name": "telegram.js",
-      "x": -252,
-      "y": -367,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/telegram.js",
-      "bgColor": "#e3f0d8",
-      "parent": "#437yyk"
-    },
-    {
-      "@id": "#fxz322",
-      "name": "Lightweight container orchestration for Claude AI…",
-      "x": 23,
-      "y": -212,
-      "link": "https://github.com/jsclaw/jsclaw",
-      "bgColor": "#ececec",
-      "parent": "#this"
-    },
-    {
-      "@id": "#s77s87",
+      "@id": "#5gpqg5",
       "name": "since Feb 2026 · last 25 Oct 2026",
-      "x": -24,
-      "y": -425,
+      "x": 438,
+      "y": 204,
       "link": "https://github.com/jsclaw/jsclaw/commits/gh-pages",
       "bgColor": "#ececec",
-      "parent": "#fxz322"
+      "parent": "#7csjb6"
     },
     {
-      "@id": "#k73rni",
-      "name": "jsclaw.dev/jsclaw",
-      "x": 183,
-      "y": -477,
-      "link": "https://jsclaw.dev/jsclaw/",
+      "@id": "#wzta82",
+      "name": "README · 8 ›",
+      "x": 313,
+      "y": 250,
+      "link": "./readme.jsonld",
       "bgColor": "#ececec",
-      "parent": "#fxz322"
+      "parent": "#7csjb6"
+    },
+    {
+      "@id": "#jw3kjf",
+      "name": "Data · 2 ›",
+      "x": 59,
+      "y": 189,
+      "link": "./kb-data.jsonld",
+      "bgColor": "#d9c6fb",
+      "parent": "#this"
+    },
+    {
+      "@id": "#r76gtv",
+      "name": "MCP Tools · 6 ›",
+      "x": 162,
+      "y": 325,
+      "link": "./kb-data.jsonld",
+      "bgColor": "#efe6ff",
+      "parent": "#jw3kjf"
+    },
+    {
+      "@id": "#qmk4u7",
+      "name": "Configuration · 20 ›",
+      "x": 69,
+      "y": 369,
+      "link": "./kb-data.jsonld",
+      "bgColor": "#efe6ff",
+      "parent": "#jw3kjf"
+    },
+    {
+      "@id": "#ysvez3",
+      "name": "Install · 6 ›",
+      "x": -142,
+      "y": 154,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#f9bdd5",
+      "parent": "#this"
+    },
+    {
+      "@id": "#83zuf9",
+      "name": "Pipeline · 13 ›",
+      "x": -104,
+      "y": 350,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#ffe2ed",
+      "parent": "#ysvez3"
+    },
+    {
+      "@id": "#vrzefk",
+      "name": "Other scripts · 3 ›",
+      "x": -196,
+      "y": 394,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#ffe2ed",
+      "parent": "#ysvez3"
+    },
+    {
+      "@id": "#hvyxxr",
+      "name": "Precedence ›",
+      "x": -209,
+      "y": 306,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#ffe2ed",
+      "parent": "#ysvez3"
+    },
+    {
+      "@id": "#qahfae",
+      "name": "heartbeatModel ›",
+      "x": -356,
+      "y": 310,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#ffe2ed",
+      "parent": "#ysvez3"
+    },
+    {
+      "@id": "#tgdsut",
+      "name": "Providers ›",
+      "x": -332,
+      "y": 219,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#ffe2ed",
+      "parent": "#ysvez3"
+    },
+    {
+      "@id": "#ijf3kk",
+      "name": "Security ›",
+      "x": -453,
+      "y": 192,
+      "link": "./kb-run.jsonld",
+      "bgColor": "#ffe2ed",
+      "parent": "#ysvez3"
+    },
+    {
+      "@id": "#anp567",
+      "name": "CLI · 21 commands ›",
+      "x": -230,
+      "y": -3,
+      "link": "./cli.jsonld",
+      "bgColor": "#fcc2a9",
+      "parent": "#this"
+    },
+    {
+      "@id": "#svn3gp",
+      "name": "Source · src/ · 30 files ›",
+      "x": -189,
+      "y": -112,
+      "link": "./src.jsonld",
+      "bgColor": "#e0d199",
+      "parent": "#this"
+    },
+    {
+      "@id": "#vbyvwg",
+      "name": "Open issues · 12 ›",
+      "x": -95,
+      "y": -182,
+      "link": "./issues.jsonld",
+      "bgColor": "#b1dfb5",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ahre4u",
+      "name": "Examples · 3",
+      "x": 59,
+      "y": -191,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/examples",
+      "bgColor": "#95e1e3",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ibdfdz",
+      "name": "nostr-agent.js",
+      "x": -37,
+      "y": -365,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js",
+      "bgColor": "#d1f3f4",
+      "parent": "#ahre4u"
+    },
+    {
+      "@id": "#z7edqb",
+      "name": "plugins",
+      "x": 83,
+      "y": -356,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins",
+      "bgColor": "#d1f3f4",
+      "parent": "#ahre4u"
+    },
+    {
+      "@id": "#2qq2fn",
+      "name": "telegram.js",
+      "x": 191,
+      "y": -338,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/telegram.js",
+      "bgColor": "#d1f3f4",
+      "parent": "#ahre4u"
     }
   ],
   "connections": [
@@ -191,15 +263,15 @@
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
@@ -215,7 +287,7 @@
       "end": 8
     },
     {
-      "start": 0,
+      "start": 1,
       "end": 9
     },
     {
@@ -223,36 +295,68 @@
       "end": 10
     },
     {
-      "start": 0,
+      "start": 10,
       "end": 11
     },
     {
-      "start": 0,
+      "start": 10,
       "end": 12
     },
     {
-      "start": 12,
+      "start": 0,
       "end": 13
     },
     {
-      "start": 12,
+      "start": 13,
       "end": 14
     },
     {
-      "start": 12,
+      "start": 13,
       "end": 15
     },
     {
-      "start": 0,
+      "start": 13,
       "end": 16
     },
     {
-      "start": 16,
+      "start": 13,
       "end": 17
     },
     {
-      "start": 16,
+      "start": 13,
       "end": 18
+    },
+    {
+      "start": 13,
+      "end": 19
+    },
+    {
+      "start": 0,
+      "end": 20
+    },
+    {
+      "start": 0,
+      "end": 21
+    },
+    {
+      "start": 0,
+      "end": 22
+    },
+    {
+      "start": 0,
+      "end": 23
+    },
+    {
+      "start": 23,
+      "end": 24
+    },
+    {
+      "start": 23,
+      "end": 25
+    },
+    {
+      "start": 23,
+      "end": 26
     }
   ],
   "selectedNode": 0

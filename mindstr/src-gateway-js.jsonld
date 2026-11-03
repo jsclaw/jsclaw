@@ -19,36 +19,45 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#p8ysyk",
-      "name": "exports",
-      "x": 250,
-      "y": 0,
+      "@id": "#xwei9g",
+      "name": "Gateway — WebSocket control plane speaking…",
+      "x": 222,
+      "y": -65,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#9c2qhr",
-      "name": "startGateway()",
-      "x": 500,
-      "y": 0,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js#L62",
-      "bgColor": "#daeeff",
-      "parent": "#p8ysyk"
+      "@id": "#6bzs4i",
+      "name": "exports",
+      "x": 60,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
     },
     {
-      "@id": "#h59t8f",
+      "@id": "#fkywkd",
+      "name": "startGateway()",
+      "x": 111,
+      "y": 353,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js#L62",
+      "bgColor": "#fce3f3",
+      "parent": "#6bzs4i"
+    },
+    {
+      "@id": "#j8deiz",
       "name": "495 lines",
-      "x": -125,
-      "y": 184,
+      "x": -222,
+      "y": 51,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/gateway.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#rfby2g",
+      "@id": "#aya9s9",
       "name": "← src/",
-      "x": -125,
-      "y": -184,
+      "x": -60,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -60,16 +69,20 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 3
     },
     {
       "start": 0,
       "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
     }
   ],
   "selectedNode": 0

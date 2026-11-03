@@ -19,54 +19,63 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ri2pzw",
-      "name": "exports",
-      "x": 250,
-      "y": 6,
+      "@id": "#y6p8te",
+      "name": "Minimal RFC 6455 WebSocket server",
+      "x": 222,
+      "y": -52,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#qbizrq",
+      "@id": "#kpttum",
+      "name": "exports",
+      "x": 58,
+      "y": 189,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#t62ib9",
       "name": "acceptKey()",
-      "x": 420,
-      "y": -231,
+      "x": 279,
+      "y": 278,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L26",
-      "bgColor": "#daeeff",
-      "parent": "#ri2pzw"
+      "bgColor": "#fce3f3",
+      "parent": "#kpttum"
     },
     {
-      "@id": "#yyfuzg",
+      "@id": "#qcu5gk",
       "name": "encodeFrame()",
-      "x": 590,
-      "y": 13,
+      "x": 108,
+      "y": 354,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L36",
-      "bgColor": "#daeeff",
-      "parent": "#ri2pzw"
+      "bgColor": "#fce3f3",
+      "parent": "#kpttum"
     },
     {
-      "@id": "#xet7zf",
+      "@id": "#za8che",
       "name": "attachWebSocket()",
-      "x": 405,
-      "y": 250,
+      "x": -85,
+      "y": 358,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L66",
-      "bgColor": "#daeeff",
-      "parent": "#ri2pzw"
+      "bgColor": "#fce3f3",
+      "parent": "#kpttum"
     },
     {
-      "@id": "#wjzwqw",
+      "@id": "#rbwcef",
       "name": "196 lines",
-      "x": -134,
-      "y": 180,
+      "x": -223,
+      "y": 46,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#cpmgtf",
+      "@id": "#mvt9ib",
       "name": "← src/",
-      "x": -122,
-      "y": -185,
+      "x": -58,
+      "y": -189,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -78,24 +87,28 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 5
     },
     {
       "start": 0,
       "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
     }
   ],
   "selectedNode": 0

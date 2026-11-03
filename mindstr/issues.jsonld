@@ -19,134 +19,134 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#yyjnxk",
+      "@id": "#3ifse5",
       "name": "issues 1/2",
-      "x": 233,
-      "y": 77,
+      "x": 207,
+      "y": 71,
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#hrvxpy",
+      "@id": "#ju3xzh",
       "name": "#88 Self-improvement loop: a `reflect`…",
-      "x": 405,
-      "y": -249,
+      "x": 348,
+      "y": -214,
       "link": "https://github.com/jsclaw/jsclaw/issues/88",
       "bgColor": "#daeeff",
-      "parent": "#yyjnxk"
+      "parent": "#3ifse5"
     },
     {
-      "@id": "#hzsqn4",
+      "@id": "#p46jmx",
       "name": "#85 Support coding-plan (OAuth) endpoin…",
-      "x": 574,
-      "y": -115,
+      "x": 487,
+      "y": -98,
       "link": "https://github.com/jsclaw/jsclaw/issues/85",
       "bgColor": "#daeeff",
-      "parent": "#yyjnxk"
+      "parent": "#3ifse5"
     },
     {
-      "@id": "#dttxwc",
+      "@id": "#bu7kuh",
       "name": "#79 Align workspace conventions with op…",
-      "x": 493,
-      "y": 70,
+      "x": 436,
+      "y": 60,
       "link": "https://github.com/jsclaw/jsclaw/issues/79",
       "bgColor": "#daeeff",
-      "parent": "#yyjnxk"
+      "parent": "#3ifse5"
     },
     {
-      "@id": "#p8ysyk",
+      "@id": "#2iffkx",
       "name": "#63 ACP support: IDEs (Zed) talk to jsc…",
-      "x": 499,
-      "y": 268,
+      "x": 423,
+      "y": 227,
       "link": "https://github.com/jsclaw/jsclaw/issues/63",
       "bgColor": "#daeeff",
-      "parent": "#yyjnxk"
+      "parent": "#3ifse5"
     },
     {
-      "@id": "#9c2qhr",
+      "@id": "#ssgz3q",
       "name": "#62 Model catalog: models.list with rea…",
-      "x": 286,
-      "y": 349,
+      "x": 246,
+      "y": 300,
       "link": "https://github.com/jsclaw/jsclaw/issues/62",
       "bgColor": "#daeeff",
-      "parent": "#yyjnxk"
+      "parent": "#3ifse5"
     },
     {
-      "@id": "#h59t8f",
+      "@id": "#gksydt",
       "name": "#61 Sub-agent spawning: agents that sta…",
-      "x": 123,
-      "y": 490,
+      "x": 104,
+      "y": 416,
       "link": "https://github.com/jsclaw/jsclaw/issues/61",
       "bgColor": "#daeeff",
-      "parent": "#yyjnxk"
+      "parent": "#3ifse5"
     },
     {
-      "@id": "#rfby2g",
+      "@id": "#8su7v6",
       "name": "issues 2/2",
-      "x": -250,
-      "y": -12,
+      "x": -230,
+      "y": -11,
       "bgColor": "#febdc6",
       "parent": "#this"
     },
     {
-      "@id": "#arxjt8",
+      "@id": "#2da7xj",
       "name": "#59 dmPolicy 'pairing': approve unknown…",
-      "x": -299,
-      "y": 341,
+      "x": -257,
+      "y": 293,
       "link": "https://github.com/jsclaw/jsclaw/issues/59",
       "bgColor": "#ffe2e6",
-      "parent": "#rfby2g"
+      "parent": "#8su7v6"
     },
     {
-      "@id": "#jtyjdw",
+      "@id": "#9e878e",
       "name": "#58 Exec approvals: human sign-off for…",
-      "x": -507,
-      "y": 257,
+      "x": -430,
+      "y": 217,
       "link": "https://github.com/jsclaw/jsclaw/issues/58",
       "bgColor": "#ffe2e6",
-      "parent": "#rfby2g"
+      "parent": "#8su7v6"
     },
     {
-      "@id": "#dtqx4z",
+      "@id": "#cp2str",
       "name": "#47 Share the skills ecosystem with ope…",
-      "x": -495,
-      "y": 61,
+      "x": -426,
+      "y": 52,
       "link": "https://github.com/jsclaw/jsclaw/issues/47",
       "bgColor": "#ffe2e6",
-      "parent": "#rfby2g"
+      "parent": "#8su7v6"
     },
     {
-      "@id": "#u2s2vv",
+      "@id": "#swzzzt",
       "name": "#46 Gateway protocol parity with opencl…",
-      "x": -571,
-      "y": -126,
+      "x": -484,
+      "y": -107,
       "link": "https://github.com/jsclaw/jsclaw/issues/46",
       "bgColor": "#ffe2e6",
-      "parent": "#rfby2g"
+      "parent": "#8su7v6"
     },
     {
-      "@id": "#vx2z65",
+      "@id": "#pj9sd5",
       "name": "#45 openclaw client compatibility: run…",
-      "x": -398,
-      "y": -257,
+      "x": -343,
+      "y": -221,
       "link": "https://github.com/jsclaw/jsclaw/issues/45",
       "bgColor": "#ffe2e6",
-      "parent": "#rfby2g"
+      "parent": "#8su7v6"
     },
     {
-      "@id": "#xwei9g",
+      "@id": "#9incsq",
       "name": "#27 Verify GLM (Z.ai) and Kimi (Moonsho…",
-      "x": -298,
-      "y": -433,
+      "x": -252,
+      "y": -367,
       "link": "https://github.com/jsclaw/jsclaw/issues/27",
       "bgColor": "#ffe2e6",
-      "parent": "#rfby2g"
+      "parent": "#8su7v6"
     },
     {
-      "@id": "#6bzs4i",
+      "@id": "#gwp9qx",
       "name": "← jsclaw",
-      "x": 52,
-      "y": -208,
+      "x": 48,
+      "y": -191,
       "link": "./index.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"

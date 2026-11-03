@@ -19,107 +19,116 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#k73rni",
-      "name": "exports 1/2",
-      "x": 249,
-      "y": -22,
+      "@id": "#7c28q6",
+      "name": "MCP server envelope — Streamable HTTP transport…",
+      "x": 201,
+      "y": -95,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#r8zm2z",
-      "name": "MCP_PROTOCOL_VERSION()",
-      "x": 389,
-      "y": -267,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L11",
-      "bgColor": "#daeeff",
-      "parent": "#k73rni"
-    },
-    {
-      "@id": "#wzv4c3",
-      "name": "RPC_ERRORS()",
-      "x": 569,
-      "y": -133,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L13",
-      "bgColor": "#daeeff",
-      "parent": "#k73rni"
-    },
-    {
-      "@id": "#7fnz2s",
-      "name": "rpcResult()",
-      "x": 497,
-      "y": 49,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L21",
-      "bgColor": "#daeeff",
-      "parent": "#k73rni"
-    },
-    {
-      "@id": "#p89exh",
-      "name": "rpcError()",
-      "x": 518,
-      "y": 240,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L25",
-      "bgColor": "#daeeff",
-      "parent": "#k73rni"
-    },
-    {
-      "@id": "#urtpxv",
-      "name": "exports 2/2",
-      "x": -42,
-      "y": 209,
-      "bgColor": "#f3bee1",
+      "@id": "#4qbh3e",
+      "name": "exports 1/2",
+      "x": 160,
+      "y": 141,
+      "bgColor": "#e9c1ef",
       "parent": "#this"
     },
     {
-      "@id": "#4dg5c4",
+      "@id": "#m3xps2",
+      "name": "MCP_PROTOCOL_VERSION",
+      "x": 407,
+      "y": 117,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L11",
+      "bgColor": "#f7e4f9",
+      "parent": "#4qbh3e"
+    },
+    {
+      "@id": "#yxjf84",
+      "name": "RPC_ERRORS",
+      "x": 397,
+      "y": 258,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L13",
+      "bgColor": "#f7e4f9",
+      "parent": "#4qbh3e"
+    },
+    {
+      "@id": "#mrv4db",
+      "name": "rpcResult()",
+      "x": 243,
+      "y": 302,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L21",
+      "bgColor": "#f7e4f9",
+      "parent": "#4qbh3e"
+    },
+    {
+      "@id": "#i6483q",
+      "name": "rpcError()",
+      "x": 139,
+      "y": 408,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L25",
+      "bgColor": "#f7e4f9",
+      "parent": "#4qbh3e"
+    },
+    {
+      "@id": "#kmcrgd",
+      "name": "exports 2/2",
+      "x": -157,
+      "y": 143,
+      "bgColor": "#fec0b1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ktiw89",
       "name": "toolText()",
-      "x": 193,
-      "y": 392,
+      "x": -118,
+      "y": 351,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L29",
-      "bgColor": "#fce3f3",
-      "parent": "#urtpxv"
+      "bgColor": "#ffe3dc",
+      "parent": "#kmcrgd"
     },
     {
-      "@id": "#kwm3he",
+      "@id": "#c74y5q",
       "name": "toolJson()",
-      "x": 11,
-      "y": 501,
+      "x": -280,
+      "y": 352,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L33",
-      "bgColor": "#fce3f3",
-      "parent": "#urtpxv"
+      "bgColor": "#ffe3dc",
+      "parent": "#kmcrgd"
     },
     {
-      "@id": "#qvd9cw",
+      "@id": "#374kep",
       "name": "toolError()",
-      "x": -176,
-      "y": 398,
+      "x": -339,
+      "y": 224,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L37",
-      "bgColor": "#fce3f3",
-      "parent": "#urtpxv"
+      "bgColor": "#ffe3dc",
+      "parent": "#kmcrgd"
     },
     {
-      "@id": "#sf37xb",
+      "@id": "#ba2cgp",
       "name": "createMcpHandler()",
-      "x": -397,
-      "y": 371,
+      "x": -470,
+      "y": 144,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L50",
-      "bgColor": "#fce3f3",
-      "parent": "#urtpxv"
+      "bgColor": "#ffe3dc",
+      "parent": "#kmcrgd"
     },
     {
-      "@id": "#fuhjpf",
+      "@id": "#h7ym9k",
       "name": "97 lines",
-      "x": -247,
-      "y": -32,
+      "x": -205,
+      "y": -89,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#dry8wx",
+      "@id": "#ius84b",
       "name": "← src/",
-      "x": -31,
-      "y": -211,
+      "x": -4,
+      "y": -195,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -131,48 +140,52 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 6,
+      "start": 0,
       "end": 7
     },
     {
-      "start": 6,
+      "start": 7,
       "end": 8
     },
     {
-      "start": 6,
+      "start": 7,
       "end": 9
     },
     {
-      "start": 6,
+      "start": 7,
       "end": 10
     },
     {
-      "start": 0,
+      "start": 7,
       "end": 11
     },
     {
       "start": 0,
       "end": 12
+    },
+    {
+      "start": 0,
+      "end": 13
     }
   ],
   "selectedNode": 0

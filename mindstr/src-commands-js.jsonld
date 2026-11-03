@@ -19,72 +19,81 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#fnrzmm",
-      "name": "exports",
-      "x": 222,
-      "y": 97,
+      "@id": "#tpktj6",
+      "name": "Slash commands — openclaw's registry shapes (#60)",
+      "x": 212,
+      "y": -76,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#3y3s3p",
-      "name": "registerPluginCommands()",
-      "x": 438,
-      "y": -205,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L20",
-      "bgColor": "#daeeff",
-      "parent": "#fnrzmm"
-    },
-    {
-      "@id": "#ujs2ci",
-      "name": "BUILTIN_COMMANDS()",
-      "x": 590,
-      "y": 20,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L29",
-      "bgColor": "#daeeff",
-      "parent": "#fnrzmm"
-    },
-    {
-      "@id": "#442pm7",
-      "name": "parseCommand()",
-      "x": 431,
-      "y": 215,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L41",
-      "bgColor": "#daeeff",
-      "parent": "#fnrzmm"
-    },
-    {
-      "@id": "#imr4n9",
-      "name": "listCommands()",
-      "x": 308,
-      "y": 428,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L54",
-      "bgColor": "#daeeff",
-      "parent": "#fnrzmm"
-    },
-    {
-      "@id": "#tpktj6",
-      "name": "handleCommand()",
-      "x": 30,
-      "y": 424,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L104",
-      "bgColor": "#daeeff",
-      "parent": "#fnrzmm"
-    },
-    {
       "@id": "#u94rpy",
+      "name": "exports",
+      "x": 28,
+      "y": 194,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#7txfyn",
+      "name": "registerPluginCommands()",
+      "x": 336,
+      "y": 229,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L20",
+      "bgColor": "#fce3f3",
+      "parent": "#u94rpy"
+    },
+    {
+      "@id": "#v5njcx",
+      "name": "BUILTIN_COMMANDS",
+      "x": 225,
+      "y": 380,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L29",
+      "bgColor": "#fce3f3",
+      "parent": "#u94rpy"
+    },
+    {
+      "@id": "#z8kicz",
+      "name": "parseCommand()",
+      "x": 35,
+      "y": 364,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L41",
+      "bgColor": "#fce3f3",
+      "parent": "#u94rpy"
+    },
+    {
+      "@id": "#7348h9",
+      "name": "listCommands()",
+      "x": -150,
+      "y": 405,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L54",
+      "bgColor": "#fce3f3",
+      "parent": "#u94rpy"
+    },
+    {
+      "@id": "#jtny2v",
+      "name": "handleCommand()",
+      "x": -274,
+      "y": 282,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js#L104",
+      "bgColor": "#fce3f3",
+      "parent": "#u94rpy"
+    },
+    {
+      "@id": "#zvvi4r",
       "name": "154 lines",
-      "x": -236,
-      "y": 69,
+      "x": -227,
+      "y": -29,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/commands.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#7txfyn",
+      "@id": "#ezqtt6",
       "name": "← src/",
-      "x": -70,
-      "y": -204,
+      "x": -28,
+      "y": -194,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -96,32 +105,36 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 7
     },
     {
       "start": 0,
       "end": 8
+    },
+    {
+      "start": 0,
+      "end": 9
     }
   ],
   "selectedNode": 0

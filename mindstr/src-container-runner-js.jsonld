@@ -19,134 +19,143 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#8edjsn",
-      "name": "exports 1/2",
-      "x": 249,
-      "y": 20,
+      "@id": "#ptf2jy",
+      "name": "Container execution engine",
+      "x": 186,
+      "y": -115,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L1",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#75s7ir",
-      "name": "resolveSkillsForRun()",
-      "x": 384,
-      "y": -272,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L31",
-      "bgColor": "#daeeff",
-      "parent": "#8edjsn"
-    },
-    {
-      "@id": "#7x3k79",
-      "name": "engineAvailable()",
-      "x": 551,
-      "y": -180,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L70",
-      "bgColor": "#daeeff",
-      "parent": "#8edjsn"
-    },
-    {
-      "@id": "#4af2dc",
-      "name": "resolveSandbox()",
-      "x": 499,
-      "y": -24,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L94",
-      "bgColor": "#daeeff",
-      "parent": "#8edjsn"
-    },
-    {
-      "@id": "#7iui3z",
-      "name": "ensureAgentDirs()",
-      "x": 571,
-      "y": 126,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L122",
-      "bgColor": "#daeeff",
-      "parent": "#8edjsn"
-    },
-    {
-      "@id": "#bq9ccn",
-      "name": "buildVolumeMounts()",
-      "x": 422,
-      "y": 229,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L137",
-      "bgColor": "#daeeff",
-      "parent": "#8edjsn"
-    },
-    {
-      "@id": "#3yirdr",
-      "name": "buildContainerArgs()",
-      "x": 371,
-      "y": 390,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L176",
-      "bgColor": "#daeeff",
-      "parent": "#8edjsn"
-    },
-    {
-      "@id": "#ptf2jy",
-      "name": "exports 2/2",
-      "x": -161,
-      "y": 162,
-      "bgColor": "#f3bee1",
+      "@id": "#4bfy6j",
+      "name": "exports 1/2",
+      "x": 164,
+      "y": 137,
+      "bgColor": "#e9c1ef",
       "parent": "#this"
     },
     {
-      "@id": "#4bfy6j",
-      "name": "resolveMcpServers()",
-      "x": 2,
-      "y": 425,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L206",
-      "bgColor": "#fce3f3",
-      "parent": "#ptf2jy"
-    },
-    {
       "@id": "#4wkdd9",
-      "name": "parseContainerOutput()",
-      "x": -199,
-      "y": 472,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L220",
-      "bgColor": "#fce3f3",
-      "parent": "#ptf2jy"
+      "name": "resolveSkillsForRun()",
+      "x": 428,
+      "y": 35,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L31",
+      "bgColor": "#f7e4f9",
+      "parent": "#4bfy6j"
     },
     {
       "@id": "#yiscsp",
-      "name": "runContainerAgent()",
-      "x": -320,
-      "y": 327,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L255",
-      "bgColor": "#fce3f3",
-      "parent": "#ptf2jy"
+      "name": "engineAvailable()",
+      "x": 465,
+      "y": 157,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L70",
+      "bgColor": "#f7e4f9",
+      "parent": "#4bfy6j"
     },
     {
       "@id": "#2fzfhg",
-      "name": "reapOrphanContainers()",
-      "x": -510,
-      "y": 253,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L478",
-      "bgColor": "#fce3f3",
-      "parent": "#ptf2jy"
+      "name": "resolveSandbox()",
+      "x": 343,
+      "y": 221,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L94",
+      "bgColor": "#f7e4f9",
+      "parent": "#4bfy6j"
     },
     {
       "@id": "#6ab87r",
-      "name": "writeTasksSnapshot()",
-      "x": -493,
-      "y": 73,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L562",
-      "bgColor": "#fce3f3",
-      "parent": "#ptf2jy"
+      "name": "ensureAgentDirs()",
+      "x": 324,
+      "y": 338,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L122",
+      "bgColor": "#f7e4f9",
+      "parent": "#4bfy6j"
     },
     {
       "@id": "#uyfscv",
+      "name": "buildVolumeMounts()",
+      "x": 149,
+      "y": 339,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L137",
+      "bgColor": "#f7e4f9",
+      "parent": "#4bfy6j"
+    },
+    {
+      "@id": "#z5cumb",
+      "name": "buildContainerArgs()",
+      "x": 51,
+      "y": 423,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L176",
+      "bgColor": "#f7e4f9",
+      "parent": "#4bfy6j"
+    },
+    {
+      "@id": "#7iejm3",
+      "name": "exports 2/2",
+      "x": -204,
+      "y": 90,
+      "bgColor": "#fec0b1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#452y5w",
+      "name": "resolveMcpServers()",
+      "x": -174,
+      "y": 323,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L206",
+      "bgColor": "#ffe3dc",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#yyjnxk",
+      "name": "parseContainerOutput()",
+      "x": -369,
+      "y": 300,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L220",
+      "bgColor": "#ffe3dc",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#hrvxpy",
+      "name": "runContainerAgent()",
+      "x": -381,
+      "y": 169,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L255",
+      "bgColor": "#ffe3dc",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#hzsqn4",
+      "name": "reapOrphanContainers()",
+      "x": -492,
+      "y": 76,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L478",
+      "bgColor": "#ffe3dc",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#dttxwc",
+      "name": "writeTasksSnapshot()",
+      "x": -426,
+      "y": -47,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js#L562",
+      "bgColor": "#ffe3dc",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#p8ysyk",
       "name": "567 lines",
-      "x": -199,
-      "y": -128,
+      "x": -154,
+      "y": -146,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/container-runner.js",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#z5cumb",
+      "@id": "#9c2qhr",
       "name": "← src/",
-      "x": 10,
-      "y": -212,
+      "x": 24,
+      "y": -194,
       "link": "./src.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"
@@ -158,60 +167,64 @@
       "end": 1
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 2
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 3
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 4
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 5
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 6
     },
     {
-      "start": 1,
+      "start": 2,
       "end": 7
     },
     {
-      "start": 0,
+      "start": 2,
       "end": 8
     },
     {
-      "start": 8,
+      "start": 0,
       "end": 9
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 10
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 11
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 12
     },
     {
-      "start": 8,
+      "start": 9,
       "end": 13
     },
     {
-      "start": 0,
+      "start": 9,
       "end": 14
     },
     {
       "start": 0,
       "end": 15
+    },
+    {
+      "start": 0,
+      "end": 16
     }
   ],
   "selectedNode": 0
