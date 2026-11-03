@@ -1,0 +1,51 @@
+# [jsclaw](https://github.com/jsclaw/jsclaw)
+
+- [Commits · 11 in 90 days](https://github.com/jsclaw/jsclaw/commits/gh-pages)
+  - [Oct 2026 · 11](./commits-2026-10.jsonld)
+    - Sun 25 Oct · 1–6 of 11
+      - [a3648b6 Merge pull request #93 from jsclaw/…](https://github.com/jsclaw/jsclaw/commit/a3648b6)
+      - [32edace nostr: wait for the relay's OK when…](https://github.com/jsclaw/jsclaw/commit/32edace)
+      - [a000a96 Merge pull request #92 from jsclaw/…](https://github.com/jsclaw/jsclaw/commit/a000a96)
+      - [69a0284 nostr: NIP-17 private DMs (gift wra…](https://github.com/jsclaw/jsclaw/commit/69a0284)
+      - [ae95dff nip44: NIP-44 v2 encryption, zero-d…](https://github.com/jsclaw/jsclaw/commit/ae95dff)
+      - [2ab992c Merge pull request #90 from jsclaw/…](https://github.com/jsclaw/jsclaw/commit/2ab992c)
+    - Sun 25 Oct · 7–11 of 11
+      - [4f8685c Merge pull request #91 from jsclaw/…](https://github.com/jsclaw/jsclaw/commit/4f8685c)
+      - [7be40cb cli: restore the startHeartbeat imp…](https://github.com/jsclaw/jsclaw/commit/7be40cb)
+      - [ecbf8d4 telegram: built-in channel over fet…](https://github.com/jsclaw/jsclaw/commit/ecbf8d4)
+      - [4c52ff5 Merge pull request #89 from jsclaw/…](https://github.com/jsclaw/jsclaw/commit/4c52ff5)
+      - [61fc2cb heartbeat: HEARTBEAT.sh pre-check k…](https://github.com/jsclaw/jsclaw/commit/61fc2cb)
+- Hot files · 5
+  - [src/nostr.js · 3](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js)
+  - [README.md · 3](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#readme)
+  - [package.json · 2](https://github.com/jsclaw/jsclaw/blob/gh-pages/package.json)
+  - [src/channels.js · 2](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/channels.js)
+  - [src/index.js · 2](https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js)
+- [README · 6](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#jsclaw)
+  - [What is jsclaw?](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw)
+  - [Install](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install)
+  - [Quick Start](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start)
+  - [Architecture](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture)
+  - [API](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api)
+  - [MCP Tools](https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#mcp-tools-inside-container)
+- Branches · 2
+  - [gh-pages](https://github.com/jsclaw/jsclaw/tree/gh-pages)
+  - [nostr-publish-ack](https://github.com/jsclaw/jsclaw/tree/nostr-publish-ack)
+- [Open issues · 12](./issues.jsonld)
+  - issues · 1–6 of 12
+    - [#88 Self-improvement loop: a `reflect`…](https://github.com/jsclaw/jsclaw/issues/88)
+    - [#85 Support coding-plan (OAuth) endpoin…](https://github.com/jsclaw/jsclaw/issues/85)
+    - [#79 Align workspace conventions with op…](https://github.com/jsclaw/jsclaw/issues/79)
+    - [#63 ACP support: IDEs (Zed) talk to jsc…](https://github.com/jsclaw/jsclaw/issues/63)
+    - [#62 Model catalog: models.list with rea…](https://github.com/jsclaw/jsclaw/issues/62)
+    - [#61 Sub-agent spawning: agents that sta…](https://github.com/jsclaw/jsclaw/issues/61)
+  - issues · 7–12 of 12
+    - [#59 dmPolicy 'pairing': approve unknown…](https://github.com/jsclaw/jsclaw/issues/59)
+    - [#58 Exec approvals: human sign-off for…](https://github.com/jsclaw/jsclaw/issues/58)
+    - [#47 Share the skills ecosystem with ope…](https://github.com/jsclaw/jsclaw/issues/47)
+    - [#46 Gateway protocol parity with opencl…](https://github.com/jsclaw/jsclaw/issues/46)
+    - [#45 openclaw client compatibility: run…](https://github.com/jsclaw/jsclaw/issues/45)
+    - [#27 Verify GLM (Z.ai) and Kimi (Moonsho…](https://github.com/jsclaw/jsclaw/issues/27)
+- agent, llm, javascript, nostr, infra, l…
+- [Lightweight container orchestration for Cla…](https://github.com/jsclaw/jsclaw)
+  - 120 commits since 2026-02-11
