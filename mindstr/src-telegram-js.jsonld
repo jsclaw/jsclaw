@@ -1,0 +1,102 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "telegram.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#vrzefk",
+      "name": "exports",
+      "x": 248,
+      "y": 29,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#hvyxxr",
+      "name": "TELEGRAM_MAX_TEXT()",
+      "x": 428,
+      "y": -219,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L13",
+      "bgColor": "#daeeff",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#qahfae",
+      "name": "chunkText()",
+      "x": 588,
+      "y": 43,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L22",
+      "bgColor": "#daeeff",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#tgdsut",
+      "name": "createTelegramChannel()",
+      "x": 361,
+      "y": 294,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js#L50",
+      "bgColor": "#daeeff",
+      "parent": "#vrzefk"
+    },
+    {
+      "@id": "#ijf3kk",
+      "name": "142 lines",
+      "x": -167,
+      "y": 158,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/telegram.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#anp567",
+      "name": "← src/",
+      "x": -110,
+      "y": -191,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    }
+  ],
+  "selectedNode": 0
+}

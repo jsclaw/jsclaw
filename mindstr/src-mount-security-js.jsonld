@@ -1,0 +1,115 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "mount-security.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#ba2cgp",
+      "name": "exports",
+      "x": 225,
+      "y": 93,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#h7ym9k",
+      "name": "loadMountAllowlist()",
+      "x": 433,
+      "y": -213,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L35",
+      "bgColor": "#daeeff",
+      "parent": "#ba2cgp"
+    },
+    {
+      "@id": "#ius84b",
+      "name": "validateMount()",
+      "x": 590,
+      "y": 12,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L75",
+      "bgColor": "#daeeff",
+      "parent": "#ba2cgp"
+    },
+    {
+      "@id": "#583aqh",
+      "name": "validateAdditionalMounts()",
+      "x": 401,
+      "y": 254,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L119",
+      "bgColor": "#daeeff",
+      "parent": "#ba2cgp"
+    },
+    {
+      "@id": "#sbf4ee",
+      "name": "generateAllowlistTemplate()",
+      "x": 130,
+      "y": 489,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js#L154",
+      "bgColor": "#daeeff",
+      "parent": "#ba2cgp"
+    },
+    {
+      "@id": "#t6q67m",
+      "name": "161 lines",
+      "x": -233,
+      "y": 77,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mount-security.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#abq85r",
+      "name": "← src/",
+      "x": -73,
+      "y": -203,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 1,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
+    }
+  ],
+  "selectedNode": 0
+}

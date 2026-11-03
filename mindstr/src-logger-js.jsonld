@@ -1,0 +1,76 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "logger.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#uhqx6j",
+      "name": "exports",
+      "x": 250,
+      "y": 0,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#aurbbn",
+      "name": "createLogger()",
+      "x": 500,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js#L13",
+      "bgColor": "#daeeff",
+      "parent": "#uhqx6j"
+    },
+    {
+      "@id": "#fxz322",
+      "name": "38 lines",
+      "x": -125,
+      "y": 184,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/logger.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#s77s87",
+      "name": "← src/",
+      "x": -125,
+      "y": -184,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 0,
+      "end": 3
+    },
+    {
+      "start": 0,
+      "end": 4
+    }
+  ],
+  "selectedNode": 0
+}

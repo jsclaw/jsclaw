@@ -1,0 +1,386 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "jsclaw",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#jsclaw",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#ucttef",
+      "name": "What is jsclaw?",
+      "x": 175,
+      "y": -152,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw",
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#vzipyd",
+      "name": "Install",
+      "x": 240,
+      "y": -61,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
+      "bgColor": "#e0c4f6",
+      "parent": "#this"
+    },
+    {
+      "@id": "#miy6ts",
+      "name": "Quick Start",
+      "x": -67,
+      "y": 205,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
+      "bgColor": "#febdc6",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ft3k8u",
+      "name": "parts · 1–6 of 18",
+      "x": 298,
+      "y": 341,
+      "bgColor": "#ffe2e6",
+      "parent": "#miy6ts"
+    },
+    {
+      "@id": "#it6792",
+      "name": "-1. Even faster: the wizard",
+      "x": 671,
+      "y": 285,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#-1-even-faster-the-wizard",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#dnz3gb",
+      "name": "The fast path: a full agent host in one command",
+      "x": 639,
+      "y": 464,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#0-the-fast-path-a-full-agent-host-in-one-command",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#3ifse5",
+      "name": "Build the container image",
+      "x": 440,
+      "y": 516,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#1-build-the-container-image",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#ju3xzh",
+      "name": "Run an agent",
+      "x": 387,
+      "y": 636,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#2-run-an-agent",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#p46jmx",
+      "name": "With Queue + IPC",
+      "x": 242,
+      "y": 602,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#3-with-queue-ipc",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#bu7kuh",
+      "name": "Scheduled tasks + heartbeat",
+      "x": 143,
+      "y": 704,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#4-scheduled-tasks-heartbeat-autonomous-operation",
+      "bgColor": "#ffe2e6",
+      "parent": "#ft3k8u"
+    },
+    {
+      "@id": "#2iffkx",
+      "name": "parts · 7–12 of 18",
+      "x": -258,
+      "y": 451,
+      "bgColor": "#ffe2e6",
+      "parent": "#miy6ts"
+    },
+    {
+      "@id": "#ssgz3q",
+      "name": "Identity files",
+      "x": -116,
+      "y": 630,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#5-identity-files-personality",
+      "bgColor": "#ffe2e6",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#gksydt",
+      "name": "Channels",
+      "x": -227,
+      "y": 687,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6-channels-pluggable-io",
+      "bgColor": "#ffe2e6",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#8su7v6",
+      "name": "6½. Nostr",
+      "x": -287,
+      "y": 589,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6½-nostr-a-decentralized-agent",
+      "bgColor": "#ffe2e6",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#2da7xj",
+      "name": "Memory",
+      "x": -411,
+      "y": 622,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#7-memory-persistent-context",
+      "bgColor": "#ffe2e6",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#9e878e",
+      "name": "Webhooks",
+      "x": -442,
+      "y": 515,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#8-webhooks-http-ingress",
+      "bgColor": "#ffe2e6",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#cp2str",
+      "name": "Skills",
+      "x": -572,
+      "y": 523,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#9-skills",
+      "bgColor": "#ffe2e6",
+      "parent": "#2iffkx"
+    },
+    {
+      "@id": "#swzzzt",
+      "name": "parts · 13–18 of 18",
+      "x": -489,
+      "y": 88,
+      "bgColor": "#ffe2e6",
+      "parent": "#miy6ts"
+    },
+    {
+      "@id": "#pj9sd5",
+      "name": "Multi-agent bindings",
+      "x": -641,
+      "y": 332,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#10-multi-agent-bindings",
+      "bgColor": "#ffe2e6",
+      "parent": "#swzzzt"
+    },
+    {
+      "@id": "#9incsq",
+      "name": "Outgoing webhooks",
+      "x": -770,
+      "y": 286,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11-outgoing-webhooks",
+      "bgColor": "#ffe2e6",
+      "parent": "#swzzzt"
+    },
+    {
+      "@id": "#gwp9qx",
+      "name": "11½. MCP servers",
+      "x": -720,
+      "y": 177,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11½-mcp-servers-plug-into-the-mcp-ecosystem",
+      "bgColor": "#ffe2e6",
+      "parent": "#swzzzt"
+    },
+    {
+      "@id": "#7csjb6",
+      "name": "11¾. Models & providers",
+      "x": -832,
+      "y": 99,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11¾-models-providers",
+      "bgColor": "#ffe2e6",
+      "parent": "#swzzzt"
+    },
+    {
+      "@id": "#cyfvb8",
+      "name": "Config file",
+      "x": -750,
+      "y": -2,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#12-config-file",
+      "bgColor": "#ffe2e6",
+      "parent": "#swzzzt"
+    },
+    {
+      "@id": "#ngjuhg",
+      "name": "CLI",
+      "x": -832,
+      "y": -96,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#13-cli",
+      "bgColor": "#ffe2e6",
+      "parent": "#swzzzt"
+    },
+    {
+      "@id": "#ad25k5",
+      "name": "Architecture",
+      "x": -169,
+      "y": -157,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
+      "bgColor": "#f1c99c",
+      "parent": "#this"
+    },
+    {
+      "@id": "#6zhwac",
+      "name": "API",
+      "x": -58,
+      "y": -207,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api",
+      "bgColor": "#c1dba8",
+      "parent": "#this"
+    },
+    {
+      "@id": "#sigj2h",
+      "name": "createConfig",
+      "x": -116,
+      "y": -413,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#createconfigoverrides",
+      "bgColor": "#e3f0d8",
+      "parent": "#6zhwac"
+    },
+    {
+      "@id": "#2gvkzt",
+      "name": "← jsclaw",
+      "x": 67,
+      "y": -205,
+      "link": "./index.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 0,
+      "end": 2
+    },
+    {
+      "start": 0,
+      "end": 3
+    },
+    {
+      "start": 3,
+      "end": 4
+    },
+    {
+      "start": 4,
+      "end": 5
+    },
+    {
+      "start": 4,
+      "end": 6
+    },
+    {
+      "start": 4,
+      "end": 7
+    },
+    {
+      "start": 4,
+      "end": 8
+    },
+    {
+      "start": 4,
+      "end": 9
+    },
+    {
+      "start": 4,
+      "end": 10
+    },
+    {
+      "start": 3,
+      "end": 11
+    },
+    {
+      "start": 11,
+      "end": 12
+    },
+    {
+      "start": 11,
+      "end": 13
+    },
+    {
+      "start": 11,
+      "end": 14
+    },
+    {
+      "start": 11,
+      "end": 15
+    },
+    {
+      "start": 11,
+      "end": 16
+    },
+    {
+      "start": 11,
+      "end": 17
+    },
+    {
+      "start": 3,
+      "end": 18
+    },
+    {
+      "start": 18,
+      "end": 19
+    },
+    {
+      "start": 18,
+      "end": 20
+    },
+    {
+      "start": 18,
+      "end": 21
+    },
+    {
+      "start": 18,
+      "end": 22
+    },
+    {
+      "start": 18,
+      "end": 23
+    },
+    {
+      "start": 18,
+      "end": 24
+    },
+    {
+      "start": 0,
+      "end": 25
+    },
+    {
+      "start": 0,
+      "end": 26
+    },
+    {
+      "start": 26,
+      "end": 27
+    },
+    {
+      "start": 0,
+      "end": 28
+    }
+  ],
+  "selectedNode": 0
+}

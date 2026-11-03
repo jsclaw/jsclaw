@@ -1,0 +1,102 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "ws.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#ri2pzw",
+      "name": "exports",
+      "x": 250,
+      "y": 6,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#qbizrq",
+      "name": "acceptKey()",
+      "x": 420,
+      "y": -231,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L26",
+      "bgColor": "#daeeff",
+      "parent": "#ri2pzw"
+    },
+    {
+      "@id": "#yyfuzg",
+      "name": "encodeFrame()",
+      "x": 590,
+      "y": 13,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L36",
+      "bgColor": "#daeeff",
+      "parent": "#ri2pzw"
+    },
+    {
+      "@id": "#xet7zf",
+      "name": "attachWebSocket()",
+      "x": 405,
+      "y": 250,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js#L66",
+      "bgColor": "#daeeff",
+      "parent": "#ri2pzw"
+    },
+    {
+      "@id": "#wjzwqw",
+      "name": "196 lines",
+      "x": -134,
+      "y": 180,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ws.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#cpmgtf",
+      "name": "← src/",
+      "x": -122,
+      "y": -185,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    }
+  ],
+  "selectedNode": 0
+}

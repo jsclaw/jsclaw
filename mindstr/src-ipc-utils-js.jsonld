@@ -1,0 +1,115 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "ipc-utils.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#aya9s9",
+      "name": "exports",
+      "x": 242,
+      "y": 54,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#vn2imx",
+      "name": "writeIpcFile()",
+      "x": 422,
+      "y": -229,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L21",
+      "bgColor": "#daeeff",
+      "parent": "#aya9s9"
+    },
+    {
+      "@id": "#2tznvh",
+      "name": "readIpcFile()",
+      "x": 590,
+      "y": -14,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L37",
+      "bgColor": "#daeeff",
+      "parent": "#aya9s9"
+    },
+    {
+      "@id": "#cnh2fk",
+      "name": "drainIpcDir()",
+      "x": 435,
+      "y": 209,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L52",
+      "bgColor": "#daeeff",
+      "parent": "#aya9s9"
+    },
+    {
+      "@id": "#dk76uz",
+      "name": "writeCloseSentinel()",
+      "x": 283,
+      "y": 440,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js#L84",
+      "bgColor": "#daeeff",
+      "parent": "#aya9s9"
+    },
+    {
+      "@id": "#5aggpq",
+      "name": "89 lines",
+      "x": -198,
+      "y": 130,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/ipc-utils.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#eqmaaw",
+      "name": "← src/",
+      "x": -96,
+      "y": -196,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 1,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    },
+    {
+      "start": 0,
+      "end": 7
+    }
+  ],
+  "selectedNode": 0
+}

@@ -1,0 +1,76 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "sessions.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#p46jmx",
+      "name": "exports",
+      "x": 250,
+      "y": 0,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#bu7kuh",
+      "name": "SessionStore()",
+      "x": 500,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js#L29",
+      "bgColor": "#daeeff",
+      "parent": "#p46jmx"
+    },
+    {
+      "@id": "#2iffkx",
+      "name": "169 lines",
+      "x": -125,
+      "y": 184,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/sessions.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ssgz3q",
+      "name": "← src/",
+      "x": -125,
+      "y": -184,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 0,
+      "end": 3
+    },
+    {
+      "start": 0,
+      "end": 4
+    }
+  ],
+  "selectedNode": 0
+}

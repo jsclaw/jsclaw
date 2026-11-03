@@ -1,0 +1,102 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "config.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#v5njcx",
+      "name": "exports",
+      "x": 250,
+      "y": 4,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#z8kicz",
+      "name": "loadConfigFile()",
+      "x": 419,
+      "y": -232,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L67",
+      "bgColor": "#daeeff",
+      "parent": "#v5njcx"
+    },
+    {
+      "@id": "#7348h9",
+      "name": "createConfig()",
+      "x": 590,
+      "y": 10,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L110",
+      "bgColor": "#daeeff",
+      "parent": "#v5njcx"
+    },
+    {
+      "@id": "#jtny2v",
+      "name": "defaultConfig()",
+      "x": 408,
+      "y": 246,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js#L136",
+      "bgColor": "#daeeff",
+      "parent": "#v5njcx"
+    },
+    {
+      "@id": "#zvvi4r",
+      "name": "137 lines",
+      "x": -131,
+      "y": 181,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/config.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#ezqtt6",
+      "name": "← src/",
+      "x": -123,
+      "y": -185,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    }
+  ],
+  "selectedNode": 0
+}

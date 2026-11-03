@@ -1,0 +1,102 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "task-store.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#wzta82",
+      "name": "exports",
+      "x": 249,
+      "y": 20,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#jw3kjf",
+      "name": "computeNextRun()",
+      "x": 424,
+      "y": -225,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L39",
+      "bgColor": "#daeeff",
+      "parent": "#wzta82"
+    },
+    {
+      "@id": "#r76gtv",
+      "name": "TaskStore()",
+      "x": 589,
+      "y": 27,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L63",
+      "bgColor": "#daeeff",
+      "parent": "#wzta82"
+    },
+    {
+      "@id": "#qmk4u7",
+      "name": "createTaskIpcHandler()",
+      "x": 380,
+      "y": 276,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js#L276",
+      "bgColor": "#daeeff",
+      "parent": "#wzta82"
+    },
+    {
+      "@id": "#ysvez3",
+      "name": "323 lines",
+      "x": -155,
+      "y": 167,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/task-store.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#83zuf9",
+      "name": "← src/",
+      "x": -114,
+      "y": -189,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 0,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    }
+  ],
+  "selectedNode": 0
+}

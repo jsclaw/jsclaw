@@ -1,0 +1,295 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "nostr.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#ux93wm",
+      "name": "exports 1/3",
+      "x": 246,
+      "y": -38,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#a464iu",
+      "name": "getPublicKey()",
+      "x": 353,
+      "y": -303,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L105",
+      "bgColor": "#daeeff",
+      "parent": "#ux93wm"
+    },
+    {
+      "@id": "#simp87",
+      "name": "generatePrivateKey()",
+      "x": 506,
+      "y": -257,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L112",
+      "bgColor": "#daeeff",
+      "parent": "#ux93wm"
+    },
+    {
+      "@id": "#tzmucf",
+      "name": "schnorrSign()",
+      "x": 479,
+      "y": -122,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L127",
+      "bgColor": "#daeeff",
+      "parent": "#ux93wm"
+    },
+    {
+      "@id": "#xmtzgz",
+      "name": "schnorrVerify()",
+      "x": 589,
+      "y": -25,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L154",
+      "bgColor": "#daeeff",
+      "parent": "#ux93wm"
+    },
+    {
+      "@id": "#b9snuz",
+      "name": "sharedSecretX()",
+      "x": 491,
+      "y": 81,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L186",
+      "bgColor": "#daeeff",
+      "parent": "#ux93wm"
+    },
+    {
+      "@id": "#nxqgmq",
+      "name": "nip04Encrypt()",
+      "x": 536,
+      "y": 210,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L202",
+      "bgColor": "#daeeff",
+      "parent": "#ux93wm"
+    },
+    {
+      "@id": "#dguykc",
+      "name": "exports 2/3",
+      "x": 12,
+      "y": 212,
+      "bgColor": "#e9c1ef",
+      "parent": "#this"
+    },
+    {
+      "@id": "#28eue2",
+      "name": "nip04Decrypt()",
+      "x": 295,
+      "y": 343,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L217",
+      "bgColor": "#f7e4f9",
+      "parent": "#dguykc"
+    },
+    {
+      "@id": "#f4n9qu",
+      "name": "eventId()",
+      "x": 229,
+      "y": 462,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L234",
+      "bgColor": "#f7e4f9",
+      "parent": "#dguykc"
+    },
+    {
+      "@id": "#krwt6e",
+      "name": "finalizeEvent()",
+      "x": 82,
+      "y": 419,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L245",
+      "bgColor": "#f7e4f9",
+      "parent": "#dguykc"
+    },
+    {
+      "@id": "#emecna",
+      "name": "verifyEvent()",
+      "x": -40,
+      "y": 500,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L263",
+      "bgColor": "#f7e4f9",
+      "parent": "#dguykc"
+    },
+    {
+      "@id": "#u8v9bw",
+      "name": "bech32Encode()",
+      "x": -148,
+      "y": 406,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L323",
+      "bgColor": "#f7e4f9",
+      "parent": "#dguykc"
+    },
+    {
+      "@id": "#j6zbf9",
+      "name": "bech32Decode()",
+      "x": -299,
+      "y": 432,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L336",
+      "bgColor": "#f7e4f9",
+      "parent": "#dguykc"
+    },
+    {
+      "@id": "#2z3p7w",
+      "name": "exports 3/3",
+      "x": -246,
+      "y": 37,
+      "bgColor": "#fec0b1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#pvzwd8",
+      "name": "createChatRumor()",
+      "x": -423,
+      "y": 227,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L373",
+      "bgColor": "#ffe3dc",
+      "parent": "#2z3p7w"
+    },
+    {
+      "@id": "#57iy7q",
+      "name": "giftWrap()",
+      "x": -562,
+      "y": 153,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L393",
+      "bgColor": "#ffe3dc",
+      "parent": "#2z3p7w"
+    },
+    {
+      "@id": "#qprvms",
+      "name": "unwrapGiftWrap()",
+      "x": -499,
+      "y": 24,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L419",
+      "bgColor": "#ffe3dc",
+      "parent": "#2z3p7w"
+    },
+    {
+      "@id": "#7fucmt",
+      "name": "createNostrChannel()",
+      "x": -578,
+      "y": -103,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js#L469",
+      "bgColor": "#ffe3dc",
+      "parent": "#2z3p7w"
+    },
+    {
+      "@id": "#t922yq",
+      "name": "853 lines",
+      "x": -165,
+      "y": -160,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/nostr.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#26rfi6",
+      "name": "← src/",
+      "x": 27,
+      "y": -211,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 1,
+      "end": 5
+    },
+    {
+      "start": 1,
+      "end": 6
+    },
+    {
+      "start": 1,
+      "end": 7
+    },
+    {
+      "start": 0,
+      "end": 8
+    },
+    {
+      "start": 8,
+      "end": 9
+    },
+    {
+      "start": 8,
+      "end": 10
+    },
+    {
+      "start": 8,
+      "end": 11
+    },
+    {
+      "start": 8,
+      "end": 12
+    },
+    {
+      "start": 8,
+      "end": 13
+    },
+    {
+      "start": 8,
+      "end": 14
+    },
+    {
+      "start": 0,
+      "end": 15
+    },
+    {
+      "start": 15,
+      "end": 16
+    },
+    {
+      "start": 15,
+      "end": 17
+    },
+    {
+      "start": 15,
+      "end": 18
+    },
+    {
+      "start": 15,
+      "end": 19
+    },
+    {
+      "start": 0,
+      "end": 20
+    },
+    {
+      "start": 0,
+      "end": 21
+    }
+  ],
+  "selectedNode": 0
+}

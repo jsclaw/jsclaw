@@ -19,125 +19,125 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ab9ysn",
+      "@id": "#j9h6ge",
       "name": "Sun 25 Oct · 1–6 of 11",
-      "x": 20,
-      "y": -212,
+      "x": 210,
+      "y": 101,
       "bgColor": "#acd5ff",
       "parent": "#this"
-    },
-    {
-      "@id": "#qhtzie",
-      "name": "a3648b6 Merge pull request #93 from jsclaw/…",
-      "x": -440,
-      "y": -202,
-      "link": "https://github.com/jsclaw/jsclaw/commit/a3648b6",
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#2sgmjt",
-      "name": "32edace nostr: wait for the relay's OK when…",
-      "x": -339,
-      "y": -387,
-      "link": "https://github.com/jsclaw/jsclaw/commit/32edace",
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
-    },
-    {
-      "@id": "#j9h6ge",
-      "name": "a000a96 Merge pull request #92 from jsclaw/…",
-      "x": -74,
-      "y": -433,
-      "link": "https://github.com/jsclaw/jsclaw/commit/a000a96",
-      "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
     },
     {
       "@id": "#ejt2c7",
-      "name": "69a0284 nostr: NIP-17 private DMs (gift wra…",
-      "x": 182,
-      "y": -477,
-      "link": "https://github.com/jsclaw/jsclaw/commit/69a0284",
+      "name": "a3648b6 Merge pull request #93 from jsclaw/…",
+      "x": 417,
+      "y": -234,
+      "link": "https://github.com/jsclaw/jsclaw/commit/a3648b6",
       "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
+      "parent": "#j9h6ge"
     },
     {
       "@id": "#tvx8v7",
-      "name": "ae95dff nip44: NIP-44 v2 encryption, zero-d…",
-      "x": 350,
-      "y": -303,
-      "link": "https://github.com/jsclaw/jsclaw/commit/ae95dff",
+      "name": "32edace nostr: wait for the relay's OK when…",
+      "x": 583,
+      "y": -76,
+      "link": "https://github.com/jsclaw/jsclaw/commit/32edace",
       "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
+      "parent": "#j9h6ge"
     },
     {
       "@id": "#4bfmpa",
-      "name": "2ab992c Merge pull request #90 from jsclaw/…",
-      "x": 558,
-      "y": -163,
-      "link": "https://github.com/jsclaw/jsclaw/commit/2ab992c",
+      "name": "a000a96 Merge pull request #92 from jsclaw/…",
+      "x": 499,
+      "y": 117,
+      "link": "https://github.com/jsclaw/jsclaw/commit/a000a96",
       "bgColor": "#daeeff",
-      "parent": "#ab9ysn"
+      "parent": "#j9h6ge"
     },
     {
       "@id": "#c2mpq8",
+      "name": "69a0284 nostr: NIP-17 private DMs (gift wra…",
+      "x": 447,
+      "y": 328,
+      "link": "https://github.com/jsclaw/jsclaw/commit/69a0284",
+      "bgColor": "#daeeff",
+      "parent": "#j9h6ge"
+    },
+    {
+      "@id": "#yykmee",
+      "name": "ae95dff nip44: NIP-44 v2 encryption, zero-d…",
+      "x": 207,
+      "y": 387,
+      "link": "https://github.com/jsclaw/jsclaw/commit/ae95dff",
+      "bgColor": "#daeeff",
+      "parent": "#j9h6ge"
+    },
+    {
+      "@id": "#7kgwkb",
+      "name": "2ab992c Merge pull request #90 from jsclaw/…",
+      "x": -3,
+      "y": 501,
+      "link": "https://github.com/jsclaw/jsclaw/commit/2ab992c",
+      "bgColor": "#daeeff",
+      "parent": "#j9h6ge"
+    },
+    {
+      "@id": "#x7t4w7",
       "name": "Sun 25 Oct · 7–11 of 11",
-      "x": 7,
-      "y": 212,
+      "x": -257,
+      "y": -36,
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#yykmee",
+      "@id": "#dsw684",
       "name": "4f8685c Merge pull request #91 from jsclaw/…",
-      "x": 408,
-      "y": 245,
+      "x": -388,
+      "y": 268,
       "link": "https://github.com/jsclaw/jsclaw/commit/4f8685c",
       "bgColor": "#ffe2e6",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#7kgwkb",
-      "name": "7be40cb cli: restore the startHeartbeat imp…",
-      "x": 279,
-      "y": 456,
-      "link": "https://github.com/jsclaw/jsclaw/commit/7be40cb",
-      "bgColor": "#ffe2e6",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#x7t4w7",
-      "name": "ecbf8d4 telegram: built-in channel over fet…",
-      "x": 15,
-      "y": 412,
-      "link": "https://github.com/jsclaw/jsclaw/commit/ecbf8d4",
-      "bgColor": "#ffe2e6",
-      "parent": "#c2mpq8"
-    },
-    {
-      "@id": "#dsw684",
-      "name": "4c52ff5 Merge pull request #89 from jsclaw/…",
-      "x": -248,
-      "y": 458,
-      "link": "https://github.com/jsclaw/jsclaw/commit/4c52ff5",
-      "bgColor": "#ffe2e6",
-      "parent": "#c2mpq8"
+      "parent": "#x7t4w7"
     },
     {
       "@id": "#v88t4a",
-      "name": "61fc2cb heartbeat: HEARTBEAT.sh pre-check k…",
-      "x": -390,
-      "y": 266,
-      "link": "https://github.com/jsclaw/jsclaw/commit/61fc2cb",
+      "name": "7be40cb cli: restore the startHeartbeat imp…",
+      "x": -572,
+      "y": 124,
+      "link": "https://github.com/jsclaw/jsclaw/commit/7be40cb",
       "bgColor": "#ffe2e6",
-      "parent": "#c2mpq8"
+      "parent": "#x7t4w7"
     },
     {
       "@id": "#skzt29",
+      "name": "ecbf8d4 telegram: built-in channel over fet…",
+      "x": -492,
+      "y": -82,
+      "link": "https://github.com/jsclaw/jsclaw/commit/ecbf8d4",
+      "bgColor": "#ffe2e6",
+      "parent": "#x7t4w7"
+    },
+    {
+      "@id": "#t4pwzt",
+      "name": "4c52ff5 Merge pull request #89 from jsclaw/…",
+      "x": -482,
+      "y": -289,
+      "link": "https://github.com/jsclaw/jsclaw/commit/4c52ff5",
+      "bgColor": "#ffe2e6",
+      "parent": "#x7t4w7"
+    },
+    {
+      "@id": "#jhaa84",
+      "name": "61fc2cb heartbeat: HEARTBEAT.sh pre-check k…",
+      "x": -250,
+      "y": -368,
+      "link": "https://github.com/jsclaw/jsclaw/commit/61fc2cb",
+      "bgColor": "#ffe2e6",
+      "parent": "#x7t4w7"
+    },
+    {
+      "@id": "#wavvy9",
       "name": "← jsclaw",
-      "x": -248,
-      "y": 24,
+      "x": 52,
+      "y": -208,
       "link": "./index.jsonld",
       "bgColor": "#ececec",
       "parent": "#this"

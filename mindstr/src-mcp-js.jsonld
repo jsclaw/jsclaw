@@ -1,0 +1,179 @@
+{
+  "@context": {
+    "@vocab": "https://mindstr.org/ns#",
+    "link": {
+      "@type": "@id"
+    },
+    "parent": {
+      "@type": "@id"
+    }
+  },
+  "version": "0.2",
+  "nodes": [
+    {
+      "@id": "#this",
+      "name": "mcp.js",
+      "x": 0,
+      "y": 0,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js",
+      "bgColor": "#ebc573"
+    },
+    {
+      "@id": "#k73rni",
+      "name": "exports 1/2",
+      "x": 249,
+      "y": -22,
+      "bgColor": "#acd5ff",
+      "parent": "#this"
+    },
+    {
+      "@id": "#r8zm2z",
+      "name": "MCP_PROTOCOL_VERSION()",
+      "x": 389,
+      "y": -267,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L11",
+      "bgColor": "#daeeff",
+      "parent": "#k73rni"
+    },
+    {
+      "@id": "#wzv4c3",
+      "name": "RPC_ERRORS()",
+      "x": 569,
+      "y": -133,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L13",
+      "bgColor": "#daeeff",
+      "parent": "#k73rni"
+    },
+    {
+      "@id": "#7fnz2s",
+      "name": "rpcResult()",
+      "x": 497,
+      "y": 49,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L21",
+      "bgColor": "#daeeff",
+      "parent": "#k73rni"
+    },
+    {
+      "@id": "#p89exh",
+      "name": "rpcError()",
+      "x": 518,
+      "y": 240,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L25",
+      "bgColor": "#daeeff",
+      "parent": "#k73rni"
+    },
+    {
+      "@id": "#urtpxv",
+      "name": "exports 2/2",
+      "x": -42,
+      "y": 209,
+      "bgColor": "#f3bee1",
+      "parent": "#this"
+    },
+    {
+      "@id": "#4dg5c4",
+      "name": "toolText()",
+      "x": 193,
+      "y": 392,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L29",
+      "bgColor": "#fce3f3",
+      "parent": "#urtpxv"
+    },
+    {
+      "@id": "#kwm3he",
+      "name": "toolJson()",
+      "x": 11,
+      "y": 501,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L33",
+      "bgColor": "#fce3f3",
+      "parent": "#urtpxv"
+    },
+    {
+      "@id": "#qvd9cw",
+      "name": "toolError()",
+      "x": -176,
+      "y": 398,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L37",
+      "bgColor": "#fce3f3",
+      "parent": "#urtpxv"
+    },
+    {
+      "@id": "#sf37xb",
+      "name": "createMcpHandler()",
+      "x": -397,
+      "y": 371,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js#L50",
+      "bgColor": "#fce3f3",
+      "parent": "#urtpxv"
+    },
+    {
+      "@id": "#fuhjpf",
+      "name": "97 lines",
+      "x": -247,
+      "y": -32,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/mcp.js",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    },
+    {
+      "@id": "#dry8wx",
+      "name": "← src/",
+      "x": -31,
+      "y": -211,
+      "link": "./src.jsonld",
+      "bgColor": "#ececec",
+      "parent": "#this"
+    }
+  ],
+  "connections": [
+    {
+      "start": 0,
+      "end": 1
+    },
+    {
+      "start": 1,
+      "end": 2
+    },
+    {
+      "start": 1,
+      "end": 3
+    },
+    {
+      "start": 1,
+      "end": 4
+    },
+    {
+      "start": 1,
+      "end": 5
+    },
+    {
+      "start": 0,
+      "end": 6
+    },
+    {
+      "start": 6,
+      "end": 7
+    },
+    {
+      "start": 6,
+      "end": 8
+    },
+    {
+      "start": 6,
+      "end": 9
+    },
+    {
+      "start": 6,
+      "end": 10
+    },
+    {
+      "start": 0,
+      "end": 11
+    },
+    {
+      "start": 0,
+      "end": 12
+    }
+  ],
+  "selectedNode": 0
+}
