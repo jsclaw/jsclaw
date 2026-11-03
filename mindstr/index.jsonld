@@ -21,8 +21,8 @@
     {
       "@id": "#ptf2jy",
       "name": "README · 5 ›",
-      "x": 238,
-      "y": -65,
+      "x": 248,
+      "y": -26,
       "link": "./readme.jsonld",
       "bgColor": "#acd5ff",
       "parent": "#this"
@@ -30,8 +30,8 @@
     {
       "@id": "#4bfy6j",
       "name": "What is jsclaw?",
-      "x": 346,
-      "y": -307,
+      "x": 368,
+      "y": -288,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw",
       "bgColor": "#daeeff",
       "parent": "#ptf2jy"
@@ -39,8 +39,8 @@
     {
       "@id": "#4wkdd9",
       "name": "Install",
-      "x": 500,
-      "y": -266,
+      "x": 535,
+      "y": -211,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
       "bgColor": "#daeeff",
       "parent": "#ptf2jy"
@@ -48,8 +48,8 @@
     {
       "@id": "#yiscsp",
       "name": "Quick Start",
-      "x": 476,
-      "y": -130,
+      "x": 496,
+      "y": -52,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
       "bgColor": "#daeeff",
       "parent": "#ptf2jy"
@@ -57,8 +57,8 @@
     {
       "@id": "#2fzfhg",
       "name": "Architecture",
-      "x": 589,
-      "y": -32,
+      "x": 580,
+      "y": 94,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
       "bgColor": "#daeeff",
       "parent": "#ptf2jy"
@@ -66,8 +66,8 @@
     {
       "@id": "#6ab87r",
       "name": "API",
-      "x": 492,
-      "y": 77,
+      "x": 439,
+      "y": 203,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api",
       "bgColor": "#daeeff",
       "parent": "#ptf2jy"
@@ -75,8 +75,8 @@
     {
       "@id": "#uyfscv",
       "name": "Source · src/ · 30 files ›",
-      "x": 162,
-      "y": 162,
+      "x": 54,
+      "y": 208,
       "link": "./src.jsonld",
       "bgColor": "#e9c1ef",
       "parent": "#this"
@@ -84,8 +84,8 @@
     {
       "@id": "#z5cumb",
       "name": "Open issues · 12 ›",
-      "x": -43,
-      "y": 209,
+      "x": -194,
+      "y": 134,
       "link": "./issues.jsonld",
       "bgColor": "#fec0b1",
       "parent": "#this"
@@ -93,8 +93,8 @@
     {
       "@id": "#7iejm3",
       "name": "Examples · 3",
-      "x": -217,
-      "y": 105,
+      "x": -228,
+      "y": -87,
       "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/examples",
       "bgColor": "#d7d59b",
       "parent": "#this"
@@ -102,8 +102,8 @@
     {
       "@id": "#452y5w",
       "name": "nostr-agent.js",
-      "x": -361,
-      "y": 294,
+      "x": -497,
+      "y": -48,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js",
       "bgColor": "#eeedd3",
       "parent": "#7iejm3"
@@ -111,8 +111,8 @@
     {
       "@id": "#yyjnxk",
       "name": "plugins",
-      "x": -513,
-      "y": 248,
+      "x": -538,
+      "y": -206,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins",
       "bgColor": "#eeedd3",
       "parent": "#7iejm3"
@@ -120,62 +120,36 @@
     {
       "@id": "#hrvxpy",
       "name": "telegram.js",
-      "x": -482,
-      "y": 113,
+      "x": -371,
+      "y": -284,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/telegram.js",
       "bgColor": "#eeedd3",
       "parent": "#7iejm3"
     },
     {
       "@id": "#hzsqn4",
-      "name": "Lightweight container orchestration for Cla…",
-      "x": -130,
-      "y": -180,
+      "name": "Lightweight container orchestration for Claude AI…",
+      "x": -9,
+      "y": -212,
       "link": "https://github.com/jsclaw/jsclaw",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
       "@id": "#dttxwc",
-      "name": "123 commits, 2026-02-11 to 2026-11-03",
-      "x": -476,
-      "y": -143,
+      "name": "since Feb 2026 · last 25 Oct 2026",
+      "x": -107,
+      "y": -415,
       "link": "https://github.com/jsclaw/jsclaw/commits/gh-pages",
       "bgColor": "#ececec",
       "parent": "#hzsqn4"
     },
     {
       "@id": "#p8ysyk",
-      "name": "branches: gh-pages, nostr-publish-ack",
-      "x": -410,
-      "y": -372,
-      "bgColor": "#ececec",
-      "parent": "#hzsqn4"
-    },
-    {
-      "@id": "#9c2qhr",
-      "name": "jsclaw.dev/jsclaw/",
-      "x": -163,
-      "y": -399,
+      "name": "jsclaw.dev/jsclaw",
+      "x": 148,
+      "y": -485,
       "link": "https://jsclaw.dev/jsclaw/",
-      "bgColor": "#ececec",
-      "parent": "#hzsqn4"
-    },
-    {
-      "@id": "#h59t8f",
-      "name": "AGPL-3.0",
-      "x": -41,
-      "y": -500,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/LICENSE",
-      "bgColor": "#ececec",
-      "parent": "#hzsqn4"
-    },
-    {
-      "@id": "#rfby2g",
-      "name": "1 stars",
-      "x": 104,
-      "y": -416,
-      "link": "https://github.com/jsclaw/jsclaw/stargazers",
       "bgColor": "#ececec",
       "parent": "#hzsqn4"
     }
@@ -240,18 +214,6 @@
     {
       "start": 13,
       "end": 15
-    },
-    {
-      "start": 13,
-      "end": 16
-    },
-    {
-      "start": 13,
-      "end": 17
-    },
-    {
-      "start": 13,
-      "end": 18
     }
   ],
   "selectedNode": 0

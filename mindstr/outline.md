@@ -261,9 +261,6 @@
   - [nostr-agent.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js)
   - [plugins](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins)
   - [telegram.js](https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/telegram.js)
-- [Lightweight container orchestration for Cla…](https://github.com/jsclaw/jsclaw)
-  - [123 commits, 2026-02-11 to 2026-11-03](https://github.com/jsclaw/jsclaw/commits/gh-pages)
-  - branches: gh-pages, nostr-publish-ack
-  - [jsclaw.dev/jsclaw/](https://jsclaw.dev/jsclaw/)
-  - [AGPL-3.0](https://github.com/jsclaw/jsclaw/blob/gh-pages/LICENSE)
-  - [1 stars](https://github.com/jsclaw/jsclaw/stargazers)
+- [Lightweight container orchestration for Claude AI…](https://github.com/jsclaw/jsclaw)
+  - [since Feb 2026 · last 25 Oct 2026](https://github.com/jsclaw/jsclaw/commits/gh-pages)
+  - [jsclaw.dev/jsclaw](https://jsclaw.dev/jsclaw/)
