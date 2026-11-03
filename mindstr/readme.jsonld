@@ -19,249 +19,249 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ucttef",
+      "@id": "#ab9ysn",
       "name": "What is jsclaw?",
-      "x": 175,
-      "y": -152,
+      "x": 176,
+      "y": -151,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#vzipyd",
+      "@id": "#qhtzie",
       "name": "Install",
       "x": 240,
-      "y": -61,
+      "y": -59,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
       "bgColor": "#e0c4f6",
       "parent": "#this"
     },
     {
-      "@id": "#miy6ts",
+      "@id": "#2sgmjt",
       "name": "Quick Start",
-      "x": -67,
+      "x": -66,
       "y": 205,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
       "bgColor": "#febdc6",
       "parent": "#this"
     },
     {
-      "@id": "#ft3k8u",
-      "name": "parts · 1–6 of 18",
-      "x": 298,
-      "y": 341,
+      "@id": "#j9h6ge",
+      "name": "parts 1/3",
+      "x": 303,
+      "y": 338,
       "bgColor": "#ffe2e6",
-      "parent": "#miy6ts"
+      "parent": "#2sgmjt"
     },
     {
-      "@id": "#it6792",
+      "@id": "#ejt2c7",
       "name": "-1. Even faster: the wizard",
-      "x": 671,
-      "y": 285,
+      "x": 669,
+      "y": 288,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#-1-even-faster-the-wizard",
       "bgColor": "#ffe2e6",
-      "parent": "#ft3k8u"
+      "parent": "#j9h6ge"
     },
     {
-      "@id": "#dnz3gb",
-      "name": "The fast path: a full agent host in one command",
-      "x": 639,
-      "y": 464,
+      "@id": "#tvx8v7",
+      "name": "The fast path: a full agent host in one…",
+      "x": 646,
+      "y": 457,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#0-the-fast-path-a-full-agent-host-in-one-command",
       "bgColor": "#ffe2e6",
-      "parent": "#ft3k8u"
+      "parent": "#j9h6ge"
     },
     {
-      "@id": "#3ifse5",
+      "@id": "#4bfmpa",
       "name": "Build the container image",
-      "x": 440,
-      "y": 516,
+      "x": 459,
+      "y": 504,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#1-build-the-container-image",
       "bgColor": "#ffe2e6",
-      "parent": "#ft3k8u"
+      "parent": "#j9h6ge"
     },
     {
-      "@id": "#ju3xzh",
+      "@id": "#c2mpq8",
       "name": "Run an agent",
-      "x": 387,
-      "y": 636,
+      "x": 409,
+      "y": 626,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#2-run-an-agent",
       "bgColor": "#ffe2e6",
-      "parent": "#ft3k8u"
+      "parent": "#j9h6ge"
     },
     {
-      "@id": "#p46jmx",
+      "@id": "#yykmee",
       "name": "With Queue + IPC",
-      "x": 242,
-      "y": 602,
+      "x": 263,
+      "y": 596,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#3-with-queue-ipc",
       "bgColor": "#ffe2e6",
-      "parent": "#ft3k8u"
+      "parent": "#j9h6ge"
     },
     {
-      "@id": "#bu7kuh",
+      "@id": "#7kgwkb",
       "name": "Scheduled tasks + heartbeat",
-      "x": 143,
-      "y": 704,
+      "x": 166,
+      "y": 700,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#4-scheduled-tasks-heartbeat-autonomous-operation",
       "bgColor": "#ffe2e6",
-      "parent": "#ft3k8u"
+      "parent": "#j9h6ge"
     },
     {
-      "@id": "#2iffkx",
-      "name": "parts · 7–12 of 18",
-      "x": -258,
-      "y": 451,
+      "@id": "#x7t4w7",
+      "name": "parts 2/3",
+      "x": -244,
+      "y": 457,
       "bgColor": "#ffe2e6",
-      "parent": "#miy6ts"
+      "parent": "#2sgmjt"
     },
     {
-      "@id": "#ssgz3q",
+      "@id": "#dsw684",
       "name": "Identity files",
-      "x": -116,
-      "y": 630,
+      "x": -95,
+      "y": 632,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#5-identity-files-personality",
       "bgColor": "#ffe2e6",
-      "parent": "#2iffkx"
+      "parent": "#x7t4w7"
     },
     {
-      "@id": "#gksydt",
+      "@id": "#v88t4a",
       "name": "Channels",
-      "x": -227,
-      "y": 687,
+      "x": -205,
+      "y": 692,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6-channels-pluggable-io",
       "bgColor": "#ffe2e6",
-      "parent": "#2iffkx"
+      "parent": "#x7t4w7"
     },
     {
-      "@id": "#8su7v6",
+      "@id": "#skzt29",
       "name": "6½. Nostr",
-      "x": -287,
-      "y": 589,
+      "x": -269,
+      "y": 595,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#6½-nostr-a-decentralized-agent",
       "bgColor": "#ffe2e6",
-      "parent": "#2iffkx"
+      "parent": "#x7t4w7"
     },
     {
-      "@id": "#2da7xj",
+      "@id": "#t4pwzt",
       "name": "Memory",
-      "x": -411,
-      "y": 622,
+      "x": -393,
+      "y": 631,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#7-memory-persistent-context",
       "bgColor": "#ffe2e6",
-      "parent": "#2iffkx"
+      "parent": "#x7t4w7"
     },
     {
-      "@id": "#9e878e",
+      "@id": "#jhaa84",
       "name": "Webhooks",
-      "x": -442,
-      "y": 515,
+      "x": -428,
+      "y": 524,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#8-webhooks-http-ingress",
       "bgColor": "#ffe2e6",
-      "parent": "#2iffkx"
+      "parent": "#x7t4w7"
     },
     {
-      "@id": "#cp2str",
+      "@id": "#wavvy9",
       "name": "Skills",
-      "x": -572,
-      "y": 523,
+      "x": -558,
+      "y": 534,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#9-skills",
       "bgColor": "#ffe2e6",
-      "parent": "#2iffkx"
+      "parent": "#x7t4w7"
     },
     {
-      "@id": "#swzzzt",
-      "name": "parts · 13–18 of 18",
-      "x": -489,
-      "y": 88,
+      "@id": "#i9w3v4",
+      "name": "parts 3/3",
+      "x": -487,
+      "y": 95,
       "bgColor": "#ffe2e6",
-      "parent": "#miy6ts"
+      "parent": "#2sgmjt"
     },
     {
-      "@id": "#pj9sd5",
+      "@id": "#e9sufn",
       "name": "Multi-agent bindings",
-      "x": -641,
-      "y": 332,
+      "x": -633,
+      "y": 343,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#10-multi-agent-bindings",
       "bgColor": "#ffe2e6",
-      "parent": "#swzzzt"
+      "parent": "#i9w3v4"
     },
     {
-      "@id": "#9incsq",
+      "@id": "#g45zx9",
       "name": "Outgoing webhooks",
-      "x": -770,
-      "y": 286,
+      "x": -763,
+      "y": 299,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11-outgoing-webhooks",
       "bgColor": "#ffe2e6",
-      "parent": "#swzzzt"
+      "parent": "#i9w3v4"
     },
     {
-      "@id": "#gwp9qx",
+      "@id": "#vz8rhu",
       "name": "11½. MCP servers",
-      "x": -720,
-      "y": 177,
+      "x": -717,
+      "y": 188,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11½-mcp-servers-plug-into-the-mcp-ecosystem",
       "bgColor": "#ffe2e6",
-      "parent": "#swzzzt"
+      "parent": "#i9w3v4"
     },
     {
-      "@id": "#7csjb6",
+      "@id": "#35gtrs",
       "name": "11¾. Models & providers",
-      "x": -832,
-      "y": 99,
+      "x": -830,
+      "y": 110,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#11¾-models-providers",
       "bgColor": "#ffe2e6",
-      "parent": "#swzzzt"
+      "parent": "#i9w3v4"
     },
     {
-      "@id": "#cyfvb8",
+      "@id": "#fiqrfa",
       "name": "Config file",
       "x": -750,
-      "y": -2,
+      "y": 7,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#12-config-file",
       "bgColor": "#ffe2e6",
-      "parent": "#swzzzt"
+      "parent": "#i9w3v4"
     },
     {
-      "@id": "#ngjuhg",
+      "@id": "#fad69b",
       "name": "CLI",
-      "x": -832,
-      "y": -96,
+      "x": -834,
+      "y": -86,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#13-cli",
       "bgColor": "#ffe2e6",
-      "parent": "#swzzzt"
+      "parent": "#i9w3v4"
     },
     {
-      "@id": "#ad25k5",
+      "@id": "#fnrzmm",
       "name": "Architecture",
-      "x": -169,
-      "y": -157,
+      "x": -171,
+      "y": -155,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
       "bgColor": "#f1c99c",
       "parent": "#this"
     },
     {
-      "@id": "#6zhwac",
+      "@id": "#3y3s3p",
       "name": "API",
-      "x": -58,
-      "y": -207,
+      "x": -60,
+      "y": -206,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api",
       "bgColor": "#c1dba8",
       "parent": "#this"
     },
     {
-      "@id": "#sigj2h",
+      "@id": "#ujs2ci",
       "name": "createConfig",
-      "x": -116,
+      "x": -120,
       "y": -413,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#createconfigoverrides",
       "bgColor": "#e3f0d8",
-      "parent": "#6zhwac"
+      "parent": "#3y3s3p"
     },
     {
-      "@id": "#2gvkzt",
+      "@id": "#442pm7",
       "name": "← jsclaw",
-      "x": 67,
+      "x": 66,
       "y": -205,
       "link": "./index.jsonld",
       "bgColor": "#ececec",

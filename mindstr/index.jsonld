@@ -19,243 +19,165 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#2qq2fn",
-      "name": "Commits · 121",
-      "x": 310,
-      "y": -11,
-      "link": "https://github.com/jsclaw/jsclaw/commits/gh-pages",
+      "@id": "#ptf2jy",
+      "name": "README · 5 ›",
+      "x": 238,
+      "y": -65,
+      "link": "./readme.jsonld",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#ri2pzw",
-      "name": "Nov 2026 · 1 ›",
-      "x": 338,
-      "y": -304,
-      "link": "./commits-2026-11.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#qbizrq",
-      "name": "Oct 2026 · 11 ›",
-      "x": 489,
-      "y": -289,
-      "link": "./commits-2026-10.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#yyfuzg",
-      "name": "Jun 2026 · 1–21 of 105 ›",
-      "x": 458,
-      "y": -171,
-      "link": "./commits-2026-06-1.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#xet7zf",
-      "name": "Jun 2026 · 22–42 of 105 ›",
-      "x": 579,
-      "y": -94,
-      "link": "./commits-2026-06-2.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#wjzwqw",
-      "name": "Jun 2026 · 43–63 of 105 ›",
-      "x": 500,
-      "y": 17,
-      "link": "./commits-2026-06-3.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#cpmgtf",
-      "name": "Jun 2026 · 64–84 of 105 ›",
-      "x": 569,
-      "y": 133,
-      "link": "./commits-2026-06-4.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#a85fzz",
-      "name": "Jun 2026 · 85–105 of 105 ›",
-      "x": 439,
-      "y": 204,
-      "link": "./commits-2026-06-5.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#eitj67",
-      "name": "Feb 2026 · 4 ›",
-      "x": 448,
-      "y": 326,
-      "link": "./commits-2026-02.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#2qq2fn"
-    },
-    {
-      "@id": "#bpmjzd",
-      "name": "Hot files · 5",
-      "x": 22,
-      "y": 212,
-      "bgColor": "#e0c4f6",
-      "parent": "#this"
-    },
-    {
-      "@id": "#r8aetn",
-      "name": "package.json · 26",
-      "x": 213,
-      "y": 385,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/package.json",
-      "bgColor": "#f2e5fd",
-      "parent": "#bpmjzd"
-    },
-    {
-      "@id": "#j3rh5f",
-      "name": "README.md · 22",
-      "x": 154,
-      "y": 484,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#readme",
-      "bgColor": "#f2e5fd",
-      "parent": "#bpmjzd"
-    },
-    {
-      "@id": "#mhgzj7",
-      "name": "src/index.js · 17",
-      "x": 44,
-      "y": 423,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js",
-      "bgColor": "#f2e5fd",
-      "parent": "#bpmjzd"
-    },
-    {
-      "@id": "#67qhwk",
-      "name": "bin/jsclaw.js · 14",
-      "x": -51,
-      "y": 500,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/bin/jsclaw.js",
-      "bgColor": "#f2e5fd",
-      "parent": "#bpmjzd"
-    },
-    {
-      "@id": "#s9du6c",
-      "name": "src/types.js · 13",
-      "x": -130,
-      "y": 410,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/types.js",
-      "bgColor": "#f2e5fd",
-      "parent": "#bpmjzd"
-    },
-    {
-      "@id": "#tjeu4p",
-      "name": "README · 5 ›",
-      "x": -197,
-      "y": 131,
-      "link": "./readme.jsonld",
-      "bgColor": "#febdc6",
-      "parent": "#this"
-    },
-    {
-      "@id": "#x9rczq",
+      "@id": "#4bfy6j",
       "name": "What is jsclaw?",
-      "x": -278,
-      "y": 353,
+      "x": 346,
+      "y": -307,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#what-is-jsclaw",
-      "bgColor": "#ffe2e6",
-      "parent": "#tjeu4p"
+      "bgColor": "#daeeff",
+      "parent": "#ptf2jy"
     },
     {
-      "@id": "#48j6uy",
+      "@id": "#4wkdd9",
       "name": "Install",
-      "x": -402,
-      "y": 367,
+      "x": 500,
+      "y": -266,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#install",
-      "bgColor": "#ffe2e6",
-      "parent": "#tjeu4p"
+      "bgColor": "#daeeff",
+      "parent": "#ptf2jy"
     },
     {
-      "@id": "#9kbx2m",
+      "@id": "#yiscsp",
       "name": "Quick Start",
-      "x": -391,
-      "y": 261,
+      "x": 476,
+      "y": -130,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#quick-start",
-      "bgColor": "#ffe2e6",
-      "parent": "#tjeu4p"
+      "bgColor": "#daeeff",
+      "parent": "#ptf2jy"
     },
     {
-      "@id": "#9gbbfy",
+      "@id": "#2fzfhg",
       "name": "Architecture",
-      "x": -519,
-      "y": 242,
+      "x": 589,
+      "y": -32,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#architecture",
-      "bgColor": "#ffe2e6",
-      "parent": "#tjeu4p"
+      "bgColor": "#daeeff",
+      "parent": "#ptf2jy"
     },
     {
-      "@id": "#kue24d",
+      "@id": "#6ab87r",
       "name": "API",
-      "x": -471,
-      "y": 143,
+      "x": 492,
+      "y": 77,
       "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/README.md#api",
-      "bgColor": "#ffe2e6",
-      "parent": "#tjeu4p"
+      "bgColor": "#daeeff",
+      "parent": "#ptf2jy"
     },
     {
-      "@id": "#ezqvf7",
+      "@id": "#uyfscv",
       "name": "Source · src/ · 30 files ›",
-      "x": -249,
-      "y": -21,
+      "x": 162,
+      "y": 162,
       "link": "./src.jsonld",
-      "bgColor": "#f1c99c",
+      "bgColor": "#e9c1ef",
       "parent": "#this"
     },
     {
-      "@id": "#4c22a7",
+      "@id": "#z5cumb",
       "name": "Open issues · 12 ›",
-      "x": -197,
-      "y": -131,
+      "x": -43,
+      "y": 209,
       "link": "./issues.jsonld",
-      "bgColor": "#c1dba8",
+      "bgColor": "#fec0b1",
       "parent": "#this"
     },
     {
-      "@id": "#zpagjg",
+      "@id": "#7iejm3",
+      "name": "Examples · 3",
+      "x": -217,
+      "y": 105,
+      "link": "https://github.com/jsclaw/jsclaw/tree/gh-pages/examples",
+      "bgColor": "#d7d59b",
+      "parent": "#this"
+    },
+    {
+      "@id": "#452y5w",
+      "name": "nostr-agent.js",
+      "x": -361,
+      "y": 294,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/nostr-agent.js",
+      "bgColor": "#eeedd3",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#yyjnxk",
+      "name": "plugins",
+      "x": -513,
+      "y": 248,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/plugins",
+      "bgColor": "#eeedd3",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#hrvxpy",
+      "name": "telegram.js",
+      "x": -482,
+      "y": 113,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/examples/telegram.js",
+      "bgColor": "#eeedd3",
+      "parent": "#7iejm3"
+    },
+    {
+      "@id": "#hzsqn4",
       "name": "Lightweight container orchestration for Cla…",
-      "x": -12,
-      "y": -212,
+      "x": -130,
+      "y": -180,
       "link": "https://github.com/jsclaw/jsclaw",
       "bgColor": "#ececec",
       "parent": "#this"
     },
     {
-      "@id": "#sptvks",
-      "name": "121 commits since 2026-02-11",
-      "x": -194,
-      "y": -392,
+      "@id": "#dttxwc",
+      "name": "123 commits, 2026-02-11 to 2026-11-03",
+      "x": -476,
+      "y": -143,
+      "link": "https://github.com/jsclaw/jsclaw/commits/gh-pages",
       "bgColor": "#ececec",
-      "parent": "#zpagjg"
+      "parent": "#hzsqn4"
     },
     {
-      "@id": "#u6iz6f",
+      "@id": "#p8ysyk",
       "name": "branches: gh-pages, nostr-publish-ack",
-      "x": -57,
-      "y": -499,
+      "x": -410,
+      "y": -372,
       "bgColor": "#ececec",
-      "parent": "#zpagjg"
+      "parent": "#hzsqn4"
     },
     {
-      "@id": "#vb6nak",
-      "name": "agent, llm, javascript, nostr, infra, l…",
-      "x": 125,
-      "y": -412,
+      "@id": "#9c2qhr",
+      "name": "jsclaw.dev/jsclaw/",
+      "x": -163,
+      "y": -399,
+      "link": "https://jsclaw.dev/jsclaw/",
       "bgColor": "#ececec",
-      "parent": "#zpagjg"
+      "parent": "#hzsqn4"
+    },
+    {
+      "@id": "#h59t8f",
+      "name": "AGPL-3.0",
+      "x": -41,
+      "y": -500,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/LICENSE",
+      "bgColor": "#ececec",
+      "parent": "#hzsqn4"
+    },
+    {
+      "@id": "#rfby2g",
+      "name": "1 stars",
+      "x": 104,
+      "y": -416,
+      "link": "https://github.com/jsclaw/jsclaw/stargazers",
+      "bgColor": "#ececec",
+      "parent": "#hzsqn4"
     }
   ],
   "connections": [
@@ -284,88 +206,52 @@
       "end": 6
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 7
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 8
     },
     {
-      "start": 1,
+      "start": 0,
       "end": 9
     },
     {
-      "start": 0,
+      "start": 9,
       "end": 10
     },
     {
-      "start": 10,
+      "start": 9,
       "end": 11
     },
     {
-      "start": 10,
+      "start": 9,
       "end": 12
     },
     {
-      "start": 10,
+      "start": 0,
       "end": 13
     },
     {
-      "start": 10,
+      "start": 13,
       "end": 14
     },
     {
-      "start": 10,
+      "start": 13,
       "end": 15
     },
     {
-      "start": 0,
+      "start": 13,
       "end": 16
     },
     {
-      "start": 16,
+      "start": 13,
       "end": 17
     },
     {
-      "start": 16,
+      "start": 13,
       "end": 18
-    },
-    {
-      "start": 16,
-      "end": 19
-    },
-    {
-      "start": 16,
-      "end": 20
-    },
-    {
-      "start": 16,
-      "end": 21
-    },
-    {
-      "start": 0,
-      "end": 22
-    },
-    {
-      "start": 0,
-      "end": 23
-    },
-    {
-      "start": 0,
-      "end": 24
-    },
-    {
-      "start": 24,
-      "end": 25
-    },
-    {
-      "start": 24,
-      "end": 26
-    },
-    {
-      "start": 24,
-      "end": 27
     }
   ],
   "selectedNode": 0

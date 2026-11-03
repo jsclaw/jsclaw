@@ -20,318 +20,334 @@
     },
     {
       "@id": "#a85fzz",
-      "name": "a–c · 6",
-      "x": 223,
-      "y": -96,
+      "name": "around index.js · 6",
+      "x": 224,
+      "y": -94,
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
       "@id": "#eitj67",
-      "name": "agent-queue.js · 1 ›",
-      "x": 292,
-      "y": -325,
-      "link": "./src-agent-queue-js.jsonld",
+      "name": "index.js",
+      "x": 318,
+      "y": -326,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js",
       "bgColor": "#daeeff",
       "parent": "#a85fzz"
     },
     {
       "@id": "#bpmjzd",
-      "name": "agents.js · 2 ›",
-      "x": 464,
-      "y": -325,
-      "link": "./src-agents-js.jsonld",
+      "name": "config.js · 3 ›",
+      "x": 446,
+      "y": -330,
+      "link": "./src-config-js.jsonld",
       "bgColor": "#daeeff",
       "parent": "#a85fzz"
     },
     {
       "@id": "#r8aetn",
-      "name": "bindings.js · 2 ›",
-      "x": 428,
-      "y": -228,
-      "link": "./src-bindings-js.jsonld",
+      "name": "container-runner.js · 11 ›",
+      "x": 429,
+      "y": -220,
+      "link": "./src-container-runner-js.jsonld",
       "bgColor": "#daeeff",
       "parent": "#a85fzz"
     },
     {
       "@id": "#j3rh5f",
-      "name": "channel.js · 1 ›",
-      "x": 547,
-      "y": -184,
-      "link": "./src-channel-js.jsonld",
+      "name": "ipc.js · 1 ›",
+      "x": 553,
+      "y": -175,
+      "link": "./src-ipc-js.jsonld",
       "bgColor": "#daeeff",
       "parent": "#a85fzz"
     },
     {
       "@id": "#mhgzj7",
-      "name": "channels.js · 3 ›",
-      "x": 488,
-      "y": -94,
-      "link": "./src-channels-js.jsonld",
+      "name": "ipc-utils.js · 4 ›",
+      "x": 490,
+      "y": -85,
+      "link": "./src-ipc-utils-js.jsonld",
       "bgColor": "#daeeff",
       "parent": "#a85fzz"
     },
     {
       "@id": "#67qhwk",
-      "name": "commands.js · 5 ›",
+      "name": "agent-queue.js · 1 ›",
       "x": 589,
-      "y": -32,
-      "link": "./src-commands-js.jsonld",
+      "y": -21,
+      "link": "./src-agent-queue-js.jsonld",
       "bgColor": "#daeeff",
       "parent": "#a85fzz"
     },
     {
       "@id": "#s9du6c",
-      "name": "c–i · 6",
-      "x": 191,
-      "y": 137,
-      "bgColor": "#e0c4f6",
+      "name": "around types.js · 6",
+      "x": 193,
+      "y": 135,
+      "bgColor": "#d9c6fb",
       "parent": "#this"
     },
     {
       "@id": "#tjeu4p",
-      "name": "config.js · 3 ›",
-      "x": 480,
-      "y": 118,
-      "link": "./src-config-js.jsonld",
-      "bgColor": "#f2e5fd",
+      "name": "types.js",
+      "x": 478,
+      "y": 126,
+      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/types.js",
+      "bgColor": "#efe6ff",
       "parent": "#s9du6c"
     },
     {
       "@id": "#x9rczq",
-      "name": "container-runner.js · 11 ›",
-      "x": 528,
-      "y": 215,
-      "link": "./src-container-runner-js.jsonld",
-      "bgColor": "#f2e5fd",
+      "name": "channel.js · 1 ›",
+      "x": 560,
+      "y": 221,
+      "link": "./src-channel-js.jsonld",
+      "bgColor": "#efe6ff",
       "parent": "#s9du6c"
     },
     {
       "@id": "#48j6uy",
-      "name": "cron.js · 3 ›",
-      "x": 400,
-      "y": 259,
-      "link": "./src-cron-js.jsonld",
-      "bgColor": "#f2e5fd",
+      "name": "channels.js · 3 ›",
+      "x": 395,
+      "y": 243,
+      "link": "./src-channels-js.jsonld",
+      "bgColor": "#efe6ff",
       "parent": "#s9du6c"
     },
     {
       "@id": "#9kbx2m",
-      "name": "gateway.js · 1 ›",
-      "x": 441,
-      "y": 360,
-      "link": "./src-gateway-js.jsonld",
-      "bgColor": "#f2e5fd",
+      "name": "commands.js · 5 ›",
+      "x": 454,
+      "y": 347,
+      "link": "./src-commands-js.jsonld",
+      "bgColor": "#efe6ff",
       "parent": "#s9du6c"
     },
     {
       "@id": "#9gbbfy",
-      "name": "heartbeat.js · 6 ›",
-      "x": 273,
-      "y": 348,
-      "link": "./src-heartbeat-js.jsonld",
-      "bgColor": "#f2e5fd",
+      "name": "gateway.js · 1 ›",
+      "x": 289,
+      "y": 338,
+      "link": "./src-gateway-js.jsonld",
+      "bgColor": "#efe6ff",
       "parent": "#s9du6c"
     },
     {
       "@id": "#kue24d",
-      "name": "index.js",
-      "x": 260,
-      "y": 450,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/index.js",
-      "bgColor": "#f2e5fd",
+      "name": "heartbeat.js · 6 ›",
+      "x": 303,
+      "y": 440,
+      "link": "./src-heartbeat-js.jsonld",
+      "bgColor": "#efe6ff",
       "parent": "#s9du6c"
     },
     {
       "@id": "#ezqvf7",
-      "name": "i–m · 6",
-      "x": -71,
-      "y": 204,
-      "bgColor": "#febdc6",
+      "name": "around agents.js · 3",
+      "x": 19,
+      "y": 228,
+      "bgColor": "#f9bdd5",
       "parent": "#this"
     },
     {
       "@id": "#4c22a7",
-      "name": "ipc-utils.js · 4 ›",
-      "x": 64,
-      "y": 422,
-      "link": "./src-ipc-utils-js.jsonld",
-      "bgColor": "#ffe2e6",
+      "name": "agents.js · 2 ›",
+      "x": 139,
+      "y": 415,
+      "link": "./src-agents-js.jsonld",
+      "bgColor": "#ffe2ed",
       "parent": "#ezqvf7"
     },
     {
       "@id": "#zpagjg",
-      "name": "ipc.js · 1 ›",
-      "x": -24,
-      "y": 501,
-      "link": "./src-ipc-js.jsonld",
-      "bgColor": "#ffe2e6",
+      "name": "memory.js · 8 ›",
+      "x": 45,
+      "y": 500,
+      "link": "./src-memory-js.jsonld",
+      "bgColor": "#ffe2ed",
       "parent": "#ezqvf7"
     },
     {
       "@id": "#sptvks",
-      "name": "logger.js · 1 ›",
-      "x": -100,
-      "y": 417,
-      "link": "./src-logger-js.jsonld",
-      "bgColor": "#ffe2e6",
+      "name": "skills.js · 9 ›",
+      "x": -15,
+      "y": 424,
+      "link": "./src-skills-js.jsonld",
+      "bgColor": "#ffe2ed",
       "parent": "#ezqvf7"
     },
     {
       "@id": "#u6iz6f",
-      "name": "mcp.js · 8 ›",
-      "x": -203,
-      "y": 471,
-      "link": "./src-mcp-js.jsonld",
-      "bgColor": "#ffe2e6",
-      "parent": "#ezqvf7"
+      "name": "around nostr.js · 3",
+      "x": -106,
+      "y": 184,
+      "bgColor": "#fcc2a9",
+      "parent": "#this"
     },
     {
       "@id": "#vb6nak",
-      "name": "memory.js · 8 ›",
-      "x": -243,
-      "y": 356,
-      "link": "./src-memory-js.jsonld",
-      "bgColor": "#ffe2e6",
-      "parent": "#ezqvf7"
+      "name": "nostr.js · 16 ›",
+      "x": -168,
+      "y": 407,
+      "link": "./src-nostr-js.jsonld",
+      "bgColor": "#ffe4d9",
+      "parent": "#u6iz6f"
     },
     {
       "@id": "#zv6fek",
-      "name": "mount-security.js · 4 ›",
-      "x": -369,
-      "y": 400,
-      "link": "./src-mount-security-js.jsonld",
-      "bgColor": "#ffe2e6",
-      "parent": "#ezqvf7"
+      "name": "nip44.js · 6 ›",
+      "x": -249,
+      "y": 454,
+      "link": "./src-nip44-js.jsonld",
+      "bgColor": "#ffe4d9",
+      "parent": "#u6iz6f"
     },
     {
       "@id": "#y6p8te",
-      "name": "n–s · 6",
-      "x": -247,
-      "y": 34,
-      "bgColor": "#f1c99c",
-      "parent": "#this"
+      "name": "logger.js · 1 ›",
+      "x": -274,
+      "y": 356,
+      "link": "./src-logger-js.jsonld",
+      "bgColor": "#ffe4d9",
+      "parent": "#u6iz6f"
     },
     {
       "@id": "#kpttum",
-      "name": "nip44.js · 6 ›",
-      "x": -427,
-      "y": 232,
-      "link": "./src-nip44-js.jsonld",
-      "bgColor": "#fbe8d3",
-      "parent": "#y6p8te"
-    },
-    {
-      "@id": "#t62ib9",
-      "name": "nostr.js · 16 ›",
-      "x": -545,
-      "y": 186,
-      "link": "./src-nostr-js.jsonld",
-      "bgColor": "#fbe8d3",
-      "parent": "#y6p8te"
-    },
-    {
-      "@id": "#qcu5gk",
-      "name": "plugins.js · 1 ›",
-      "x": -486,
-      "y": 100,
-      "link": "./src-plugins-js.jsonld",
-      "bgColor": "#fbe8d3",
-      "parent": "#y6p8te"
-    },
-    {
-      "@id": "#za8che",
-      "name": "providers.js · 3 ›",
-      "x": -588,
-      "y": 42,
-      "link": "./src-providers-js.jsonld",
-      "bgColor": "#fbe8d3",
-      "parent": "#y6p8te"
-    },
-    {
-      "@id": "#rbwcef",
-      "name": "sessions.js · 1 ›",
-      "x": -499,
-      "y": -30,
-      "link": "./src-sessions-js.jsonld",
-      "bgColor": "#fbe8d3",
-      "parent": "#y6p8te"
-    },
-    {
-      "@id": "#mvt9ib",
-      "name": "skills.js · 9 ›",
-      "x": -575,
-      "y": -112,
-      "link": "./src-skills-js.jsonld",
-      "bgColor": "#fbe8d3",
-      "parent": "#y6p8te"
-    },
-    {
-      "@id": "#4cdvsg",
-      "name": "t–w · 6",
-      "x": -139,
-      "y": -177,
-      "bgColor": "#c1dba8",
+      "name": "around task-store.js · 3",
+      "x": -210,
+      "y": 115,
+      "bgColor": "#e0d199",
       "parent": "#this"
     },
     {
-      "@id": "#ur7wv9",
+      "@id": "#t62ib9",
+      "name": "task-store.js · 3 ›",
+      "x": -367,
+      "y": 306,
+      "link": "./src-task-store-js.jsonld",
+      "bgColor": "#f2ecd2",
+      "parent": "#kpttum"
+    },
+    {
+      "@id": "#qcu5gk",
       "name": "task-scheduler.js · 1 ›",
-      "x": -418,
-      "y": -233,
+      "x": -496,
+      "y": 262,
       "link": "./src-task-scheduler-js.jsonld",
-      "bgColor": "#e3f0d8",
-      "parent": "#4cdvsg"
+      "bgColor": "#f2ecd2",
+      "parent": "#kpttum"
+    },
+    {
+      "@id": "#za8che",
+      "name": "cron.js · 3 ›",
+      "x": -461,
+      "y": 164,
+      "link": "./src-cron-js.jsonld",
+      "bgColor": "#f2ecd2",
+      "parent": "#kpttum"
+    },
+    {
+      "@id": "#rbwcef",
+      "name": "other 1 · 7",
+      "x": -285,
+      "y": -105,
+      "bgColor": "#b1dfb5",
+      "parent": "#this"
+    },
+    {
+      "@id": "#mvt9ib",
+      "name": "bindings.js · 2 ›",
+      "x": -498,
+      "y": 34,
+      "link": "./src-bindings-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
+    },
+    {
+      "@id": "#4cdvsg",
+      "name": "mcp.js · 8 ›",
+      "x": -588,
+      "y": -39,
+      "link": "./src-mcp-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
+    },
+    {
+      "@id": "#ur7wv9",
+      "name": "mount-security.js · 4 ›",
+      "x": -484,
+      "y": -105,
+      "link": "./src-mount-security-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
     },
     {
       "@id": "#j2eaqz",
-      "name": "task-store.js · 3 ›",
-      "x": -461,
-      "y": -344,
-      "link": "./src-task-store-js.jsonld",
-      "bgColor": "#e3f0d8",
-      "parent": "#4cdvsg"
+      "name": "plugins.js · 1 ›",
+      "x": -538,
+      "y": -194,
+      "link": "./src-plugins-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
     },
     {
       "@id": "#vqbwbg",
-      "name": "telegram.js · 3 ›",
-      "x": -286,
-      "y": -338,
-      "link": "./src-telegram-js.jsonld",
-      "bgColor": "#e3f0d8",
-      "parent": "#4cdvsg"
+      "name": "providers.js · 3 ›",
+      "x": -418,
+      "y": -240,
+      "link": "./src-providers-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
     },
     {
       "@id": "#y9jt3w",
-      "name": "types.js",
-      "x": -278,
-      "y": -445,
-      "link": "https://github.com/jsclaw/jsclaw/blob/gh-pages/src/types.js",
-      "bgColor": "#e3f0d8",
-      "parent": "#4cdvsg"
+      "name": "sessions.js · 1 ›",
+      "x": -465,
+      "y": -337,
+      "link": "./src-sessions-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
     },
     {
       "@id": "#vxinpu",
-      "name": "webhooks.js · 3 ›",
-      "x": -162,
-      "y": -401,
-      "link": "./src-webhooks-js.jsonld",
-      "bgColor": "#e3f0d8",
-      "parent": "#4cdvsg"
+      "name": "telegram.js · 3 ›",
+      "x": -297,
+      "y": -332,
+      "link": "./src-telegram-js.jsonld",
+      "bgColor": "#ddf2de",
+      "parent": "#rbwcef"
     },
     {
       "@id": "#spatem",
-      "name": "ws.js · 3 ›",
-      "x": -100,
-      "y": -494,
-      "link": "./src-ws-js.jsonld",
-      "bgColor": "#e3f0d8",
-      "parent": "#4cdvsg"
+      "name": "other 2 · 2",
+      "x": -58,
+      "y": -207,
+      "bgColor": "#95e1e3",
+      "parent": "#this"
     },
     {
       "@id": "#twzhxn",
+      "name": "webhooks.js · 3 ›",
+      "x": -167,
+      "y": -400,
+      "link": "./src-webhooks-js.jsonld",
+      "bgColor": "#d1f3f4",
+      "parent": "#spatem"
+    },
+    {
+      "@id": "#ir6eif",
+      "name": "ws.js · 3 ›",
+      "x": -76,
+      "y": -497,
+      "link": "./src-ws-js.jsonld",
+      "bgColor": "#d1f3f4",
+      "parent": "#spatem"
+    },
+    {
+      "@id": "#bwj4g5",
       "name": "← jsclaw",
-      "x": 65,
+      "x": 67,
       "y": -205,
       "link": "./index.jsonld",
       "bgColor": "#ececec",
@@ -412,76 +428,84 @@
       "end": 18
     },
     {
-      "start": 15,
+      "start": 0,
       "end": 19
     },
     {
-      "start": 15,
+      "start": 19,
       "end": 20
     },
     {
-      "start": 15,
+      "start": 19,
       "end": 21
     },
     {
-      "start": 0,
+      "start": 19,
       "end": 22
     },
     {
-      "start": 22,
+      "start": 0,
       "end": 23
     },
     {
-      "start": 22,
+      "start": 23,
       "end": 24
     },
     {
-      "start": 22,
+      "start": 23,
       "end": 25
     },
     {
-      "start": 22,
+      "start": 23,
       "end": 26
     },
     {
-      "start": 22,
+      "start": 0,
       "end": 27
     },
     {
-      "start": 22,
+      "start": 27,
       "end": 28
     },
     {
-      "start": 0,
+      "start": 27,
       "end": 29
     },
     {
-      "start": 29,
+      "start": 27,
       "end": 30
     },
     {
-      "start": 29,
+      "start": 27,
       "end": 31
     },
     {
-      "start": 29,
+      "start": 27,
       "end": 32
     },
     {
-      "start": 29,
+      "start": 27,
       "end": 33
     },
     {
-      "start": 29,
+      "start": 27,
       "end": 34
     },
     {
-      "start": 29,
+      "start": 0,
       "end": 35
     },
     {
-      "start": 0,
+      "start": 35,
       "end": 36
+    },
+    {
+      "start": 35,
+      "end": 37
+    },
+    {
+      "start": 0,
+      "end": 38
     }
   ],
   "selectedNode": 0

@@ -19,24 +19,16 @@
       "bgColor": "#ebc573"
     },
     {
-      "@id": "#ahre4u",
-      "name": "topics · 1",
+      "@id": "#bq9ccn",
+      "name": "unlabelled · 12 ›",
       "x": 217,
       "y": 106,
+      "link": "./issues-unlabelled.jsonld",
       "bgColor": "#acd5ff",
       "parent": "#this"
     },
     {
-      "@id": "#ibdfdz",
-      "name": "unlabelled · 12 ›",
-      "x": 433,
-      "y": 213,
-      "link": "./issues-unlabelled.jsonld",
-      "bgColor": "#daeeff",
-      "parent": "#ahre4u"
-    },
-    {
-      "@id": "#z7edqb",
+      "@id": "#3yirdr",
       "name": "← jsclaw",
       "x": -217,
       "y": -106,
@@ -51,12 +43,8 @@
       "end": 1
     },
     {
-      "start": 1,
-      "end": 2
-    },
-    {
       "start": 0,
-      "end": 3
+      "end": 2
     }
   ],
   "selectedNode": 0
