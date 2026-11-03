@@ -3,6 +3,7 @@
 [![CI](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml/badge.svg)](https://github.com/jsclaw/jsclaw/actions/workflows/ci.yml)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
 [![license AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)](LICENSE)
+[![Mind map](https://mindstr.org/badge.svg)](https://mindstr.org/?uri=https://jsclaw.dev/jsclaw/mindstr/index.jsonld)
 
 Lightweight container orchestration for Claude AI agents. Pure JavaScript ESM, zero dependencies.
 
